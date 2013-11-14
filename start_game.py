@@ -11,6 +11,7 @@ for i in range(0, 10):
     game_map.append(['grass' for k in range(0, 10)])
 
 game_map[5][5] = 'center'
+game_map[9][9] = 'tree'
 
 uis = UIState()
 
@@ -21,7 +22,9 @@ sprites = {'center': pygame.image.load('res/images/center.png'),
            'build_homes': pygame.image.load('res/images/build_homes.png'),
            'build_field': pygame.image.load('res/images/build_field.png'),
            'houses': pygame.image.load('res/images/houses.png'),
-           'field': pygame.image.load('res/images/field.png')}
+           'field': pygame.image.load('res/images/field.png'),
+           'human': pygame.image.load('res/images/human.png'),
+           'tree': pygame.image.load('res/images/tree.png')}
 done = False
 buttons_active = False
 buttons_pos = None
@@ -74,7 +77,7 @@ def build(mouse_x, mouse_y):
 def next_turn():
     global village, turn
     turn += 1
-    village.population += village.population_growth
+    village.update_pop()
 
 
 while not done:
@@ -115,7 +118,7 @@ while not done:
         screen.blit(sprites['build_homes'], buttons_pos)
         screen.blit(sprites['build_field'], (buttons_pos[0], buttons_pos[1] + 23))
 
-    population_label = label_font.render("Population: %d" % village.population, 1, (255, 255, 255))
+    population_label = label_font.render("Population: %d/%d" % (village.population, village.max_population), 1, (255, 255, 255))
     screen.blit(population_label, (320, 0))
 
     pygame.display.flip()

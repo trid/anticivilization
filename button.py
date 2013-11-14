@@ -7,8 +7,12 @@ class Button:
         self.y = y
         self.w = w
         self.h = h
+        self.callback = None
+        self.active = True
 
     def is_pressed(self, x, y):
+        if not self.active:
+            return False
         if x < self.x:
             return False
         elif x > self.x + self.w:
@@ -17,4 +21,8 @@ class Button:
             return False
         elif y > self.y + self.h:
             return False
+
+        if self.callback:
+            self.callback()
+
         return True
