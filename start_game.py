@@ -2,6 +2,8 @@ __author__ = 'TriD'
 
 import pygame
 from button import Button
+from village import Village
+from ui_state import UIState
 
 game_map = []
 
@@ -10,7 +12,7 @@ for i in range(0, 10):
 
 game_map[5][5] = 'center'
 
-current_building = None
+uis = UIState()
 
 pygame.init()
 screen = pygame.display.set_mode([800, 600])
@@ -25,11 +27,9 @@ buttons_active = False
 buttons_pos = None
 button_homes = Button(0, 0, 115, 23)
 button_fields = Button(0, 0, 93, 23)
-building = None
 
-population = 100
-population_growth = 10
-food = 100
+village = Village()
+
 turn = 0
 
 label_font = pygame.font.SysFont('monospace', 17)
@@ -68,13 +68,13 @@ def build(mouse_x, mouse_y):
     if game_map[x][y] != 'grass':
         may_build = False
     if may_build:
-        game_map[x][y] = building
+        game_map[x][y] = uis.building
 
 
 def next_turn():
-    global turn, population
+    global village, turn
     turn += 1
-    population += population_growth
+    village.population += village.population_growth
 
 
 while not done:
@@ -91,10 +91,10 @@ while not done:
                 if buttons_active:
                     buttons_active = False
                     if button_homes.is_pressed(event.pos[0], event.pos[1]):
-                        building = 'houses'
+                        uis.building = 'houses'
                     if button_fields.is_pressed(event.pos[0], event.pos[1]):
-                        building = 'field'
-                elif building:
+                        uis.building = 'field'
+                elif uis.building:
                     build(*event.pos)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RETURN:
@@ -115,7 +115,7 @@ while not done:
         screen.blit(sprites['build_homes'], buttons_pos)
         screen.blit(sprites['build_field'], (buttons_pos[0], buttons_pos[1] + 23))
 
-    population_label = label_font.render("Population: %d" % population, 1, (255, 255, 255))
+    population_label = label_font.render("Population: %d" % village.population, 1, (255, 255, 255))
     screen.blit(population_label, (320, 0))
 
     pygame.display.flip()
