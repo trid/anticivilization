@@ -3,5 +3,6 @@ __author__ = 'TriD'
 
 class Tile:
     def __init__(self):
-        self.type = None
+        self.building = None
         self.ground = 'grass'
+        self.resource = None
