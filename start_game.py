@@ -29,13 +29,6 @@ turn = 0
 label_font = pygame.font.SysFont('monospace', 17)
 
 
-def setup_buttons(buttons_pos):
-    uis.button_homes.x = buttons_pos[0]
-    uis.button_homes.y = buttons_pos[1]
-    uis.button_fields.x = buttons_pos[0]
-    uis.button_fields.y = buttons_pos[1] + 23
-
-
 def build(mouse_x, mouse_y):
     x = mouse_x / 32
     y = mouse_y / 32
@@ -79,7 +72,7 @@ while not done:
             if event.button == 3:
                 buttons_active = True
                 buttons_pos = event.pos
-                setup_buttons(buttons_pos)
+                uis.setup_buttons(*buttons_pos)
                 building = None
             if event.button == 1:
                 if buttons_active:

@@ -2,13 +2,14 @@ __author__ = 'TriD'
 
 
 class Button:
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, name=None):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
         self.callback = None
         self.active = True
+        self.name = name
 
     def is_pressed(self, x, y):
         if not self.active:
