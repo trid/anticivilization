@@ -73,6 +73,10 @@ while not done:
                 buttons_active = True
                 buttons_pos = event.pos
                 uis.setup_buttons(*buttons_pos)
+                if game_map[buttons_pos[0]/32][buttons_pos[1]/32].resource:
+                    uis.set_resource_click_buttons()
+                else:
+                    uis.set_grass_click()
                 building = None
             if event.button == 1:
                 if buttons_active:
@@ -100,8 +104,7 @@ while not done:
                 screen.blit(uis.sprites[game_map[x][y].building], [x * 32, y * 32])
 
     if buttons_active:
-        screen.blit(uis.sprites['build_homes'], buttons_pos)
-        screen.blit(uis.sprites['build_field'], (buttons_pos[0], buttons_pos[1] + 23))
+        uis.draw_buttons(screen)
 
     population_label = label_font.render("Population: %d/%d" % (village.population, village.max_population), 1, (255, 255, 255))
     screen.blit(population_label, (320, 0))

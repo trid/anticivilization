@@ -18,18 +18,32 @@ class UIState:
                         'human': pygame.image.load('res/images/human.png'),
                         'tree': pygame.image.load('res/images/tree.png')}
         self.button_homes = Button(0, 0, 115, 23, 'build_homes')
-        self.button_fields = Button(0, 0, 93, 23, 'build_fields')
+        self.button_fields = Button(0, 0, 93, 23, 'build_field')
         self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
 
         self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter]
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
+        self.button_set = None
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x
         self.button_homes.y = y
         self.button_fields.x = x
         self.button_fields.y = y + 23
+        self.button_woodcutter.x = x
+        self.button_woodcutter.y = y + 46
+        self.button_expedition.x = x
+        self.button_expedition.y = y + 67
+
+    def set_grass_click(self):
+        self.button_set = self.grass_click_buttons
+
+    def set_resource_click_buttons(self):
+        self.button_set = self.resource_click_buttons
 
     def draw_buttons(self, screen):
-        pass
+        y = self.button_homes.y
+
+        for button in self.button_set:
+            screen.blit(self.sprites[button.name], (button.x, button.y))
