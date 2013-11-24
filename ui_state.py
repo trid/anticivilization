@@ -16,7 +16,8 @@ class UIState:
                         'houses': pygame.image.load('res/images/houses.png'),
                         'field': pygame.image.load('res/images/field.png'),
                         'human': pygame.image.load('res/images/human.png'),
-                        'tree': pygame.image.load('res/images/tree.png')}
+                        'tree': pygame.image.load('res/images/tree.png'),
+                        'woodcutter': pygame.image.load('res/images/woodcutter.png')}
         self.button_homes = Button(0, 0, 115, 23, 'build_homes')
         self.button_fields = Button(0, 0, 93, 23, 'build_field')
         self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')

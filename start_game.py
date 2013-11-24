@@ -1,3 +1,5 @@
+from expedition import Expedition
+
 __author__ = 'TriD'
 
 import pygame
@@ -23,10 +25,22 @@ buttons_active = False
 buttons_pos = None
 
 village = Village()
+expedition = None
 
 turn = 0
 
 label_font = pygame.font.SysFont('monospace', 17)
+
+
+def set_building(x, y):
+    if uis.building == 'field':
+        village.food_growth += 600
+    elif uis.building == 'houses':
+        village.max_population += 400
+    elif uis.building == 'woodcutter':
+        if game_map[x][y].resource != 'tree':
+            return
+    game_map[x][y].building = uis.building
 
 
 def build(mouse_x, mouse_y):
@@ -55,13 +69,18 @@ def build(mouse_x, mouse_y):
     if y < 9 and game_map[x][y + 1].building:
         may_build = True
     if may_build:
-        game_map[x][y].building = uis.building
+        set_building(x, y)
 
 
 def next_turn():
     global village, turn
     turn += 1
-    village.update_pop()
+    village.update()
+    global expedition
+    if expedition:
+        expedition.move()
+        if expedition.returned:
+            expedition = None
 
 
 while not done:
@@ -75,6 +94,7 @@ while not done:
                 uis.setup_buttons(*buttons_pos)
                 if game_map[buttons_pos[0]/32][buttons_pos[1]/32].resource:
                     uis.set_resource_click_buttons()
+                    exp_pos = buttons_pos
                 else:
                     uis.set_grass_click()
                 building = None
@@ -85,6 +105,11 @@ while not done:
                         uis.building = 'houses'
                     if uis.button_fields.is_pressed(event.pos[0], event.pos[1]):
                         uis.building = 'field'
+                    if uis.button_woodcutter.is_pressed(*event.pos):
+                        uis.building = 'woodcutter'
+                    if uis.button_expedition.is_pressed(event.pos[0], event.pos[1]):
+                        expedition = Expedition()
+                        expedition.find_path(5, 5, exp_pos[0]/32, exp_pos[1]/32)
                 elif uis.building:
                     build(*event.pos)
         if event.type == pygame.KEYUP:
@@ -100,13 +125,17 @@ while not done:
                 screen.blit(uis.sprites[game_map[x][y].resource], [x * 32, y * 32])
             if game_map[x][y].building == 'center':
                 screen.blit(uis.sprites['center'], [x * 32, y * 32 - 64])
-            elif game_map[x][y].building:
+            if game_map[x][y].building:
                 screen.blit(uis.sprites[game_map[x][y].building], [x * 32, y * 32])
+    if expedition:
+        screen.blit(uis.sprites['human'], (expedition.x * 32, expedition.y * 32 - 28))
 
     if buttons_active:
         uis.draw_buttons(screen)
 
     population_label = label_font.render("Population: %d/%d" % (village.population, village.max_population), 1, (255, 255, 255))
     screen.blit(population_label, (320, 0))
+    food_label = label_font.render("Food: %d(+%d)" % (village.food_stockpile, village.food_growth), 1, (255, 255, 255))
+    screen.blit(food_label, (320, 20))
 
     pygame.display.flip()
