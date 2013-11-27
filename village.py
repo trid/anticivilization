@@ -20,3 +20,4 @@ class Village:
         if self.food_stockpile < 0:
             self.population += self.food_stockpile
             self.food_stockpile = 0
+        self.wood_stockpile += self.wood_increasing

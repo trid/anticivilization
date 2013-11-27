@@ -1,4 +1,5 @@
 from expedition import Expedition
+from monster import Monster
 
 __author__ = 'TriD'
 
@@ -26,6 +27,7 @@ buttons_pos = None
 
 village = Village()
 expedition = None
+monster = Monster()
 
 turn = 0
 
@@ -40,6 +42,8 @@ def set_building(x, y):
     elif uis.building == 'woodcutter':
         if game_map[x][y].resource != 'tree':
             return
+        else:
+            village.wood_increasing += 100
     game_map[x][y].building = uis.building
 
 
@@ -81,6 +85,16 @@ def next_turn():
         expedition.move()
         if expedition.returned:
             expedition = None
+            village.wood_stockpile += 100
+    monster.random_move()
+
+
+def send_expedition():
+    global expedition
+    if village.food_stockpile >= 100:
+        expedition = Expedition()
+        expedition.find_path(5, 5, exp_pos[0] / 32, exp_pos[1] / 32)
+        village.food_stockpile -= 100
 
 
 while not done:
@@ -108,8 +122,7 @@ while not done:
                     if uis.button_woodcutter.is_pressed(*event.pos):
                         uis.building = 'woodcutter'
                     if uis.button_expedition.is_pressed(event.pos[0], event.pos[1]):
-                        expedition = Expedition()
-                        expedition.find_path(5, 5, exp_pos[0]/32, exp_pos[1]/32)
+                        send_expedition()
                 elif uis.building:
                     build(*event.pos)
         if event.type == pygame.KEYUP:
@@ -130,6 +143,8 @@ while not done:
     if expedition:
         screen.blit(uis.sprites['human'], (expedition.x * 32, expedition.y * 32 - 28))
 
+    screen.blit(uis.sprites['monster'], (monster.x * 32, monster.y * 32))
+
     if buttons_active:
         uis.draw_buttons(screen)
 
@@ -137,5 +152,7 @@ while not done:
     screen.blit(population_label, (320, 0))
     food_label = label_font.render("Food: %d(+%d)" % (village.food_stockpile, village.food_growth), 1, (255, 255, 255))
     screen.blit(food_label, (320, 20))
+    wood_label = label_font.render("Wood: %d(+%d)" % (village.wood_stockpile, village.wood_increasing), 1, (255, 255, 255))
+    screen.blit(wood_label, (320, 40))
 
     pygame.display.flip()
