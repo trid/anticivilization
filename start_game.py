@@ -1,20 +1,14 @@
 from expedition import Expedition
+from game_map import GameMap
 from monster import Monster
 
 __author__ = 'TriD'
 
 import pygame
-from tile import Tile
 from village import Village
 from ui_state import UIState
 
-game_map = []
-
-for i in range(0, 10):
-    game_map.append([Tile() for k in range(0, 10)])
-
-game_map[5][5].building = 'center'
-game_map[9][9].resource = 'tree'
+game_map = GameMap()
 
 uis = UIState()
 
