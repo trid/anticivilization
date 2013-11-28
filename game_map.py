@@ -31,11 +31,11 @@ class GameMap:
         return Column(self, row)
 
     def get_tile(self, x, y):
-        self.touch_square(x, y)
+        self.touch_square(x / 10, y / 10)
         return self.data[(x / 10, y / 10)][x % 10][y % 10]
 
     def set_tile(self, x, y, tile):
-        self.touch_square(x, y)
+        self.touch_square(x / 10, y / 10)
         self.data[(x / 10, y / 10)][x % 10][y % 10] = tile
 
     def touch_square(self, x, y):

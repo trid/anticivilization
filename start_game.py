@@ -49,8 +49,8 @@ def set_building(x, y):
 
 
 def build(mouse_x, mouse_y):
-    x = (mouse_x - dx) / 32
-    y = (mouse_y - dy) / 32
+    x = (mouse_x - dx + dx % 32) / 32
+    y = (mouse_y - dy + dx % 32) / 32
 
     may_build = False
     if game_map[x][y].building:
@@ -100,10 +100,10 @@ def send_expedition():
 
 def draw(x, y, sprite):
     global dx
-    if x + 32 <= 500:
+    if x + 32 <= 600:
         screen.blit(sprite, [x, y])
-    elif 532 > x + 32 > 500:
-        screen.blit(sprite, [x, y], Rect(0, 0, 500 - x, sprite.get_height()))
+    elif 632 > x + 32 > 600:
+        screen.blit(sprite, [x, y], Rect(0, 0, 600 - x, sprite.get_height()))
 
 while not done:
     for event in pygame.event.get():
@@ -155,26 +155,40 @@ while not done:
 
     for x in range(0, 20):
         for y in range(0, 20):
-            draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].ground])
-            if game_map[x][y].resource:
-                draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].resource])
-            if game_map[x][y].building == 'center':
-                draw(x * 32 + dx, y * 32 - 64 + dy, uis.sprites['center'])
-            elif game_map[x][y].building:
-                draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].building])
-    if expedition:
-        draw(expedition.x * 32 + dx, expedition.y * 32 - 28 + dy, uis.sprites['human'])
+            # Old not so good rendering that draws only some part of map
+            # draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x - dx][y].ground])
+            # if game_map[x][y].resource:
+            #     draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].resource])
+            # if game_map[x][y].building == 'center':
+            #     draw(x * 32 + dx, y * 32 - 64 + dy, uis.sprites['center'])
+            # elif game_map[x][y].building:
+            #     draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].building])
+    #if expedition:
+    #    draw(expedition.x * 32 + dx, expedition.y * 32 - 28 + dy, uis.sprites['human'])
 
-    draw(monster.x * 32 + dx, monster.y * 32 + dy, uis.sprites['monster'])
+    #draw(monster.x * 32 + dx, monster.y * 32 + dy, uis.sprites['monster'])
+
+            # New, better rendering that draws part of map that is currently on screen
+            mx = x + dx / 32
+            my = y + dy / 32
+            sx = x * 32 - dx % 32
+            sy = y * 32 - dy % 32
+            draw(sx, sy, uis.sprites[game_map[mx][my].ground])
+            if game_map[mx][my].resource:
+                draw(sx, sy, uis.sprites[game_map[mx][my].resource])
+            if game_map[mx][my].building == 'center':
+                draw(sx, sy - 64, uis.sprites['center'])
+            elif game_map[mx][my].building:
+                draw(sx, sy, uis.sprites[game_map[mx][my].building])
 
     if buttons_active:
         uis.draw_buttons(screen)
 
     population_label = label_font.render("Population: %d/%d" % (village.population, village.max_population), 1, (255, 255, 255))
-    screen.blit(population_label, (500, 0))
+    screen.blit(population_label, (600, 0))
     food_label = label_font.render("Food: %d(+%d)" % (village.food_stockpile, village.food_growth), 1, (255, 255, 255))
-    screen.blit(food_label, (500, 20))
+    screen.blit(food_label, (600, 20))
     wood_label = label_font.render("Wood: %d(+%d)" % (village.wood_stockpile, village.wood_increasing), 1, (255, 255, 255))
-    screen.blit(wood_label, (500, 40))
+    screen.blit(wood_label, (600, 40))
 
     pygame.display.flip()
