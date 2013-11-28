@@ -135,20 +135,20 @@ while not done:
                     build(*event.pos)
                 elif drag:
                     drag = False
-                    old_dx = dx
-                    old_dy = dy
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RETURN:
                 next_turn()
         if event.type == pygame.MOUSEMOTION and drag:
             #And here we move the map on the screen
             mouse_pos_x, mouse_pos_y = event.pos
-            dx = old_dx - (mouse_drag_x - mouse_pos_x)
-            dy = old_dy - (mouse_drag_x - mouse_pos_y)
+            dx = old_dx + (mouse_pos_x - mouse_drag_x)
+            dy = old_dy + (mouse_pos_y - mouse_drag_y)
         if event.type == pygame.MOUSEBUTTONDOWN:
             #Here we start drag the map
             drag = True
             mouse_drag_x, mouse_drag_y = event.pos
+            old_dx = dx
+            old_dy = dy
 
     screen.fill((0, 0, 0))
 
