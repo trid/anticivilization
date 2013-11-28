@@ -49,8 +49,8 @@ def set_building(x, y):
 
 
 def build(mouse_x, mouse_y):
-    x = mouse_x / 32 - dx
-    y = mouse_y / 32 - dy
+    x = (mouse_x - dx) / 32
+    y = (mouse_y - dy) / 32
 
     may_build = False
     if game_map[x][y].building:
@@ -114,7 +114,7 @@ while not done:
                 buttons_active = True
                 buttons_pos = event.pos
                 uis.setup_buttons(*buttons_pos)
-                if game_map[buttons_pos[0]/32 - dx][buttons_pos[1]/32 - dy].resource:
+                if game_map[(buttons_pos[0] - dx)/32][(buttons_pos[1] - dy)/32].resource:
                     uis.set_resource_click_buttons()
                     exp_pos = buttons_pos
                 else:
@@ -133,7 +133,7 @@ while not done:
                         send_expedition()
                 elif uis.building:
                     build(*event.pos)
-                elif drag:
+                if drag:
                     drag = False
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RETURN:
@@ -144,11 +144,12 @@ while not done:
             dx = old_dx + (mouse_pos_x - mouse_drag_x)
             dy = old_dy + (mouse_pos_y - mouse_drag_y)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            #Here we start drag the map
-            drag = True
-            mouse_drag_x, mouse_drag_y = event.pos
-            old_dx = dx
-            old_dy = dy
+            if event.button == 1:
+                #Here we start drag the map
+                drag = True
+                mouse_drag_x, mouse_drag_y = event.pos
+                old_dx = dx
+                old_dy = dy
 
     screen.fill((0, 0, 0))
 
