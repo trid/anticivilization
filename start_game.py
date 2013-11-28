@@ -1,3 +1,4 @@
+from pygame.rect import Rect
 from expedition import Expedition
 from game_map import GameMap
 from monster import Monster
@@ -27,6 +28,12 @@ turn = 0
 
 label_font = pygame.font.SysFont('monospace', 17)
 
+old_dx = 0
+old_dy = 0
+dx = 0
+dy = 0
+drag = False
+
 
 def set_building(x, y):
     if uis.building == 'field':
@@ -42,8 +49,8 @@ def set_building(x, y):
 
 
 def build(mouse_x, mouse_y):
-    x = mouse_x / 32
-    y = mouse_y / 32
+    x = mouse_x / 32 - dx
+    y = mouse_y / 32 - dy
 
     may_build = False
     if game_map[x][y].building:
@@ -91,6 +98,13 @@ def send_expedition():
         village.food_stockpile -= 100
 
 
+def draw(x, y, sprite):
+    global dx
+    if x + 32 <= 500:
+        screen.blit(sprite, [x, y])
+    elif 532 > x + 32 > 500:
+        screen.blit(sprite, [x, y], Rect(0, 0, 500 - x, sprite.get_height()))
+
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -100,7 +114,7 @@ while not done:
                 buttons_active = True
                 buttons_pos = event.pos
                 uis.setup_buttons(*buttons_pos)
-                if game_map[buttons_pos[0]/32][buttons_pos[1]/32].resource:
+                if game_map[buttons_pos[0]/32 - dx][buttons_pos[1]/32 - dy].resource:
                     uis.set_resource_click_buttons()
                     exp_pos = buttons_pos
                 else:
@@ -119,34 +133,47 @@ while not done:
                         send_expedition()
                 elif uis.building:
                     build(*event.pos)
+                elif drag:
+                    drag = False
+                    old_dx = dx
+                    old_dy = dy
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RETURN:
                 next_turn()
+        if event.type == pygame.MOUSEMOTION and drag:
+            #And here we move the map on the screen
+            mouse_pos_x, mouse_pos_y = event.pos
+            dx = old_dx - (mouse_drag_x - mouse_pos_x)
+            dy = old_dy - (mouse_drag_x - mouse_pos_y)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            #Here we start drag the map
+            drag = True
+            mouse_drag_x, mouse_drag_y = event.pos
 
     screen.fill((0, 0, 0))
 
     for x in range(0, 10):
         for y in range(0, 10):
-            screen.blit(uis.sprites[game_map[x][y].ground], [x * 32, y * 32])
+            draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].ground])
             if game_map[x][y].resource:
-                screen.blit(uis.sprites[game_map[x][y].resource], [x * 32, y * 32])
+                draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].resource])
             if game_map[x][y].building == 'center':
-                screen.blit(uis.sprites['center'], [x * 32, y * 32 - 64])
-            if game_map[x][y].building:
-                screen.blit(uis.sprites[game_map[x][y].building], [x * 32, y * 32])
+                draw(x * 32 + dx, y * 32 - 64 + dy, uis.sprites['center'])
+            elif game_map[x][y].building:
+                draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].building])
     if expedition:
-        screen.blit(uis.sprites['human'], (expedition.x * 32, expedition.y * 32 - 28))
+        draw(expedition.x * 32 + dx, expedition.y * 32 - 28 + dy, uis.sprites['human'])
 
-    screen.blit(uis.sprites['monster'], (monster.x * 32, monster.y * 32))
+    draw(monster.x * 32 + dx, monster.y * 32 + dy, uis.sprites['monster'])
 
     if buttons_active:
         uis.draw_buttons(screen)
 
     population_label = label_font.render("Population: %d/%d" % (village.population, village.max_population), 1, (255, 255, 255))
-    screen.blit(population_label, (320, 0))
+    screen.blit(population_label, (500, 0))
     food_label = label_font.render("Food: %d(+%d)" % (village.food_stockpile, village.food_growth), 1, (255, 255, 255))
-    screen.blit(food_label, (320, 20))
+    screen.blit(food_label, (500, 20))
     wood_label = label_font.render("Wood: %d(+%d)" % (village.wood_stockpile, village.wood_increasing), 1, (255, 255, 255))
-    screen.blit(wood_label, (320, 40))
+    screen.blit(wood_label, (500, 40))
 
     pygame.display.flip()
