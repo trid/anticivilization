@@ -153,8 +153,8 @@ while not done:
 
     screen.fill((0, 0, 0))
 
-    for x in range(0, 10):
-        for y in range(0, 10):
+    for x in range(0, 20):
+        for y in range(0, 20):
             draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].ground])
             if game_map[x][y].resource:
                 draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].resource])

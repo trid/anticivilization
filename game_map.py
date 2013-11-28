@@ -31,7 +31,16 @@ class GameMap:
         return Column(self, row)
 
     def get_tile(self, x, y):
-        return self.data[(0, 0)][x][y]
+        self.touch_square(x, y)
+        return self.data[(x / 10, y / 10)][x % 10][y % 10]
 
     def set_tile(self, x, y, tile):
-        self.data[(0, 0)][x][y] = tile
+        self.touch_square(x, y)
+        self.data[(x / 10, y / 10)][x % 10][y % 10] = tile
+
+    def touch_square(self, x, y):
+        if not (x, y) in self.data:
+            map_part = []
+            for i in range(0, 10):
+                map_part.append([Tile() for k in range(0, 10)])
+            self.data[(x, y)] = map_part
