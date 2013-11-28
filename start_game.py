@@ -35,6 +35,34 @@ dy = 0
 drag = False
 
 
+def send_expedition():
+    global expedition
+    if village.food_stockpile >= 100:
+        expedition = Expedition()
+        expedition.find_path(5, 5, exp_pos[0], exp_pos[1])
+        village.food_stockpile -= 100
+
+
+def build_houses():
+    uis.building = 'houses'
+
+
+def build_field():
+    uis.building = 'field'
+
+
+def build_woodcutter():
+    uis.building = 'woodcutter'
+
+
+def send_expedition_callback():
+    send_expedition()
+
+uis.button_homes.callback = build_houses
+uis.button_fields.callback = build_field
+uis.button_woodcutter.callback = build_woodcutter
+uis.button_expedition.callback = send_expedition_callback
+
 def set_building(x, y):
     if uis.building == 'field':
         village.food_growth += 600
@@ -49,8 +77,8 @@ def set_building(x, y):
 
 
 def build(mouse_x, mouse_y):
-    x = (mouse_x - dx + dx % 32) / 32
-    y = (mouse_y - dy + dx % 32) / 32
+    x = (mouse_x - dx - dx % 32) / 32
+    y = (mouse_y - dy - dy % 32) / 32
 
     may_build = False
     if game_map[x][y].building:
@@ -90,20 +118,13 @@ def next_turn():
     monster.random_move()
 
 
-def send_expedition():
-    global expedition
-    if village.food_stockpile >= 100:
-        expedition = Expedition()
-        expedition.find_path(5, 5, exp_pos[0] / 32, exp_pos[1] / 32)
-        village.food_stockpile -= 100
-
-
 def draw(x, y, sprite):
     global dx
     if x + 32 <= 600:
         screen.blit(sprite, [x, y])
     elif 632 > x + 32 > 600:
         screen.blit(sprite, [x, y], Rect(0, 0, 600 - x, sprite.get_height()))
+
 
 while not done:
     for event in pygame.event.get():
@@ -114,23 +135,16 @@ while not done:
                 buttons_active = True
                 buttons_pos = event.pos
                 uis.setup_buttons(*buttons_pos)
-                if game_map[(buttons_pos[0] - dx)/32][(buttons_pos[1] - dy)/32].resource:
+                if game_map[(buttons_pos[0] + dx - dx % 32) / 32][(buttons_pos[1] + dy - dy % 32) / 32].resource:
                     uis.set_resource_click_buttons()
-                    exp_pos = buttons_pos
+                    exp_pos = ((buttons_pos[0] + dx - dx % 32) / 32, (buttons_pos[1] + dy - dy % 32) / 32)
                 else:
                     uis.set_grass_click()
                 building = None
             if event.button == 1:
                 if buttons_active:
                     buttons_active = False
-                    if uis.button_homes.is_pressed(event.pos[0], event.pos[1]):
-                        uis.building = 'houses'
-                    if uis.button_fields.is_pressed(event.pos[0], event.pos[1]):
-                        uis.building = 'field'
-                    if uis.button_woodcutter.is_pressed(*event.pos):
-                        uis.building = 'woodcutter'
-                    if uis.button_expedition.is_pressed(event.pos[0], event.pos[1]):
-                        send_expedition()
+                    uis.process_buttons(*event.pos)
                 elif uis.building:
                     build(*event.pos)
                 if drag:
@@ -155,19 +169,6 @@ while not done:
 
     for x in range(0, 20):
         for y in range(0, 20):
-            # Old not so good rendering that draws only some part of map
-            # draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x - dx][y].ground])
-            # if game_map[x][y].resource:
-            #     draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].resource])
-            # if game_map[x][y].building == 'center':
-            #     draw(x * 32 + dx, y * 32 - 64 + dy, uis.sprites['center'])
-            # elif game_map[x][y].building:
-            #     draw(x * 32 + dx, y * 32 + dy, uis.sprites[game_map[x][y].building])
-    #if expedition:
-    #    draw(expedition.x * 32 + dx, expedition.y * 32 - 28 + dy, uis.sprites['human'])
-
-    #draw(monster.x * 32 + dx, monster.y * 32 + dy, uis.sprites['monster'])
-
             # New, better rendering that draws part of map that is currently on screen
             mx = x + dx / 32
             my = y + dy / 32
@@ -180,15 +181,21 @@ while not done:
                 draw(sx, sy - 64, uis.sprites['center'])
             elif game_map[mx][my].building:
                 draw(sx, sy, uis.sprites[game_map[mx][my].building])
+    if expedition:
+        draw(expedition.x * 32 - dx, expedition.y * 32 - 28 - dy, uis.sprites['human'])
+
+    draw(monster.x * 32 - dx, monster.y * 32 - dy, uis.sprites['monster'])
 
     if buttons_active:
         uis.draw_buttons(screen)
 
-    population_label = label_font.render("Population: %d/%d" % (village.population, village.max_population), 1, (255, 255, 255))
+    population_label = label_font.render("Population: %d/%d" % (village.population, village.max_population), 1,
+                                         (255, 255, 255))
     screen.blit(population_label, (600, 0))
     food_label = label_font.render("Food: %d(+%d)" % (village.food_stockpile, village.food_growth), 1, (255, 255, 255))
     screen.blit(food_label, (600, 20))
-    wood_label = label_font.render("Wood: %d(+%d)" % (village.wood_stockpile, village.wood_increasing), 1, (255, 255, 255))
+    wood_label = label_font.render("Wood: %d(+%d)" % (village.wood_stockpile, village.wood_increasing), 1,
+                                   (255, 255, 255))
     screen.blit(wood_label, (600, 40))
 
     pygame.display.flip()

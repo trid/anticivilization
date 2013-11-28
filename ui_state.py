@@ -27,6 +27,7 @@ class UIState:
         self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter]
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
+        self.exp_click_pos = None
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x
@@ -49,3 +50,7 @@ class UIState:
 
         for button in self.button_set:
             screen.blit(self.sprites[button.name], (button.x, button.y))
+
+    def process_buttons(self, x, y):
+        for button in self.button_set:
+            button.is_pressed(x, y)
