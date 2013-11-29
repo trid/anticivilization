@@ -21,7 +21,7 @@ buttons_active = False
 buttons_pos = None
 
 village = Village()
-expedition = None
+expeditions = []
 monster = Monster()
 
 turn = 0
@@ -36,10 +36,11 @@ drag = False
 
 
 def send_expedition():
-    global expedition
+    global expeditions
     if village.food_stockpile >= 100:
         expedition = Expedition()
-        expedition.find_path(5, 5, exp_pos[0], exp_pos[1])
+        expedition.find_path(5, 5, exp_pos[0], exp_pos[1], [])
+        expeditions.append(expedition)
         village.food_stockpile -= 100
 
 
@@ -62,6 +63,7 @@ uis.button_homes.callback = build_houses
 uis.button_fields.callback = build_field
 uis.button_woodcutter.callback = build_woodcutter
 uis.button_expedition.callback = send_expedition_callback
+
 
 def set_building(x, y):
     if uis.building == 'field':
@@ -109,12 +111,12 @@ def next_turn():
     global village, turn
     turn += 1
     village.update()
-    global expedition
-    if expedition:
+    global expeditions
+    for expedition in expeditions:
         expedition.move()
         if expedition.returned:
-            expedition = None
             village.wood_stockpile += 100
+    expeditions = filter(lambda x: not x.returned, expeditions)
     monster.random_move()
 
 
@@ -181,7 +183,7 @@ while not done:
                 draw(sx, sy - 64, uis.sprites['center'])
             elif game_map[mx][my].building:
                 draw(sx, sy, uis.sprites[game_map[mx][my].building])
-    if expedition:
+    for expedition in expeditions:
         draw(expedition.x * 32 - dx, expedition.y * 32 - 28 - dy, uis.sprites['human'])
 
     draw(monster.x * 32 - dx, monster.y * 32 - dy, uis.sprites['monster'])

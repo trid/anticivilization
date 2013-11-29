@@ -89,7 +89,7 @@ class Expedition:
             del self.path[0]
         elif not self.finished:
             self.finished = True
-            self.find_path(self.x, self.y, 5, 5)
+            self.find_path(self.x, self.y, 5, 5, [])
             self.x, self.y = self.path[0]
             del self.path[0]
         else:
