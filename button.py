@@ -2,7 +2,7 @@ __author__ = 'TriD'
 
 
 class Button:
-    def __init__(self, x, y, w, h, name=None):
+    def __init__(self, x, y, w, h, name=None, caller=None):
         self.x = x
         self.y = y
         self.w = w
@@ -10,6 +10,7 @@ class Button:
         self.callback = None
         self.active = True
         self.name = name
+        self.caller = caller
 
     def is_pressed(self, x, y):
         if not self.active:
@@ -24,6 +25,9 @@ class Button:
             return False
 
         if self.callback:
-            self.callback()
+            if self.caller:
+                self.callback(self.caller)
+            else:
+                self.callback()
 
         return True

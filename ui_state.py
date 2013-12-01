@@ -5,7 +5,8 @@ from button import Button
 
 
 class UIState:
-    def __init__(self):
+    def __init__(self, data):
+        self.data = data
         self.building = None
         self.sprites = {'center': pygame.image.load('res/images/center.png'),
                         'grass': pygame.image.load('res/images/grass.png'),
