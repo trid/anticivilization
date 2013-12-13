@@ -4,9 +4,10 @@ __author__ = 'TriD'
 
 
 class EventProcessor:
-    def __init__(self, data, uis):
+    def __init__(self, data, uis, display):
         self.data = data
         self.uis = uis
+        self.display = display
 
     def process_events(self):
         for event in pygame.event.get():
@@ -34,11 +35,13 @@ class EventProcessor:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RETURN:
                     self.data.next_turn()
-            if event.type == pygame.MOUSEMOTION and self.data.drag:
-                #And here we move the map on the screen
-                mouse_pos_x, mouse_pos_y = event.pos
-                self.data.dx = self.data.old_dx + (mouse_pos_x - self.data.mouse_drag_x)
-                self.data.dy = self.data.old_dy + (mouse_pos_y - self.data.mouse_drag_y)
+            if event.type == pygame.MOUSEMOTION:
+                self.display.mouse_x, self.display.mouse_y = event.pos
+                if self.data.drag:
+                    #And here we move the map on the screen
+                    mouse_pos_x, mouse_pos_y = event.pos
+                    self.data.dx = self.data.old_dx + (mouse_pos_x - self.data.mouse_drag_x)
+                    self.data.dy = self.data.old_dy + (mouse_pos_y - self.data.mouse_drag_y)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     #Here we start drag the map

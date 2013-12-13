@@ -1,4 +1,4 @@
-from GameData import GameData
+from game_data import GameData
 from display import Display
 from events import EventProcessor
 __author__ = 'TriD'
@@ -10,7 +10,7 @@ game_data = GameData()
 uis = UIState(game_data)
 game_data.uis = uis
 display = Display(game_data, uis)
-event_processor = EventProcessor(game_data, uis)
+event_processor = EventProcessor(game_data, uis, display)
 
 
 def build_houses():

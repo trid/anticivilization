@@ -11,6 +11,7 @@ class Display():
         self.label_font = pygame.font.SysFont('monospace', 17)
         self.game_data = game_data
         self.uis = uis
+        self.mouse_x, self.mouse_y = 0, 0
 
     def draw_sprite(self, x, y, sprite):
         if x + 32 <= 600:
@@ -54,5 +55,14 @@ class Display():
         self.game_data.village.wood_stockpile, self.game_data.village.wood_increasing), 1,
                                        (255, 255, 255))
         self.screen.blit(wood_label, (600, 40))
+
+        lighted_x = (self.mouse_x - self.game_data.dx % 32) / 32
+        lighted_y = (self.mouse_y - self.game_data.dy % 32) / 32
+        x_ = lighted_x * 32
+        lighted_x = x_ - self.game_data.dx % 32
+        y_ = lighted_y * 32
+        lighted_y = y_ - self.game_data.dy % 32
+
+        pygame.draw.rect(self.screen, 0x10ffaa, Rect(lighted_x, lighted_y, 32, 32))
 
         pygame.display.flip()
