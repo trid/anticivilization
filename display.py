@@ -56,12 +56,8 @@ class Display():
                                        (255, 255, 255))
         self.screen.blit(wood_label, (600, 40))
 
-        lighted_x = (self.mouse_x - self.game_data.dx % 32) / 32
-        lighted_y = (self.mouse_y - self.game_data.dy % 32) / 32
-        x_ = lighted_x * 32
-        lighted_x = x_ - self.game_data.dx % 32
-        y_ = lighted_y * 32
-        lighted_y = y_ - self.game_data.dy % 32
+        lighted_x = ((self.mouse_x + self.game_data.dx) / 32) * 32 - self.game_data.dx
+        lighted_y = ((self.mouse_y + self.game_data.dy) / 32) * 32 - self.game_data.dy
 
         pygame.draw.rect(self.screen, 0x10ffaa, Rect(lighted_x, lighted_y, 32, 32))
 

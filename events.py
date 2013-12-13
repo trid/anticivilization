@@ -18,9 +18,9 @@ class EventProcessor:
                     self.data.buttons_active = True
                     buttons_pos = event.pos
                     self.uis.setup_buttons(*buttons_pos)
-                    if self.data.game_map[(buttons_pos[0] + self.data.dx - self.data.dx % 32) / 32][(buttons_pos[1] + self.data.dy - self.data.dy % 32) / 32].resource:
+                    if self.data.game_map[(buttons_pos[0] + self.data.dx) / 32][(buttons_pos[1] + self.data.dy) / 32].resource:
                         self.uis.set_resource_click_buttons()
-                        self.data.exp_pos = ((buttons_pos[0] + self.data.dx - self.data.dx % 32) / 32, (buttons_pos[1] + self.data.dy - self.data.dy % 32) / 32)
+                        self.data.exp_pos = ((buttons_pos[0] + self.data.dx) / 32, (buttons_pos[1] + self.data.dy) / 32)
                     else:
                         self.uis.set_grass_click()
                     building = None
