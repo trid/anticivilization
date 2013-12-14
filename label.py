@@ -4,7 +4,7 @@ __author__ = 'TriD'
 
 
 class Label:
-    def __init__(self, x, y, text, h = 18):
+    def __init__(self, x, y, text, h=15):
         self.x = x
         self.y = y
         self.dirty = True

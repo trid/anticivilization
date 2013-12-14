@@ -1,3 +1,5 @@
+from label import Label
+
 __author__ = 'trid'
 
 import pygame
@@ -29,6 +31,9 @@ class UIState:
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
         self.exp_click_pos = None
+        self.population_label = Label(600, 0, "")
+        self.food_label = Label(600, 20, "")
+        self.wood_label = Label(600, 40, "")
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x
@@ -55,3 +60,13 @@ class UIState:
     def process_buttons(self, x, y):
         for button in self.button_set:
             button.is_pressed(x, y)
+
+    def draw_labels(self, screen):
+        self.population_label.draw(screen)
+        self.food_label.draw(screen)
+        self.wood_label.draw(screen)
+
+    def update_labels(self):
+        self.population_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
+        self.food_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
+        self.wood_label.set_text("Wood: %d(+%d)" % (self.data.village.wood_stockpile, self.data.village.wood_increasing))

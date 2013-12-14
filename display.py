@@ -1,17 +1,21 @@
 import pygame
 from pygame.rect import Rect
+from pygame.surface import Surface
 
 __author__ = 'TriD'
 
 
 class Display():
-    def __init__(self, game_data, uis):
+    def __init__(self, game_data, uis=None):
         pygame.init()
         self.screen = pygame.display.set_mode([800, 600])
         self.label_font = pygame.font.SysFont('monospace', 17)
         self.game_data = game_data
         self.uis = uis
         self.mouse_x, self.mouse_y = 0, 0
+        self.selected_tile_surface = Surface((32, 32))
+        self.selected_tile_surface.fill((111, 111, 0, 111))
+        self.selected_tile_surface.set_alpha(124)
 
     def draw_sprite(self, x, y, sprite):
         if x + 32 <= 600:
@@ -44,21 +48,12 @@ class Display():
         if self.game_data.buttons_active:
             self.uis.draw_buttons(self.screen)
 
-        population_label = self.label_font.render("Population: %d/%d" % (
-        self.game_data.village.population, self.game_data.village.max_population), 1,
-                                             (255, 255, 255))
-        self.screen.blit(population_label, (600, 0))
-        food_label = self.label_font.render("Food: %d(+%d)" % (
-        self.game_data.village.food_stockpile, self.game_data.village.food_growth), 1, (255, 255, 255))
-        self.screen.blit(food_label, (600, 20))
-        wood_label = self.label_font.render("Wood: %d(+%d)" % (
-        self.game_data.village.wood_stockpile, self.game_data.village.wood_increasing), 1,
-                                       (255, 255, 255))
-        self.screen.blit(wood_label, (600, 40))
+        self.uis.update_labels()
+        self.uis.draw_labels(self.screen)
 
         lighted_x = ((self.mouse_x + self.game_data.dx) / 32) * 32 - self.game_data.dx
         lighted_y = ((self.mouse_y + self.game_data.dy) / 32) * 32 - self.game_data.dy
 
-        pygame.draw.rect(self.screen, 0x10ffaa, Rect(lighted_x, lighted_y, 32, 32))
+        self.screen.blit(self.selected_tile_surface, (lighted_x, lighted_y))
 
         pygame.display.flip()

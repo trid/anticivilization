@@ -1,15 +1,15 @@
+__author__ = 'TriD'
+
 from game_data import GameData
 from display import Display
 from events import EventProcessor
-__author__ = 'TriD'
-
-import pygame
 from ui_state import UIState
 
 game_data = GameData()
+display = Display(game_data)
 uis = UIState(game_data)
+display.uis = uis
 game_data.uis = uis
-display = Display(game_data, uis)
 event_processor = EventProcessor(game_data, uis, display)
 
 
