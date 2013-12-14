@@ -3,6 +3,8 @@ from expedition import Expedition
 import expedition
 from game_map import GameMap
 from monster import Monster
+from specialist import Specialist
+import specialist
 from village import Village
 
 __author__ = 'TriD'
@@ -23,6 +25,7 @@ class GameData():
         self.expeditions = []
         self.turn = 0
         self.monster = Monster()
+        self.specialists = [Specialist(specialist.CHIEFTAIN)]
 
     def send_expedition(self):
         if self.village.food_stockpile >= 100:

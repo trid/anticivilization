@@ -5,6 +5,7 @@ __author__ = 'TriD'
 STARTED = 1
 RETURNING = 2
 FINISHED = 3
+DEAD = 4
 
 
 class Expedition:

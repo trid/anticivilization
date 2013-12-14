@@ -1,4 +1,5 @@
 from label import Label
+from panel import Panel
 
 __author__ = 'trid'
 
@@ -34,6 +35,13 @@ class UIState:
         self.population_label = Label(600, 0, "")
         self.food_label = Label(600, 20, "")
         self.wood_label = Label(600, 40, "")
+        #Ok, here we shall store ui items, for have less writing about how to draw them
+        self.ui_items = []
+        self.status_panel = Panel()
+        self.status_panel.add(self.population_label)
+        self.status_panel.add(self.food_label)
+        self.status_panel.add(self.wood_label)
+        self.ui_items.append(self.status_panel)
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x
@@ -61,12 +69,11 @@ class UIState:
         for button in self.button_set:
             button.is_pressed(x, y)
 
-    def draw_labels(self, screen):
-        self.population_label.draw(screen)
-        self.food_label.draw(screen)
-        self.wood_label.draw(screen)
-
     def update_labels(self):
         self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth))
         self.food_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
         self.wood_label.set_text("Wood: %d(+%d)" % (self.data.village.wood_stockpile, self.data.village.wood_increasing))
+
+    def draw(self, screen):
+        for item in self.ui_items:
+            item.draw(screen)

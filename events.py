@@ -15,6 +15,8 @@ class EventProcessor:
                 self.data.done = True
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 3:
+                    if event.pos[0] > 600:
+                        continue
                     self.data.buttons_active = True
                     buttons_pos = event.pos
                     self.uis.setup_buttons(*buttons_pos)
@@ -25,10 +27,10 @@ class EventProcessor:
                         self.uis.set_grass_click()
                     building = None
                 if event.button == 1:
-                    if self.data.buttons_active:
+                    if self.data.buttons_active and event.pos[0] < 600:
                         self.data.buttons_active = False
                         self.uis.process_buttons(*event.pos)
-                    elif self.uis.building:
+                    elif self.uis.building and event.pos[0] < 600:
                         self.data.build(*event.pos)
                     if self.data.drag:
                         self.data.drag = False
