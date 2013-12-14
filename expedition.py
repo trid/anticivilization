@@ -2,13 +2,16 @@ from math import sqrt
 
 __author__ = 'TriD'
 
+STARTED = 1
+RETURNING = 2
+FINISHED = 3
+
 
 class Expedition:
     def __init__(self):
         self.x = 5
         self.y = 5
-        self.finished = False
-        self.returned = False
+        self.status = STARTED
         self.path = []
 
     def find_path(self, pos_x, pos_y, dst_x, dst_y, passed=[]):
@@ -87,10 +90,10 @@ class Expedition:
             self.x = pos_x
             self.y = pos_y
             del self.path[0]
-        elif not self.finished:
-            self.finished = True
+        elif self.status != RETURNING:
+            self.status = RETURNING
             self.find_path(self.x, self.y, 5, 5, [])
             self.x, self.y = self.path[0]
             del self.path[0]
         else:
-            self.returned = True
+            self.status = FINISHED

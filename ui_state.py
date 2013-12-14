@@ -67,6 +67,6 @@ class UIState:
         self.wood_label.draw(screen)
 
     def update_labels(self):
-        self.population_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
+        self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth))
         self.food_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
         self.wood_label.set_text("Wood: %d(+%d)" % (self.data.village.wood_stockpile, self.data.village.wood_increasing))

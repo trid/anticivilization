@@ -1,0 +1,8 @@
+{
+    "resources": {
+        "wood": 150
+    },
+    "growth": {
+        "food_growth": 600
+    }
+}

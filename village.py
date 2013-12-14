@@ -1,5 +1,16 @@
 __author__ = 'trid'
 
+# I'm need it to map resources names from configs to names in village parameters
+# And, yes, it's really better than use __dict__
+resources_mapping = {
+    'food': 'food_stockpile',
+    'wood': 'wood_stockpile',
+    'population': 'population',
+    'food_growth': 'food_growth',
+    'max_population': 'max_population',
+    'wood_growth': 'wood_increasing'
+}
+
 
 class Village:
     def __init__(self):
@@ -21,3 +32,20 @@ class Village:
             self.population += self.food_stockpile
             self.food_stockpile = 0
         self.wood_stockpile += self.wood_increasing
+
+    def get_resource_by_name(self, name):
+        return resources_mapping.get(name, None)
+
+    def change_resource_count(self, resource, count):
+        resource_field = self.get_resource_by_name(resource)
+        if resource is None:
+            return
+        stock = getattr(self, resource_field)
+        stock += count
+        if stock < 0:
+            stock = 0
+        setattr(self, resource_field, stock)
+
+    def get_resource_count(self, resource):
+        resource_field = self.get_resource_by_name(resource)
+        return getattr(self, resource_field)

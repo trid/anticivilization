@@ -1,4 +1,6 @@
+from building_manager import BuildingManager
 from expedition import Expedition
+import expedition
 from game_map import GameMap
 from monster import Monster
 from village import Village
@@ -32,11 +34,11 @@ class GameData():
     def next_turn(self):
         self.turn += 1
         self.village.update()
-        for expedition in self.expeditions:
-            expedition.move()
-            if expedition.returned:
+        for expedition_item in self.expeditions:
+            expedition_item.move()
+            if expedition_item.status == expedition.FINISHED:
                 self.village.wood_stockpile += 100
-        self.expeditions = filter(lambda x: not x.returned, self.expeditions)
+        self.expeditions = filter(lambda x: x.status != expedition.FINISHED, self.expeditions)
         self.monster.random_move()
 
     def build(self, mouse_x, mouse_y):
@@ -68,13 +70,21 @@ class GameData():
             self.set_building(x, y)
 
     def set_building(self, x, y):
-        if self.uis.building == 'field':
-            self.village.food_growth += 600
-        elif self.uis.building == 'houses':
-            self.village.max_population += 400
-        elif self.uis.building == 'woodcutter':
-            if self.game_map[x][y].resource != 'tree':
+        bm = BuildingManager()
+        bc = bm.conds[self.uis.building]
+        for resource in bc.resources:
+            amount = self.village.get_resource_count(resource)
+            if amount < bc.resources[resource]:
                 return
-            else:
-                self.village.wood_increasing += 100
+
+        for cond in bc.tile_params:
+            if cond != self.game_map[x][y].resource:
+                return
+
+        for resource in bc.resources:
+            self.village.change_resource_count(resource, -bc.resources[resource])
+
+        for resource in bc.changes:
+            self.village.change_resource_count(resource, bc.changes[resource])
+
         self.game_map[x][y].building = self.uis.building
