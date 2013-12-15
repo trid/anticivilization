@@ -4,7 +4,7 @@ from panel import Panel
 __author__ = 'trid'
 
 import pygame
-from button import Button
+from ui.button import Button
 
 
 class UIState:
@@ -22,12 +22,15 @@ class UIState:
                         'human': pygame.image.load('res/images/human.png'),
                         'tree': pygame.image.load('res/images/tree.png'),
                         'woodcutter': pygame.image.load('res/images/woodcutter.png'),
-                        'monster': pygame.image.load('res/images/monster.png')}
+                        'monster': pygame.image.load('res/images/monster.png'),
+                        'statistics_button': pygame.image.load('res/images/statistics_button.png'),
+                        'specialists_button': pygame.image.load('res/images/specialists_button.png')}
         self.button_homes = Button(0, 0, 115, 23, 'build_homes')
         self.button_fields = Button(0, 0, 93, 23, 'build_field')
         self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
-
+        self.button_statistics = Button(600, 579, 100, 21, sprite=self.sprites['statistics_button'])
+        self.button_specialists = Button(700, 579, 100, 21, sprite=self.sprites['specialists_button'])
         self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter]
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
@@ -42,6 +45,8 @@ class UIState:
         self.status_panel.add(self.food_label)
         self.status_panel.add(self.wood_label)
         self.ui_items.append(self.status_panel)
+        self.ui_items.append(self.button_statistics)
+        self.ui_items.append(self.button_specialists)
         self.dialog = None
 
 

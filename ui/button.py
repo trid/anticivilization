@@ -2,7 +2,7 @@ __author__ = 'TriD'
 
 
 class Button:
-    def __init__(self, x, y, w, h, name=None, caller=None):
+    def __init__(self, x, y, w, h, name=None, caller=None, sprite=None):
         self.x = x
         self.y = y
         self.w = w
@@ -11,6 +11,7 @@ class Button:
         self.active = True
         self.name = name
         self.caller = caller
+        self.sprite = sprite
 
     def is_pressed(self, x, y):
         if not self.active:
@@ -31,3 +32,7 @@ class Button:
                 self.callback()
 
         return True
+
+    def draw(self, screen):
+        if self.sprite:
+            screen.blit(self.sprite, (self.x, self.y))
