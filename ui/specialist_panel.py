@@ -3,12 +3,13 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from label import Label
 import specialist
+from ui.clickable import Clickable
 
 __author__ = 'TriD'
 
 
 #Let us make all specialist drawing routine simple
-class SpecialistPanel:
+class SpecialistPanel(Clickable):
     def __init__(self, x, y, specialist_instance, selectable=False):
         self.surface = Surface((200, 60))
         self.specialist = specialist_instance
@@ -19,6 +20,8 @@ class SpecialistPanel:
         self.selected = False
         self.x = x
         self.y = y
+        self.w = 200
+        self.h = 60
 
     def draw(self, screen):
         self.surface.fill(0x000000)
@@ -30,8 +33,8 @@ class SpecialistPanel:
         self.s_level.draw(self.surface)
         screen.blit(self.surface, (self.x, self.y))
 
-    def is_presses(self, x, y):
-        if not self.active:
+    def is_pressed(self, x, y):
+        if not self.selectable:
             return False
         if x < self.x:
             return False

@@ -1,7 +1,9 @@
+from ui.clickable import Clickable
+
 __author__ = 'TriD'
 
 
-class Button:
+class Button(Clickable):
     def __init__(self, x, y, w, h, name=None, caller=None, sprite=None, callback=None):
         self.x = x
         self.y = y

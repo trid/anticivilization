@@ -14,7 +14,10 @@ class EventProcessor:
             if event.type == pygame.QUIT:
                 self.data.done = True
             elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 3:
+                if self.uis.dialog:
+                    if event.button == 1:
+                        self.uis.process_clicks(*event.pos)
+                elif event.button == 3:
                     if event.pos[0] > 600:
                         continue
                     self.data.popup_active = True
