@@ -1,5 +1,6 @@
 from label import Label
 from panel import Panel
+from ui.specialist_panel import SpecialistPanel
 
 __author__ = 'trid'
 
@@ -54,6 +55,7 @@ class UIState:
         self.clickables = []
         self.clickables.append(self.button_specialists)
         self.clickables.append(self.button_statistics)
+        self.specialists_panel.add(SpecialistPanel(600, 0, self.data.specialists[0]))
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x

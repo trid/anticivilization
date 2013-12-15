@@ -14,7 +14,7 @@ class Display():
         self.uis = uis
         self.mouse_x, self.mouse_y = 0, 0
         self.selected_tile_surface = Surface((32, 32))
-        self.selected_tile_surface.fill((111, 111, 0, 111))
+        self.selected_tile_surface.fill(0xb7f315)
         self.selected_tile_surface.set_alpha(124)
 
     def draw_sprite(self, x, y, sprite):
