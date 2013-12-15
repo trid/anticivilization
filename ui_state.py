@@ -42,6 +42,8 @@ class UIState:
         self.status_panel.add(self.food_label)
         self.status_panel.add(self.wood_label)
         self.ui_items.append(self.status_panel)
+        self.dialog = None
+
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x

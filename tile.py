@@ -6,3 +6,4 @@ class Tile:
         self.building = None
         self.ground = 'grass'
         self.resource = None
+        self.unit = None

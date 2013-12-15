@@ -25,6 +25,7 @@ class GameData():
         self.expeditions = []
         self.turn = 0
         self.monster = Monster()
+        self.game_map[0][0].unit = self.monster
         self.specialists = [Specialist(specialist.CHIEFTAIN)]
 
     def send_expedition(self):
@@ -33,16 +34,31 @@ class GameData():
             expedition.find_path(5, 5, self.exp_pos[0], self.exp_pos[1], [])
             self.expeditions.append(expedition)
             self.village.food_stockpile -= 100
-            
+
+    def move_monsters(self):
+        self.game_map[self.monster.x][self.monster.y].unit = None
+        self.monster.random_move()
+
+        monster_tile = self.game_map[self.monster.x][self.monster.y]
+        if monster_tile.unit:
+            monster_tile.unit.status = expedition.DEAD
+        monster_tile.unit = self.monster
+
     def next_turn(self):
         self.turn += 1
         self.village.update()
         for expedition_item in self.expeditions:
+            self.game_map[expedition_item.x][expedition_item.y].unit = None
             expedition_item.move()
-            if expedition_item.status == expedition.FINISHED:
+            tile = self.game_map[expedition_item.x][expedition_item.y]
+            if type(tile.unit) == Monster:
+                expedition_item.status = expedition.DEAD
+            elif expedition_item.status == expedition.FINISHED:
                 self.village.wood_stockpile += 100
-        self.expeditions = filter(lambda x: x.status != expedition.FINISHED, self.expeditions)
-        self.monster.random_move()
+            else:
+                tile.unit = expedition_item
+        self.expeditions = filter(lambda x: x.status != expedition.FINISHED and x.status != expedition.DEAD, self.expeditions)
+        self.move_monsters()
 
     def build(self, mouse_x, mouse_y):
         x = (mouse_x - self.dx - self.dx % 32) / 32
