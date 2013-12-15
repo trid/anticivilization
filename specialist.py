@@ -1,8 +1,10 @@
 __author__ = 'TriD'
 
-CHIEFTAIN = 1
-WARRIOR = 2
-WORKER = 3
+CHIEFTAIN = 0
+WARRIOR = 1
+WORKER = 2
+
+mapping = ("Chieftain", "Warrior", "Worker")
 
 
 class Specialist():

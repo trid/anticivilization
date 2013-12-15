@@ -29,8 +29,8 @@ class UIState:
         self.button_fields = Button(0, 0, 93, 23, 'build_field')
         self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
-        self.button_statistics = Button(600, 579, 100, 21, sprite=self.sprites['statistics_button'])
-        self.button_specialists = Button(700, 579, 100, 21, sprite=self.sprites['specialists_button'])
+        self.button_statistics = Button(600, 579, 100, 21, sprite=self.sprites['statistics_button'], callback=self.show_statistics)
+        self.button_specialists = Button(700, 579, 100, 21, sprite=self.sprites['specialists_button'], callback=self.show_specialists)
         self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter]
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
@@ -47,8 +47,13 @@ class UIState:
         self.ui_items.append(self.status_panel)
         self.ui_items.append(self.button_statistics)
         self.ui_items.append(self.button_specialists)
+        self.specialists_panel = Panel()
+        self.specialists_panel.visible = False
+        self.ui_items.append(self.specialists_panel)
         self.dialog = None
-
+        self.clickables = []
+        self.clickables.append(self.button_specialists)
+        self.clickables.append(self.button_statistics)
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x
@@ -68,11 +73,10 @@ class UIState:
 
     def draw_buttons(self, screen):
         y = self.button_homes.y
-
         for button in self.button_set:
             screen.blit(self.sprites[button.name], (button.x, button.y))
 
-    def process_buttons(self, x, y):
+    def process_popup(self, x, y):
         for button in self.button_set:
             button.is_pressed(x, y)
 
@@ -84,3 +88,17 @@ class UIState:
     def draw(self, screen):
         for item in self.ui_items:
             item.draw(screen)
+
+    def show_specialists(self):
+        self.specialists_panel.visible = True
+        self.status_panel.visible = False
+
+    def show_statistics(self):
+        self.specialists_panel.visible = False
+        self.status_panel.visible = True
+
+    def process_clicks(self, x, y):
+        result = False
+        for button in self.clickables:
+            result = result or button.is_pressed(x, y)
+        return result

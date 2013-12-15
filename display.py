@@ -45,7 +45,7 @@ class Display():
 
         self.draw_sprite(self.game_data.monster.x * 32 - self.game_data.dx, self.game_data.monster.y * 32 - self.game_data.dy, self.uis.sprites['monster'])
 
-        if self.game_data.buttons_active:
+        if self.game_data.popup_active:
             self.uis.draw_buttons(self.screen)
 
         self.uis.update_labels()

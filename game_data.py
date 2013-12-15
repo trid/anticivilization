@@ -17,7 +17,7 @@ class GameData():
         self.old_dy = 0
         self.dx = 0
         self.dy = 0
-        self.buttons_active = False
+        self.popup_active = False
         self.done = False
         self.game_map = GameMap()
         self.exp_pos = None

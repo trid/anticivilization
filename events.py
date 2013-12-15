@@ -17,7 +17,7 @@ class EventProcessor:
                 if event.button == 3:
                     if event.pos[0] > 600:
                         continue
-                    self.data.buttons_active = True
+                    self.data.popup_active = True
                     buttons_pos = event.pos
                     self.uis.setup_buttons(*buttons_pos)
                     if self.data.game_map[(buttons_pos[0] + self.data.dx) / 32][(buttons_pos[1] + self.data.dy) / 32].resource:
@@ -27,9 +27,11 @@ class EventProcessor:
                         self.uis.set_grass_click()
                     building = None
                 if event.button == 1:
-                    if self.data.buttons_active and event.pos[0] < 600:
-                        self.data.buttons_active = False
-                        self.uis.process_buttons(*event.pos)
+                    if self.data.popup_active and event.pos[0] < 600:
+                        self.data.popup_active = False
+                        self.uis.process_popup(*event.pos)
+                    elif self.uis.process_clicks(*event.pos):
+                        pass
                     elif self.uis.building and event.pos[0] < 600:
                         self.data.build(*event.pos)
                     if self.data.drag:
