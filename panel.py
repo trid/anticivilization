@@ -3,7 +3,7 @@ from ui.clickable import Clickable
 __author__ = 'TriD'
 
 
-class Panel:
+class Panel(Clickable):
     def __init__(self):
         self.items = []
         self.clickables = []
@@ -19,7 +19,9 @@ class Panel:
         if isinstance(item, Clickable):
             self.clickables.append(item)
 
-    def click(self, x, y):
+    def is_pressed(self, x, y):
+        if not self.visible:
+            return False
         res = False
-        for item in self.items:
+        for item in self.clickables:
             res = res or item.is_pressed(x, y)
