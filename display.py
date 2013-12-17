@@ -49,12 +49,12 @@ class Display():
         if self.game_data.popup_active:
             self.uis.draw_buttons(self.screen)
 
-        self.uis.update_labels()
-        self.uis.draw(self.screen)
-
         lighted_x = ((self.mouse_x + self.game_data.dx) / 32) * 32 - self.game_data.dx
         lighted_y = ((self.mouse_y + self.game_data.dy) / 32) * 32 - self.game_data.dy
 
         self.draw_sprite(lighted_x, lighted_y, self.selected_tile_surface)
+
+        self.uis.update_labels()
+        self.uis.draw(self.screen)
 
         pygame.display.flip()

@@ -45,5 +45,5 @@ class SpecialistPanel(Clickable):
         elif y > self.y + self.h:
             return False
 
-        if self.selectable:
-            self.selected = not self.selected
+        self.selected = not self.selected
+        return True

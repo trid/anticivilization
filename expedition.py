@@ -1,4 +1,5 @@
 from math import sqrt
+import specialist
 
 __author__ = 'TriD'
 
@@ -9,11 +10,22 @@ DEAD = 4
 
 
 class Expedition:
-    def __init__(self):
+    def __init__(self, specialists):
         self.x = 5
         self.y = 5
         self.status = STARTED
         self.path = []
+        self.warriors = []
+        self.workers = []
+        for specialist_instance in specialists:
+            specialist_instance.occupied = True
+            if specialist_instance.s_type == specialist.WORKER:
+                self.workers.append(specialist_instance)
+            elif specialist_instance.s_type == specialist.WARRIOR:
+                self.warriors.append(specialist_instance)
+            else:
+                self.workers.append(specialist_instance)
+                self.warriors.append(specialist_instance)
 
     def find_path(self, pos_x, pos_y, dst_x, dst_y, passed=[]):
         #something too much to really use it, but i will...
@@ -98,3 +110,10 @@ class Expedition:
             del self.path[0]
         else:
             self.status = FINISHED
+            self.release_specialists()
+
+    def release_specialists(self):
+        for warrior in self.warriors:
+            warrior.occupied = False
+        for worker in self.workers:
+            worker.occupied = False

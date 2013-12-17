@@ -29,11 +29,7 @@ class GameData():
         self.specialists = [Specialist(specialist.CHIEFTAIN)]
 
     def send_expedition(self):
-        if self.village.food_stockpile >= 100:
-            expedition = Expedition()
-            expedition.find_path(5, 5, self.exp_pos[0], self.exp_pos[1], [])
-            self.expeditions.append(expedition)
-            self.village.food_stockpile -= 100
+        self.uis.show_chose_specialists_dialog()
 
     def move_monsters(self):
         self.game_map[self.monster.x][self.monster.y].unit = None

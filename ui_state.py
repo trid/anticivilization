@@ -1,8 +1,10 @@
+from expedition import Expedition
 from label import Label
 from panel import Panel
 from specialist import Specialist
 import specialist
 from sprite_manager import SpriteManager
+from ui.clickable_specialists_list import ClickableSpList
 from ui.dialog import Dialog
 from ui.specialist_panel import SpecialistPanel
 from ui.specialists_list import SpecialistsList
@@ -54,6 +56,7 @@ class UIState(object):
         self.create_chose_specialist_type_dialog()
         self.sp_list_panel = SpecialistsList(self.data, 600, 0)
         self.specialists_panel.add(self.sp_list_panel)
+        self.create_chose_specialists_dialog()
 
     def setup_buttons(self, x, y):
         self.button_homes.x = x
@@ -128,3 +131,29 @@ class UIState(object):
 
     def show_create_specialist_dialog(self):
         self.dialog = self.add_sp_dialog
+
+    def create_chose_specialists_dialog(self):
+        dialog = Dialog(300, 200, 200, 200)
+        sp_list = ClickableSpList(self.data, 0, 0)
+        dialog.add(sp_list)
+        send_button = Button(0, 171, 44, 21, sprite=SpriteManager().sprites['send_expedition_ok'], callback=self.send_expedition)
+        cancel_button = Button(100, 171, 60, 21, sprite=SpriteManager().sprites['cancel_button'], callback=self.dialog_cancel_button)
+        dialog.add(send_button)
+        dialog.add(cancel_button)
+        self.cl_sp_list = sp_list
+        self.chose_sp_dialog = dialog
+
+    def show_chose_specialists_dialog(self):
+        self.cl_sp_list.reset()
+        self.dialog = self.chose_sp_dialog
+
+    def dialog_cancel_button(self):
+        self.dialog = None
+
+    def send_expedition(self):
+        self.dialog = None
+        if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
+            expedition = Expedition(self.cl_sp_list.chosen)
+            expedition.find_path(5, 5, self.data.exp_pos[0], self.data.exp_pos[1], [])
+            self.data.expeditions.append(expedition)
+            self.data.village.food_stockpile -= 100
