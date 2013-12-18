@@ -1,3 +1,4 @@
+from map_gen.simplexnoise import raw_noise_2d, octave_noise_2d
 from tile import Tile
 
 __author__ = 'TriD'
@@ -17,15 +18,13 @@ class Column:
 
 class GameMap:
     def __init__(self):
-        start_map = []
-
-        for i in range(0, 10):
-            start_map.append([Tile() for k in range(0, 10)])
+        self.data = {}
+        self.touch_square(0, 0)
+        start_map = self.data[(0, 0)]
 
         start_map[5][5].building = 'center'
         start_map[9][9].resource = 'tree'
 
-        self.data = {(0, 0): start_map}
 
     def __getitem__(self, row):
         return Column(self, row)
@@ -40,7 +39,12 @@ class GameMap:
 
     def touch_square(self, x, y):
         if not (x, y) in self.data:
-            map_part = []
+            data = []
             for i in range(0, 10):
-                map_part.append([Tile() for k in range(0, 10)])
-            self.data[(x, y)] = map_part
+                row = []
+                for k in range(0, 10):
+                    tile = Tile()
+                    tile.ground = 'grass' if octave_noise_2d(5, 1, 1, i * 10 + x, k * 10 + y) >= -0.1 else 'water'
+                    row.append(tile)
+                data.append(row)
+            self.data[(x, y)] = data

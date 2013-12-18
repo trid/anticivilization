@@ -14,6 +14,7 @@ class SpriteManager(object):
     def __init__(self):
         self.sprites = {'center': pygame.image.load('res/images/center.png'),
                         'grass': pygame.image.load('res/images/grass.png'),
+                        'water': pygame.image.load('res/images/water.png'),
                         'build_homes': pygame.image.load('res/images/build_homes.png'),
                         'build_field': pygame.image.load('res/images/build_field.png'),
                         'build_woodcutter': pygame.image.load('res/images/build_woodcutter.png'),
