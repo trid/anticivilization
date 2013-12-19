@@ -25,7 +25,6 @@ class GameMap:
         start_map[5][5].building = 'center'
         start_map[9][9].resource = 'tree'
 
-
     def __getitem__(self, row):
         return Column(self, row)
 
