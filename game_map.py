@@ -1,3 +1,5 @@
+import random
+from map_gen.river import River
 from map_gen.simplexnoise import raw_noise_2d, octave_noise_2d
 from tile import Tile
 
@@ -25,6 +27,8 @@ class GameMap:
         start_map[5][5].building = 'center'
         start_map[9][9].resource = 'tree'
 
+        self.river = River(random.randint(0, 500), random.randint(0, 500))
+
     def __getitem__(self, row):
         return Column(self, row)
 
@@ -38,6 +42,7 @@ class GameMap:
 
     def touch_square(self, x, y):
         if not (x, y) in self.data:
+            self.generate_rivers(x, y)
             data = []
             for i in range(0, 10):
                 row = []
@@ -47,3 +52,6 @@ class GameMap:
                     row.append(tile)
                 data.append(row)
             self.data[(x, y)] = data
+
+    def generate_rivers(self, x, y):
+        pass
