@@ -3,6 +3,14 @@ from map_gen.river import River
 from map_gen.simplexnoise import raw_noise_2d, octave_noise_2d
 from tile import Tile
 
+SQUARE_HEIGHT = 10
+
+SQUARE_WIDTH = 10
+
+MAP_HEIGHT = 20
+
+MAP_WIDTH = 20
+
 __author__ = 'TriD'
 
 
@@ -21,34 +29,30 @@ class Column:
 class GameMap:
     def __init__(self):
         self.data = {}
-        self.touch_square(0, 0)
-        start_map = self.data[(0, 0)]
-
-        start_map[5][5].building = 'center'
-        start_map[9][9].resource = 'tree'
-
-        self.river = River(random.randint(0, 500), random.randint(0, 500))
 
     def __getitem__(self, row):
         return Column(self, row)
 
     def get_tile(self, x, y):
-        self.touch_square(x / 10, y / 10)
-        return self.data[(x / 10, y / 10)][x % 10][y % 10]
+        sx = (x / SQUARE_WIDTH) % MAP_WIDTH
+        sy = (y / SQUARE_HEIGHT) % MAP_HEIGHT
+        self.touch_square(sx, sy)
+        return self.data[(sx, sy)][x % SQUARE_WIDTH][y % SQUARE_WIDTH]
 
     def set_tile(self, x, y, tile):
-        self.touch_square(x / 10, y / 10)
-        self.data[(x / 10, y / 10)][x % 10][y % 10] = tile
+        sx = (x / SQUARE_WIDTH) % MAP_WIDTH
+        sy = (y / SQUARE_HEIGHT) % MAP_HEIGHT
+        self.touch_square(sx, sy)
+        self.data[(sx, sy)][x % SQUARE_WIDTH][y % SQUARE_HEIGHT] = tile
 
     def touch_square(self, x, y):
         if not (x, y) in self.data:
             self.generate_rivers(x, y)
             data = []
-            for i in range(0, 10):
+            for i in range(0, SQUARE_WIDTH):
                 row = []
-                for k in range(0, 10):
+                for k in range(0, SQUARE_HEIGHT):
                     tile = Tile()
-                    tile.ground = 'grass' if octave_noise_2d(5, 1, 1, i * 10 + x, k * 10 + y) >= -0.1 else 'water'
                     row.append(tile)
                 data.append(row)
             self.data[(x, y)] = data

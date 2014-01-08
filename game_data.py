@@ -11,34 +11,41 @@ __author__ = 'TriD'
 
 
 class GameData():
+    def place_center(self):
+        self.game_map[5][5].building = 'center'
+        self.game_map[9][9].resource = 'tree'
+        self.center = (5, 5)
+
     def __init__(self):
         self.drag = False
-        self.old_dx = 0
-        self.old_dy = 0
-        self.dx = 0
-        self.dy = 0
         self.popup_active = False
         self.done = False
         self.game_map = GameMap()
+        self.place_center()
+        self.old_dx = 0
+        self.old_dy = 0
+        self.dx = -(300 - 32 * self.center[0])
+        self.dy = -(300 - 32 * self.center[1])
         self.exp_pos = None
         self.village = Village()
         self.expeditions = []
         self.turn = 0
-        self.monster = Monster()
-        self.game_map[0][0].unit = self.monster
+        self.monsters = [Monster()]
+        self.game_map[0][0].unit = self.monsters[0]
         self.specialists = [Specialist(specialist.CHIEFTAIN)]
 
     def send_expedition(self):
         self.uis.show_chose_specialists_dialog()
 
     def move_monsters(self):
-        self.game_map[self.monster.x][self.monster.y].unit = None
-        self.monster.random_move()
+        for monster in self.monsters:
+            self.game_map[monster.x][monster.y].unit = None
+            monster.random_move()
 
-        monster_tile = self.game_map[self.monster.x][self.monster.y]
-        if monster_tile.unit:
-            monster_tile.unit.status = expedition.DEAD
-        monster_tile.unit = self.monster
+            monster_tile = self.game_map[monster.x][monster.y]
+            if monster_tile.unit:
+                monster_tile.unit.status = expedition.DEAD
+            monster_tile.unit = monster
 
     def next_turn(self):
         self.turn += 1
@@ -57,11 +64,13 @@ class GameData():
         self.move_monsters()
 
     def build(self, mouse_x, mouse_y):
-        x = (mouse_x - self.dx - self.dx % 32) / 32
-        y = (mouse_y - self.dy - self.dy % 32) / 32
+        x = (self.dx + mouse_x) / 32
+        y = (self.dy + mouse_y) / 32
 
         may_build = False
         if self.game_map[x][y].building:
+            return
+        if self.game_map[x][y].ground == 'water':
             return
         if x > 0:
             if self.game_map[x - 1][y].building:

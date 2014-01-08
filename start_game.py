@@ -1,3 +1,5 @@
+from map_gen.river_gen import generate_rivers
+
 __author__ = 'TriD'
 
 from game_data import GameData
@@ -11,6 +13,7 @@ uis = UIState(game_data)
 display.uis = uis
 game_data.uis = uis
 event_processor = EventProcessor(game_data, uis, display)
+generate_rivers(game_data.game_map)
 
 
 def build_houses():

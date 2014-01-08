@@ -41,7 +41,7 @@ class EventProcessor:
                         self.data.build(*event.pos)
                     if self.data.drag:
                         self.data.drag = False
-            if event.type == pygame.KEYUP:
+            if event.type == pygame.KEYUP and not self.uis.dialog:
                 if event.key == pygame.K_RETURN:
                     self.data.next_turn()
             if event.type == pygame.MOUSEMOTION:

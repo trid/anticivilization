@@ -43,8 +43,8 @@ class Display():
                     self.draw_sprite(sx, sy, self.sm.sprites[self.game_data.game_map[mx][my].building])
         for expedition in self.game_data.expeditions:
             self.draw_sprite(expedition.x * 32 - self.game_data.dx, expedition.y * 32 - 28 - self.game_data.dy, self.sm.sprites['human'])
-
-        self.draw_sprite(self.game_data.monster.x * 32 - self.game_data.dx, self.game_data.monster.y * 32 - self.game_data.dy, self.sm.sprites['monster'])
+        for monster in self.game_data.monsters:
+            self.draw_sprite(monster.x * 32 - self.game_data.dx, monster.y * 32 - self.game_data.dy, self.sm.sprites['monster'])
 
         if self.game_data.popup_active:
             self.uis.draw_buttons(self.screen)
