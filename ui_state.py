@@ -154,6 +154,6 @@ class UIState(object):
         self.dialog = None
         if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
             expedition = Expedition(self.cl_sp_list.chosen)
-            expedition.find_path(5, 5, self.data.exp_pos[0], self.data.exp_pos[1], [])
+            expedition.find_path(5, 5, self.data.exp_pos[0], self.data.exp_pos[1], self.data.game_map)
             self.data.expeditions.append(expedition)
             self.data.village.food_stockpile -= 100

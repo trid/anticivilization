@@ -14,6 +14,8 @@ class GameData():
     def place_center(self):
         self.game_map[5][5].building = 'center'
         self.game_map[9][9].resource = 'tree'
+        self.game_map[-20][0].resource = 'tree'
+        self.game_map[20][0].resource = 'tree'
         self.center = (5, 5)
 
     def __init__(self):
