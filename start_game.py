@@ -29,6 +29,10 @@ def build_road():
     uis.building = 'road'
 
 
+def build_port():
+    uis.building = 'port'
+
+
 def send_expedition_callback():
     game_data.send_expedition()
 
@@ -37,6 +41,7 @@ uis.button_fields.callback = build_field
 uis.button_woodcutter.callback = build_woodcutter
 uis.button_expedition.callback = send_expedition_callback
 uis.button_road.callback = build_road
+uis.button_port.callback = build_port
 
 while not game_data.done:
     event_processor.process_events()

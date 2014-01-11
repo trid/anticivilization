@@ -117,8 +117,8 @@ class GameData():
             if cond != self.game_map[x][y].resource:
                 return
 
-        for cond in bc.near:
-            self.check_nearby_tiles(x, y, cond)
+        if not self.check_nearby_tiles(x, y, bc.near):
+            return
 
         for resource in bc.resources:
             self.village.change_resource_count(resource, -bc.resources[resource])
@@ -141,7 +141,7 @@ class GameData():
         for param in cond:
             result = False
             for point in points:
-                result = getattr(point) == cond[param] or result
+                result = getattr(point, param) == cond[param] or result
             if not result:
                 return False
         return True

@@ -24,10 +24,11 @@ class UIState(object):
         self.button_fields = Button(0, 0, 93, 23, 'build_field')
         self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')
         self.button_road = Button(0, 0, 92, 21, 'build_road')
+        self.button_port = Button(0, 0, 92, 21, 'build_port')
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
-        self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter, self.button_road]
+        self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter, self.button_road, self.button_port]
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
         self.exp_click_pos = None

@@ -1,0 +1,13 @@
+{
+    "conditions": {
+        "resources": {
+            "wood": 200
+        },
+        "near": {
+            "ground": "water"
+        }
+    },
+    "growth": {
+        "food_growth": 200
+    }
+}
