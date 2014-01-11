@@ -21,6 +21,6 @@ class BuildingManager(object):
             name = os.path.splitext(item)
             datafile = open("%s/%s" % (RES_BUILDINGS, item))
             data = json.load(datafile)
-            bc = BuildConditions(data['resources'], data['growth'])
+            bc = BuildConditions(data['conditions'], data['growth'])
             self.conds[name[0]] = bc
             datafile.close()

@@ -29,7 +29,7 @@ def draw_river(vec, map):
     deltax = x2 - x1
     deltay = y2 - y1
     error = 0.
-    deltaerr = math.fabs(deltay / deltax)
+    deltaerr = math.fabs(deltay / deltax or 1)
     y = y1
     for x in range(x1, x2):
         if steep:

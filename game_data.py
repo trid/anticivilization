@@ -1,6 +1,7 @@
 from building_manager import BuildingManager
 import expedition
 from game_map import GameMap
+from map_gen.river_gen import generate_rivers
 from monster import Monster
 from point import Point
 from specialist import Specialist
@@ -17,14 +18,18 @@ class GameData():
         self.game_map[20][0].resource = 'tree'
 
     def place_center(self):
-        self.game_map[5][5].building = 'center'
         self.center = Point(5, 5)
+        while self.game_map[self.center.x][self.center.y].ground == 'water':
+            self.center.x += 1
+            self.center.y += 1
+        self.game_map[self.center.x][self.center.y].building = 'center'
 
     def __init__(self):
         self.drag = False
         self.popup_active = False
         self.done = False
         self.game_map = GameMap()
+        generate_rivers(self.game_map)
         self.place_center()
         self.place_resources()
         self.old_dx = 0
@@ -69,6 +74,9 @@ class GameData():
         self.move_monsters()
 
     def build(self, mouse_x, mouse_y):
+        if not self.uis.building:
+            return
+
         x = (self.dx + mouse_x) / 32
         y = (self.dy + mouse_y) / 32
 
@@ -77,23 +85,22 @@ class GameData():
             return
         if self.game_map[x][y].ground == 'water':
             return
-        if x > 0:
-            if self.game_map[x - 1][y].building:
-                may_build = True
-            if y > 0 and self.game_map[x - 1][y - 1].building:
-                may_build = True
-            if y < 9 and self.game_map[x - 1][y - 1].building:
-                may_build = True
-        if x < 9:
-            if self.game_map[x + 1][y].building:
-                may_build = True
-            if y > 0 and self.game_map[x + 1][y - 1].building:
-                may_build = True
-            if y < 9 and self.game_map[x + 1][y + 1].building:
-                may_build = True
-        if y > 0 and self.game_map[x][y - 1].building:
+
+        if self.game_map[x - 1][y].building:
             may_build = True
-        if y < 9 and self.game_map[x][y + 1].building:
+        if self.game_map[x - 1][y - 1].building:
+            may_build = True
+        if self.game_map[x - 1][y - 1].building:
+            may_build = True
+        if self.game_map[x][y - 1].building:
+            may_build = True
+        if self.game_map[x + 1][y - 1].building:
+            may_build = True
+        if self.game_map[x + 1][y].building:
+            may_build = True
+        if self.game_map[x + 1][y + 1].building:
+            may_build = True
+        if self.game_map[x][y + 1].building:
             may_build = True
         if may_build:
             self.set_building(x, y)
