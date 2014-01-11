@@ -1,8 +1,8 @@
 from building_manager import BuildingManager
-from expedition import Expedition
 import expedition
 from game_map import GameMap
 from monster import Monster
+from point import Point
 from specialist import Specialist
 import specialist
 from village import Village
@@ -11,12 +11,14 @@ __author__ = 'TriD'
 
 
 class GameData():
-    def place_center(self):
-        self.game_map[5][5].building = 'center'
+    def place_resources(self):
         self.game_map[9][9].resource = 'tree'
         self.game_map[-20][0].resource = 'tree'
         self.game_map[20][0].resource = 'tree'
-        self.center = (5, 5)
+
+    def place_center(self):
+        self.game_map[5][5].building = 'center'
+        self.center = Point(5, 5)
 
     def __init__(self):
         self.drag = False
@@ -24,10 +26,11 @@ class GameData():
         self.done = False
         self.game_map = GameMap()
         self.place_center()
+        self.place_resources()
         self.old_dx = 0
         self.old_dy = 0
-        self.dx = -(300 - 32 * self.center[0])
-        self.dy = -(300 - 32 * self.center[1])
+        self.dx = -(300 - 32 * self.center.x)
+        self.dy = -(300 - 32 * self.center.y)
         self.exp_pos = None
         self.village = Village()
         self.expeditions = []
@@ -107,6 +110,9 @@ class GameData():
             if cond != self.game_map[x][y].resource:
                 return
 
+        for cond in bc.near:
+            self.check_nearby_tiles(x, y, cond)
+
         for resource in bc.resources:
             self.village.change_resource_count(resource, -bc.resources[resource])
 
@@ -114,3 +120,21 @@ class GameData():
             self.village.change_resource_count(resource, bc.changes[resource])
 
         self.game_map[x][y].building = self.uis.building
+
+    #Conditions for nearby tiles. Specially for port building
+    def check_nearby_tiles(self, x, y, cond):
+        points = (self.game_map[x][y - 1],
+                  self.game_map[x + 1][y - 1],
+                  self.game_map[x + 1][y],
+                  self.game_map[x + 1][y + 1],
+                  self.game_map[x][y + 1],
+                  self.game_map[x - 1][y + 1],
+                  self.game_map[x - 1][y],
+                  self.game_map[x - 1][y - 1])
+        for param in cond:
+            result = False
+            for point in points:
+                result = getattr(point) == cond[param] or result
+            if not result:
+                return False
+        return True

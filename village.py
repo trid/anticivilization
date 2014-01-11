@@ -11,6 +11,10 @@ resources_mapping = {
     'wood_growth': 'wood_increasing'
 }
 
+unlimited_growth = {
+    'food_growth', 'max_population', 'wood_growth', 'population'
+}
+
 
 class Village:
     def __init__(self):
@@ -21,6 +25,7 @@ class Village:
         self.max_population = 200
         self.wood_stockpile = 0
         self.wood_increasing = 0
+        self.resources_limit = 1000
 
     def update(self):
         self.population += self.population_growth
@@ -31,7 +36,11 @@ class Village:
         if self.food_stockpile < 0:
             self.population += self.food_stockpile
             self.food_stockpile = 0
+        elif self.food_stockpile > self.resources_limit:
+            self.food_stockpile = self.resources_limit
         self.wood_stockpile += self.wood_increasing
+        if self.wood_stockpile > self.resources_limit:
+            self.wood_stockpile = self.resources_limit
 
     def get_resource_by_name(self, name):
         return resources_mapping.get(name, None)
@@ -44,6 +53,8 @@ class Village:
         stock += count
         if stock < 0:
             stock = 0
+        elif stock > self.resources_limit and resource not in unlimited_growth:
+            stock = self.resources_limit
         setattr(self, resource_field, stock)
 
     def get_resource_count(self, resource):

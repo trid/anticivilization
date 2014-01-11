@@ -80,10 +80,13 @@ class AStarFinder():
     def add_to_open_set(self, open_set, node_to, heuristic):
         if not len(open_set):
             open_set.append((node_to, heuristic))
+            return
         else:
             for i in range(0, len(open_set)):
-                if open_set[i][1] > heuristic:
-                    open_set.insert(i + 1, (node_to, heuristic))
+                if open_set[i][1] < heuristic:
+                    open_set.insert(i, (node_to, heuristic))
+                    return
+        open_set.append((node_to, heuristic))
 
     def formate_path(self, came_from, node):
         current_node = node

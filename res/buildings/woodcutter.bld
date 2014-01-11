@@ -1,8 +1,10 @@
 {
-    "resources": {
-        "wood": 100
+    "conditions": {
+        "resources": {
+            "wood": 100
+        },
+        "tile_params": ["tree"]
     },
-    "tile_params": ["tree"],
     "growth": {
         "wood_growth": 100
     }

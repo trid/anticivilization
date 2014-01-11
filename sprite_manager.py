@@ -33,4 +33,6 @@ class SpriteManager(object):
                         'up_button': pygame.image.load('res/images/up_button.png'),
                         'down_button': pygame.image.load('res/images/down_button.png'),
                         'send_expedition_ok': pygame.image.load('res/images/send_expedition_ok.png'),
-                        'cancel_button': pygame.image.load('res/images/cancel_button.png')}
+                        'cancel_button': pygame.image.load('res/images/cancel_button.png'),
+                        'road': pygame.image.load('res/images/road.png'),
+                        'build_road': pygame.image.load('res/images/build_road.png'),}

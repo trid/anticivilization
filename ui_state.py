@@ -23,10 +23,11 @@ class UIState(object):
         self.button_homes = Button(0, 0, 115, 23, 'build_homes')
         self.button_fields = Button(0, 0, 93, 23, 'build_field')
         self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')
+        self.button_road = Button(0, 0, 92, 21, 'build_road')
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
-        self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter]
+        self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter, self.button_road]
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
         self.exp_click_pos = None
@@ -59,14 +60,11 @@ class UIState(object):
         self.create_chose_specialists_dialog()
 
     def setup_buttons(self, x, y):
-        self.button_homes.x = x
-        self.button_homes.y = y
-        self.button_fields.x = x
-        self.button_fields.y = y + 23
-        self.button_woodcutter.x = x
-        self.button_woodcutter.y = y + 46
-        self.button_expedition.x = x
-        self.button_expedition.y = y + 67
+        button_y = y
+        for button in self.button_set:
+            button.x = x
+            button.y = y
+            y += button.h
 
     def set_grass_click(self):
         self.button_set = self.grass_click_buttons
@@ -153,7 +151,7 @@ class UIState(object):
     def send_expedition(self):
         self.dialog = None
         if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
-            expedition = Expedition(self.cl_sp_list.chosen)
-            expedition.find_path(5, 5, self.data.exp_pos[0], self.data.exp_pos[1], self.data.game_map)
+            expedition = Expedition(self.cl_sp_list.chosen, self.data.center)
+            expedition.find_path(self.data.center.x, self.data.center.y, self.data.exp_pos[0], self.data.exp_pos[1], self.data.game_map)
             self.data.expeditions.append(expedition)
             self.data.village.food_stockpile -= 100

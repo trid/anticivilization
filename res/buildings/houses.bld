@@ -1,6 +1,8 @@
 {
-    "resources": {
-        "wood": 200
+    "conditions": {
+        "resources": {
+            "wood": 200
+        }
     },
     "growth": {
         "max_population": 400

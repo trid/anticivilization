@@ -12,9 +12,10 @@ DEAD = 4
 
 
 class Expedition:
-    def __init__(self, specialists):
-        self.x = 5
-        self.y = 5
+    def __init__(self, specialists, position_from):
+        self.x = position_from.x
+        self.y = position_from.y
+        self.center = position_from
         self.status = STARTED
         self.path = []
         self.warriors = []
@@ -45,7 +46,7 @@ class Expedition:
             self.path.pop()
         elif self.status != RETURNING:
             self.status = RETURNING
-            self.find_path(self.x, self.y, 5, 5, self.game_map)
+            self.find_path(self.x, self.y, self.center.x, self.center.y, self.game_map)
             self.x, self.y = (self.path[-1].x, self.path[-1].y)
             self.path.pop()
         else:
