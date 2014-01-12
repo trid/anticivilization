@@ -33,6 +33,10 @@ def build_port():
     uis.building = 'port'
 
 
+def build_stockpile():
+    uis.building = 'stockpile'
+
+
 def send_expedition_callback():
     game_data.send_expedition()
 
@@ -42,7 +46,9 @@ uis.button_woodcutter.callback = build_woodcutter
 uis.button_expedition.callback = send_expedition_callback
 uis.button_road.callback = build_road
 uis.button_port.callback = build_port
+uis.button_stockpile.callback = build_stockpile
 
 while not game_data.done:
+    game_data.process()
     event_processor.process_events()
     display.draw()

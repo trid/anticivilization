@@ -27,9 +27,12 @@ class Node:
                   Point(point.x - 1, point.y + 1),
                   Point(point.x - 1, point.y),
                   Point(point.x - 1, point.y - 1))
-        for point in points:
-            if game_map[point.x][point.y].ground != 'water':
-                yield Edge(game_map, self, Node(game_map, point))
+        for npoint in points:
+            if game_map[npoint.x][npoint.y].ground != 'water' or game_map[point.x][point.y].building == 'port':
+                yield Edge(game_map, self, Node(game_map, npoint))
+            if game_map[npoint.x][npoint.y].ground == 'water' and \
+                    (game_map[point.x][point.y].building is None or game_map[point.x][point.y].building == 'port'):
+                yield Edge(game_map, self, Node(game_map, npoint))
 
 
 class Edge:

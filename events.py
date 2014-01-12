@@ -31,7 +31,7 @@ class EventProcessor:
                     self.uis.setup_buttons(*buttons_pos)
                     building = None
                 if event.button == 1:
-                    if self.data.popup_active and event.pos[0] < 600:
+                    if self.data.popup_active:
                         self.data.popup_active = False
                         self.uis.process_popup(*event.pos)
                         continue
@@ -41,9 +41,30 @@ class EventProcessor:
                         self.data.build(*event.pos)
                     if self.data.drag:
                         self.data.drag = False
-            if event.type == pygame.KEYUP and not self.uis.dialog:
-                if event.key == pygame.K_RETURN:
-                    self.data.next_turn()
+            if event.type == pygame.KEYUP:
+                if not self.uis.dialog:
+                    if event.key == pygame.K_RETURN:
+                        self.data.next_turn()
+                else:
+                    if event.key == pygame.K_RETURN:
+                        if self.uis.dialog.enter_btn:
+                            self.uis.dialog.enter_btn.run_callback()
+                    elif event.key == pygame.K_ESCAPE:
+                        if self.uis.dialog.esc_btn:
+                            self.uis.dialog.esc_btn.run_callback()
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    self.data.scroll_spd_y = 0
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    self.data.scroll_spd_x = 0
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.data.scroll_spd_y = -5
+                if event.key == pygame.K_LEFT:
+                    self.data.scroll_spd_x = -5
+                if event.key == pygame.K_DOWN:
+                    self.data.scroll_spd_y = 5
+                if event.key == pygame.K_RIGHT:
+                    self.data.scroll_spd_x = 5
             if event.type == pygame.MOUSEMOTION:
                 self.display.mouse_x, self.display.mouse_y = event.pos
                 if self.data.drag:

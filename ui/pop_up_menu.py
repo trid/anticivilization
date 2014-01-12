@@ -37,3 +37,5 @@ class PopUpMenu(Clickable):
     def add_item(self, item):
         self.items.append(item)
         self.h += item.h
+        if self.w < item.w:
+            self.w = item.w

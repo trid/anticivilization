@@ -1,3 +1,4 @@
+import time
 from building_manager import BuildingManager
 import expedition
 from game_map import GameMap
@@ -36,6 +37,7 @@ class GameData():
         self.old_dy = 0
         self.dx = -(300 - 32 * self.center.x)
         self.dy = -(300 - 32 * self.center.y)
+        self.scroll_spd_x, self.scroll_spd_y = 0, 0
         self.exp_pos = None
         self.village = Village()
         self.expeditions = []
@@ -43,6 +45,8 @@ class GameData():
         self.monsters = [Monster()]
         self.game_map[0][0].unit = self.monsters[0]
         self.specialists = [Specialist(specialist.CHIEFTAIN)]
+        self.last_time = time.time() * 1000
+        self.accum = 0
 
     def send_expedition(self):
         self.uis.show_chose_specialists_dialog()
@@ -145,3 +149,14 @@ class GameData():
             if not result:
                 return False
         return True
+
+    def process(self):
+        curr_time = time.time() * 1000
+        delta = curr_time - self.last_time
+        self.last_time = curr_time
+        self.accum += delta
+
+        if self.accum >= 100:
+            self.accum -= 100
+            self.dx += self.scroll_spd_x
+            self.dy += self.scroll_spd_y

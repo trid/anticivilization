@@ -27,14 +27,17 @@ class Button(Clickable):
         elif y > self.y + self.h:
             return False
 
-        if self.callback:
-            if self.caller:
-                self.callback(self.caller)
-            else:
-                self.callback()
+        self.run_callback()
 
         return True
 
     def draw(self, screen):
         if self.sprite:
             screen.blit(self.sprite, (self.x, self.y))
+
+    def run_callback(self):
+        if self.callback:
+            if self.caller:
+                self.callback(self.caller)
+            else:
+                self.callback()

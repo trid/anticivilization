@@ -1,0 +1,10 @@
+{
+    "conditions": {
+        "resources": {
+            "wood": 150
+        }
+    },
+    "growth": {
+        "resources_limit": 1000
+    }
+}

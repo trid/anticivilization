@@ -37,4 +37,7 @@ class SpriteManager(object):
                         'road': pygame.image.load('res/images/road.png'),
                         'build_road': pygame.image.load('res/images/build_road.png'),
                         'port': pygame.image.load('res/images/port.png'),
-                        'build_port': pygame.image.load('res/images/build_port.png'),}
+                        'build_port': pygame.image.load('res/images/build_port.png'),
+                        'stockpile': pygame.image.load('res/images/stockpile.png'),
+                        'build_stockpile': pygame.image.load('res/images/build_stockpile.png'),
+                        'boat': pygame.image.load('res/images/boat.png'),}

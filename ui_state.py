@@ -25,10 +25,11 @@ class UIState(object):
         self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')
         self.button_road = Button(0, 0, 92, 21, 'build_road')
         self.button_port = Button(0, 0, 92, 21, 'build_port')
+        self.button_stockpile = Button(0, 0, 132, 21, 'build_stockpile')
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
-        self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter, self.button_road, self.button_port]
+        self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter, self.button_road, self.button_port, self.button_stockpile]
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
         self.exp_click_pos = None
@@ -129,7 +130,8 @@ class UIState(object):
         self.add_sp_dialog = dialog
 
     def show_create_specialist_dialog(self):
-        self.dialog = self.add_sp_dialog
+        if self.data.village.population > 1000 * len(self.data.specialists):
+            self.dialog = self.add_sp_dialog
 
     def create_chose_specialists_dialog(self):
         dialog = Dialog(300, 200, 200, 200)
@@ -137,8 +139,8 @@ class UIState(object):
         dialog.add(sp_list)
         send_button = Button(0, 171, 44, 21, sprite=SpriteManager().sprites['send_expedition_ok'], callback=self.send_expedition)
         cancel_button = Button(100, 171, 60, 21, sprite=SpriteManager().sprites['cancel_button'], callback=self.dialog_cancel_button)
-        dialog.add(send_button)
-        dialog.add(cancel_button)
+        dialog.add_ok(send_button)
+        dialog.add_cancel(cancel_button)
         self.cl_sp_list = sp_list
         self.chose_sp_dialog = dialog
 

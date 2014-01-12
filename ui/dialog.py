@@ -13,6 +13,8 @@ class Dialog(object):
         self.y = y
         self.w = w
         self.h = h
+        self.enter_btn = None
+        self.esc_btn = None
 
     def draw(self, screen):
         self.surface.fill(0xaaaaaa)
@@ -32,3 +34,11 @@ class Dialog(object):
             return
         for item in self.clickables:
             item.is_pressed(x, y)
+
+    def add_ok(self, button):
+        self.enter_btn = button
+        self.add(button)
+
+    def add_cancel(self, button):
+        self.esc_btn = button
+        self.add(button)

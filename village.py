@@ -8,11 +8,12 @@ resources_mapping = {
     'population': 'population',
     'food_growth': 'food_growth',
     'max_population': 'max_population',
-    'wood_growth': 'wood_increasing'
+    'wood_growth': 'wood_increasing',
+    'resources_limit': 'resources_limit'
 }
 
 unlimited_growth = {
-    'food_growth', 'max_population', 'wood_growth', 'population'
+    'food_growth', 'max_population', 'wood_growth', 'population', 'resources_limit'
 }
 
 
