@@ -20,6 +20,7 @@ class Expedition:
         self.path = []
         self.warriors = []
         self.workers = []
+        self.speed = 2
         for specialist_instance in specialists:
             specialist_instance.occupied = True
             if specialist_instance.s_type == specialist.WORKER:

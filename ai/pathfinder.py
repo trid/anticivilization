@@ -27,11 +27,15 @@ class Node:
                   Point(point.x - 1, point.y + 1),
                   Point(point.x - 1, point.y),
                   Point(point.x - 1, point.y - 1))
+        current_tile = game_map[point.x][point.y]
         for npoint in points:
-            if game_map[npoint.x][npoint.y].ground != 'water' or game_map[point.x][point.y].building == 'port':
+            next_tile = game_map[npoint.x][npoint.y]
+            if (current_tile.ground == 'grass' and next_tile.ground != 'water') or current_tile.building == 'port':
                 yield Edge(game_map, self, Node(game_map, npoint))
-            if game_map[npoint.x][npoint.y].ground == 'water' and \
-                    (game_map[point.x][point.y].building is None or game_map[point.x][point.y].building == 'port'):
+            if current_tile.ground == 'water' and next_tile.ground == 'water':
+                yield Edge(game_map, self, Node(game_map, npoint))
+            if (current_tile.ground == 'water' and next_tile.ground == 'grass') and \
+                    (next_tile.building is None or next_tile.building == 'port'):
                 yield Edge(game_map, self, Node(game_map, npoint))
 
 
@@ -65,7 +69,7 @@ class AStarFinder():
                     continue
                 #Here will be cost for passing tile
                 #and somehow i'll add here some way to avoid tiles that character can't pass
-                tentative_g_score = gscore[current_node] + 1
+                tentative_g_score = gscore[current_node] + 0
                 hcost = self.heuristic(end_point, edge.node_to.point)
 
                 if not self.is_in_open_set(open_set, edge.node_to) or tentative_g_score < gscore[edge.node_to]:

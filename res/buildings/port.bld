@@ -1,7 +1,7 @@
 {
     "conditions": {
         "resources": {
-            "wood": 200
+            "wood": 0
         },
         "near": {
             "ground": "water"
