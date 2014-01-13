@@ -1,6 +1,7 @@
 import pygame
 from pygame.rect import Rect
 from pygame.surface import Surface
+from field_view import FieldView
 from sprite_manager import SpriteManager
 
 __author__ = 'TriD'
@@ -13,46 +14,17 @@ class Display():
         self.game_data = game_data
         self.uis = uis
         self.mouse_x, self.mouse_y = 0, 0
-        self.selected_tile_surface = Surface((32, 32))
-        self.selected_tile_surface.fill(0xb7f315)
-        self.selected_tile_surface.set_alpha(124)
         self.sm = SpriteManager()
-
-    def draw_sprite(self, x, y, sprite):
-        if x + 32 <= 600:
-            self.screen.blit(sprite, [x, y])
-        elif 632 > x + 32 > 600:
-            self.screen.blit(sprite, [x, y], Rect(0, 0, 600 - x, sprite.get_height()))
+        self.field_view = FieldView(self.game_data)
 
     def draw(self):
         self.screen.fill((0, 0, 0))
 
-        for x in range(0, 20):
-            for y in range(0, 20):
-                # New, better rendering that draws part of map that is currently on screen
-                mx = x + self.game_data.dx / 32
-                my = y + self.game_data.dy / 32
-                sx = x * 32 - self.game_data.dx % 32
-                sy = y * 32 - self.game_data.dy % 32
-                self.draw_sprite(sx, sy, self.sm.sprites[self.game_data.game_map[mx][my].ground])
-                if self.game_data.game_map[mx][my].resource:
-                    self.draw_sprite(sx, sy, self.sm.sprites[self.game_data.game_map[mx][my].resource])
-                if self.game_data.game_map[mx][my].building == 'center':
-                    self.draw_sprite(sx, sy - 64, self.sm.sprites['center'])
-                elif self.game_data.game_map[mx][my].building:
-                    self.draw_sprite(sx, sy, self.sm.sprites[self.game_data.game_map[mx][my].building])
-        for expedition in self.game_data.expeditions:
-            self.draw_sprite(expedition.x * 32 - self.game_data.dx, expedition.y * 32 - 28 - self.game_data.dy, self.sm.sprites['human'])
-        for monster in self.game_data.monsters:
-            self.draw_sprite(monster.x * 32 - self.game_data.dx, monster.y * 32 - self.game_data.dy, self.sm.sprites['monster'])
+        self.field_view.mouse_x, self.field_view.mouse_y = self.mouse_x, self.mouse_y
+        self.field_view.draw_field(self.screen)
 
         if self.game_data.popup_active:
             self.uis.draw_buttons(self.screen)
-
-        lighted_x = ((self.mouse_x + self.game_data.dx) / 32) * 32 - self.game_data.dx
-        lighted_y = ((self.mouse_y + self.game_data.dy) / 32) * 32 - self.game_data.dy
-
-        self.draw_sprite(lighted_x, lighted_y, self.selected_tile_surface)
 
         self.uis.update_labels()
         self.uis.draw(self.screen)
