@@ -45,6 +45,8 @@ class EventProcessor:
                 if not self.uis.dialog:
                     if event.key == pygame.K_RETURN:
                         self.data.next_turn()
+                    if event.key == pygame.K_ESCAPE:
+                        self.uis.dialog = self.uis.main_menu
                 else:
                     if event.key == pygame.K_RETURN:
                         if self.uis.dialog.enter_btn:

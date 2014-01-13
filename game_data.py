@@ -71,7 +71,7 @@ class GameData():
             if type(tile.unit) == Monster:
                 expedition_item.status = expedition.DEAD
             elif expedition_item.status == expedition.FINISHED:
-                self.village.wood_stockpile += 100
+                self.village.change_resource_count(expedition_item.resource, 100)
             else:
                 tile.unit = expedition_item
         self.expeditions = filter(lambda x: x.status != expedition.FINISHED and x.status != expedition.DEAD, self.expeditions)

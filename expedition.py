@@ -53,6 +53,7 @@ class Expedition:
             self.y = point.y
             self.path.pop()
         elif self.status != RETURNING:
+            self.resource = self.game_map[self.x][self.y].resource
             self.status = RETURNING
             self.find_path(self.x, self.y, self.center.x, self.center.y, self.game_map)
             self.x, self.y = (self.path[-1].x, self.path[-1].y)

@@ -5,6 +5,7 @@ __author__ = 'trid'
 resources_mapping = {
     'food': 'food_stockpile',
     'wood': 'wood_stockpile',
+    'tree': 'wood_stockpile',
     'population': 'population',
     'food_growth': 'food_growth',
     'max_population': 'max_population',

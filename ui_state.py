@@ -60,6 +60,7 @@ class UIState(object):
         self.sp_list_panel = SpecialistsList(self.data, 600, 0)
         self.specialists_panel.add(self.sp_list_panel)
         self.create_chose_specialists_dialog()
+        self.create_main_menu_dialog()
 
     def setup_buttons(self, x, y):
         button_y = y
@@ -149,12 +150,20 @@ class UIState(object):
         self.dialog = self.chose_sp_dialog
 
     def dialog_cancel_button(self):
-        self.dialog = None
+        self.hide_dialog()
 
     def send_expedition(self):
-        self.dialog = None
+        self.hide_dialog()
         if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
             expedition = Expedition(self.cl_sp_list.chosen, self.data.center)
             expedition.find_path(self.data.center.x, self.data.center.y, self.data.exp_pos[0], self.data.exp_pos[1], self.data.game_map)
             self.data.expeditions.append(expedition)
             self.data.village.food_stockpile -= 100
+
+    def create_main_menu_dialog(self):
+        self.main_menu = Dialog(300, 150, 200, 300)
+        esc_button = Button(0, 0, 0, 0, callback=self.hide_dialog)
+        self.main_menu.add_cancel(esc_button)
+
+    def hide_dialog(self):
+        self.dialog = None
