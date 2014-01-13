@@ -30,7 +30,7 @@ class Node:
         current_tile = game_map[point.x][point.y]
         for npoint in points:
             next_tile = game_map[npoint.x][npoint.y]
-            if (current_tile.ground == 'grass' and next_tile.ground != 'water') or current_tile.building == 'port':
+            if (current_tile.ground == 'grass' and next_tile.ground != 'water') or (current_tile.building == 'port' or current_tile.building == 'boat'):
                 yield Edge(game_map, self, Node(game_map, npoint))
             if current_tile.ground == 'water' and next_tile.ground == 'water':
                 yield Edge(game_map, self, Node(game_map, npoint))

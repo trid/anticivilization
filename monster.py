@@ -9,6 +9,7 @@ class Monster:
         self.y = 0
         self.speed = 2
         self.environment = 'ground'
+        self.level = 1
 
     def random_move(self):
         self.x += random.randint(-1, 1)

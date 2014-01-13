@@ -42,10 +42,13 @@ class Expedition:
     def move(self):
         if self.path:
             point = self.path[-1]
-            ground_on = self.game_map[self.x][self.y].ground
+            tile_on = self.game_map[self.x][self.y]
+            ground_on = tile_on.ground
             tile_to_move = self.game_map[point.x][point.y]
             if ground_on == 'water' and tile_to_move.ground == 'grass' and tile_to_move.building is None:
                 tile_to_move.building = 'boat'
+            if tile_on.building == 'boat' and tile_to_move.ground == 'water':
+                tile_on.building = None
             self.x = point.x
             self.y = point.y
             self.path.pop()
