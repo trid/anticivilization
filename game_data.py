@@ -42,7 +42,7 @@ class GameData():
         self.village = Village()
         self.expeditions = []
         self.turn = 0
-        self.monsters = [Monster()]
+        self.monsters = [Monster(self.game_map)]
         self.game_map[0][0].unit = self.monsters[0]
         self.specialists = [Specialist(specialist.CHIEFTAIN)]
         self.last_time = time.time() * 1000
@@ -51,19 +51,24 @@ class GameData():
     def send_expedition(self):
         self.uis.show_chose_specialists_dialog()
 
+    def destroy_expedition(self, monster_tile):
+        expedition = monster_tile.unit
+        expedition.status = expedition.DEAD
+        for spec in expedition.warriors + expedition.workers:
+            self.specialists.remove(spec)
+
+
     def move_monsters(self):
         for monster in self.monsters:
             self.game_map[monster.x][monster.y].unit = None
-            monster.random_move()
+            monster.move()
 
             monster_tile = self.game_map[monster.x][monster.y]
             if monster_tile.unit:
-                monster_tile.unit.status = expedition.DEAD
+                self.destroy_expedition(monster_tile)
             monster_tile.unit = monster
 
-    def next_turn(self):
-        self.turn += 1
-        self.village.update()
+    def move_expeditions(self):
         for expedition_item in self.expeditions:
             self.game_map[expedition_item.x][expedition_item.y].unit = None
             expedition_item.move()
@@ -74,8 +79,14 @@ class GameData():
                 self.village.change_resource_count(expedition_item.resource, 100)
             else:
                 tile.unit = expedition_item
-        self.expeditions = filter(lambda x: x.status != expedition.FINISHED and x.status != expedition.DEAD, self.expeditions)
+        self.expeditions = filter(lambda x: x.status != expedition.FINISHED and x.status != expedition.DEAD,
+                                  self.expeditions)
+
+    def next_turn(self):
+        self.turn += 1
+        self.village.update()
         self.move_monsters()
+        self.move_expeditions()
 
     def build(self, mouse_x, mouse_y):
         if not self.uis.building:

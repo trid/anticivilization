@@ -12,7 +12,7 @@ DEAD = 4
 
 
 class Expedition:
-    def __init__(self, specialists, position_from):
+    def __init__(self, specialists, position_from, people):
         self.x = position_from.x
         self.y = position_from.y
         self.center = position_from
@@ -21,6 +21,7 @@ class Expedition:
         self.warriors = []
         self.workers = []
         self.speed = 2
+        self.people = 0
         for specialist_instance in specialists:
             specialist_instance.occupied = True
             if specialist_instance.s_type == specialist.WORKER:

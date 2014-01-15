@@ -164,6 +164,16 @@ class UIState(object):
         self.main_menu = Dialog(300, 150, 200, 300)
         esc_button = Button(0, 0, 0, 0, callback=self.hide_dialog)
         self.main_menu.add_cancel(esc_button)
+        save_button = Button(78, 0, 44, 21, sprite=SpriteManager().sprites['save_button'], callback=self.save_game)
+        load_button = Button(78, 24, 44, 21, sprite=SpriteManager().sprites['load_button'], callback=self.load_game)
+        self.main_menu.add(save_button)
+        self.main_menu.add(load_button)
 
     def hide_dialog(self):
         self.dialog = None
+
+    def save_game(self):
+        self.data.save('save')
+
+    def load_game(self):
+        self.data.load('save')
