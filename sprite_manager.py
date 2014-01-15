@@ -42,4 +42,6 @@ class SpriteManager(object):
                         'build_stockpile': pygame.image.load('res/images/build_stockpile.png'),
                         'boat': pygame.image.load('res/images/boat.png'),
                         'save_button': pygame.image.load('res/images/save_button.png'),
-                        'load_button': pygame.image.load('res/images/load_button.png'),}
+                        'load_button': pygame.image.load('res/images/load_button.png'),
+                        'plus_button': pygame.image.load('res/images/plus_button.png'),
+                        'minus_button': pygame.image.load('res/images/minus_button.png'),}

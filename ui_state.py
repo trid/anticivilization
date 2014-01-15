@@ -61,6 +61,7 @@ class UIState(object):
         self.specialists_panel.add(self.sp_list_panel)
         self.create_chose_specialists_dialog()
         self.create_main_menu_dialog()
+        self.expedition_people_count = 0
 
     def setup_buttons(self, x, y):
         button_y = y
@@ -135,17 +136,24 @@ class UIState(object):
             self.dialog = self.add_sp_dialog
 
     def create_chose_specialists_dialog(self):
-        dialog = Dialog(300, 200, 200, 200)
+        dialog = Dialog(400, 200, 200, 300)
         sp_list = ClickableSpList(self.data, 0, 0)
         dialog.add(sp_list)
-        send_button = Button(0, 171, 44, 21, sprite=SpriteManager().sprites['send_expedition_ok'], callback=self.send_expedition)
-        cancel_button = Button(100, 171, 60, 21, sprite=SpriteManager().sprites['cancel_button'], callback=self.dialog_cancel_button)
+        send_button = Button(0, 271, 44, 21, sprite=SpriteManager().sprites['send_expedition_ok'], callback=self.send_expedition)
+        cancel_button = Button(100, 271, 60, 21, sprite=SpriteManager().sprites['cancel_button'], callback=self.dialog_cancel_button)
         dialog.add_ok(send_button)
         dialog.add_cancel(cancel_button)
+        plus_button = Button(160, 171, 20, 21, sprite=SpriteManager().sprites['plus_button'], callback=self.add_people)
+        minus_button = Button(0, 171, 20, 21, sprite=SpriteManager().sprites['minus_button'], callback=self.remove_people)
+        self.count_label = Label(30, 171, "0")
+        dialog.add(plus_button)
+        dialog.add(minus_button)
+        dialog.add(self.count_label)
         self.cl_sp_list = sp_list
         self.chose_sp_dialog = dialog
 
     def show_chose_specialists_dialog(self):
+        self.expedition_people_count = 0
         self.cl_sp_list.reset()
         self.dialog = self.chose_sp_dialog
 
@@ -155,7 +163,7 @@ class UIState(object):
     def send_expedition(self):
         self.hide_dialog()
         if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
-            expedition = Expedition(self.cl_sp_list.chosen, self.data.center)
+            expedition = Expedition(self.cl_sp_list.chosen, self.data.center, self.expedition_people_count)
             expedition.find_path(self.data.center.x, self.data.center.y, self.data.exp_pos[0], self.data.exp_pos[1], self.data.game_map)
             self.data.expeditions.append(expedition)
             self.data.village.food_stockpile -= 100
@@ -177,3 +185,15 @@ class UIState(object):
 
     def load_game(self):
         self.data.load('save')
+
+    def add_people(self):
+        new_count = self.expedition_people_count + 100
+        if new_count < self.data.village.population:
+            self.expedition_people_count = new_count
+            self.count_label.set_text(str(self.expedition_people_count))
+
+    def remove_people(self):
+        new_count = self.expedition_people_count - 100
+        if new_count > 0:
+            self.expedition_people_count = new_count
+            self.count_label.set_text(str(self.expedition_people_count))
