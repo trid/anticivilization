@@ -2,6 +2,7 @@ from math import sqrt
 from ai.pathfinder import AStarFinder
 from point import Point
 import specialist
+from tile_data import tile_data
 
 __author__ = 'TriD'
 
@@ -20,7 +21,7 @@ class Expedition:
         self.path = []
         self.warriors = []
         self.workers = []
-        self.speed = 2
+        self.speed = 4
         self.people = 0
         for specialist_instance in specialists:
             specialist_instance.occupied = True
@@ -53,15 +54,29 @@ class Expedition:
             self.x = point.x
             self.y = point.y
             self.path.pop()
-        elif self.status != RETURNING:
-            self.resource = self.game_map[self.x][self.y].resource
-            self.status = RETURNING
-            self.find_path(self.x, self.y, self.center.x, self.center.y, self.game_map)
-            self.x, self.y = (self.path[-1].x, self.path[-1].y)
-            self.path.pop()
-        else:
-            self.status = FINISHED
-            self.release_specialists()
+
+    def make_move(self):
+        steps_left = self.speed
+        while (self.status != DEAD or self.status != FINISHED) and self.can_move(steps_left):
+            self.move()
+            tile = self.game_map[self.x][self.y]
+            movement_cost = 1 if tile.building == 'road' else tile_data[tile.ground]
+            steps_left -= movement_cost
+            if not self.path:
+                if self.status != RETURNING:
+                    self.status = RETURNING
+                    self.resource = self.game_map[self.x][self.y].resource
+                    self.find_path(self.x, self.y, self.center.x, self.center.y, self.game_map)
+                else:
+                    self.status = FINISHED
+                    self.release_specialists()
+                    return
+
+    def can_move(self, steps_left):
+        position = self.path[-1]
+        tile = self.game_map[position.x][position.y]
+        movement_cost = 1 if tile.building == 'road' else tile_data[tile.ground]
+        return steps_left >= movement_cost
 
     def release_specialists(self):
         for warrior in self.warriors:

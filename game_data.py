@@ -71,7 +71,7 @@ class GameData():
     def move_expeditions(self):
         for expedition_item in self.expeditions:
             self.game_map[expedition_item.x][expedition_item.y].unit = None
-            expedition_item.move()
+            expedition_item.make_move()
             tile = self.game_map[expedition_item.x][expedition_item.y]
             if type(tile.unit) == Monster:
                 expedition_item.status = expedition.DEAD
