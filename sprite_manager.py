@@ -46,4 +46,5 @@ class SpriteManager(object):
                         'plus_button': pygame.image.load('res/images/plus_button.png'),
                         'minus_button': pygame.image.load('res/images/minus_button.png'),
                         'stone': pygame.image.load('res/images/stone_resource.png'),
-                        'port_expedition_button': pygame.image.load('res/images/port_expedition_button.png'),}
+                        'port_expedition_button': pygame.image.load('res/images/port_expedition_button.png'),
+                        'build_button': pygame.image.load('res/images/build_button.png')}

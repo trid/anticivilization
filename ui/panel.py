@@ -25,3 +25,4 @@ class Panel(Clickable):
         res = False
         for item in self.clickables:
             res = res or item.is_pressed(x, y)
+        return res

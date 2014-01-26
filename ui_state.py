@@ -8,6 +8,7 @@ from ui.clickable_specialists_list import ClickableSpList
 from ui.dialog import Dialog
 from ui.specialist_panel import SpecialistPanel
 from ui.specialists_list import SpecialistsList
+from ui.pop_up_menu import PopUpMenu
 
 __author__ = 'trid'
 
@@ -20,16 +21,16 @@ class UIState(object):
         self.data = data
         self.building = None
 
-        self.button_homes = Button(0, 0, 115, 23, 'build_homes')
-        self.button_fields = Button(0, 0, 93, 23, 'build_field')
-        self.button_woodcutter = Button(0, 0, 140, 21, 'build_woodcutter')
-        self.button_road = Button(0, 0, 92, 21, 'build_road')
-        self.button_port = Button(0, 0, 92, 21, 'build_port')
-        self.button_stockpile = Button(0, 0, 132, 21, 'build_stockpile')
+        self.button_homes = Button(0, 0, 115, 23, sprite=SpriteManager().sprites['build_homes'])
+        self.button_fields = Button(0, 0, 93, 23, sprite=SpriteManager().sprites['build_field'])
+        self.button_woodcutter = Button(0, 0, 140, 21, sprite=SpriteManager().sprites['build_woodcutter'])
+        self.button_road = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_road'])
+        self.button_port = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'])
+        self.button_stockpile = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['build_stockpile'])
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
-        self.grass_click_buttons = [self.button_homes, self.button_fields, self.button_woodcutter, self.button_road, self.button_port, self.button_stockpile]
+        self.grass_click_buttons = []
         self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
         self.button_set = None
         self.exp_click_pos = None
@@ -62,6 +63,11 @@ class UIState(object):
         self.create_chose_specialists_dialog()
         self.create_main_menu_dialog()
         self.expedition_people_count = 0
+        self.build_button = Button(0, 0, 51, 23, callback=self.show_buildings_pop_up, sprite=SpriteManager().sprites['build_button'])
+        self.ui_items.append(self.build_button)
+        self.clickables.append(self.build_button)
+        self.generate_building_menu()
+        self.pop_up = None
 
     def setup_buttons(self, x, y):
         button_y = y
@@ -109,8 +115,13 @@ class UIState(object):
             self.dialog.click(x, y)
             return True
         result = False
+        if self.pop_up and self.pop_up.visible:
+            result = result or self.pop_up.is_pressed(x, y)
+            self.pop_up.hide()
         for button in self.clickables:
             result = result or button.is_pressed(x, y)
+            if result:
+                return True
         return result
 
     def add_warrior(self):
@@ -197,3 +208,17 @@ class UIState(object):
         if new_count > 0:
             self.expedition_people_count = new_count
             self.count_label.set_text(str(self.expedition_people_count))
+
+    def generate_building_menu(self):
+        self.building_popup = PopUpMenu()
+        self.building_popup.add_item(self.button_homes)
+        self.building_popup.add_item(self.button_fields)
+        self.building_popup.add_item(self.button_road)
+        self.building_popup.add_item(self.button_woodcutter)
+        self.building_popup.add_item(self.button_port)
+        self.building_popup.add_item(self.button_stockpile)
+        self.ui_items.append(self.building_popup)
+
+    def show_buildings_pop_up(self):
+        self.building_popup.show(0, 0)
+        self.pop_up = self.building_popup

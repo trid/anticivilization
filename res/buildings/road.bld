@@ -1,6 +1,7 @@
 {
     "conditions": {
         "resources": {
+            "stone": 50
         }
     },
     "growth": {

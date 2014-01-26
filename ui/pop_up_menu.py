@@ -1,3 +1,4 @@
+from pygame.surface import Surface
 from ui.clickable import Clickable
 
 __author__ = 'TriD'
@@ -8,6 +9,8 @@ class PopUpMenu(Clickable):
         self.visible = False
         self.items = []
         self.x, self.y, self.w, self.h = (0, 0, 0, 0)
+        self.surface = False
+        self.dirty = True
 
     def is_pressed(self, x, y):
         if not self.visible:
@@ -36,6 +39,19 @@ class PopUpMenu(Clickable):
 
     def add_item(self, item):
         self.items.append(item)
+        item.x = 0
+        item.y = self.h
         self.h += item.h
         if self.w < item.w:
             self.w = item.w
+        self.dirty = True
+
+    def draw(self, screen):
+        if not self.visible:
+            return
+        if self.dirty:
+            self.surface = Surface((self.w, self.h))
+            for item in self.items:
+                item.draw(self.surface)
+            self.dirty = False
+        screen.blit(self.surface, (self.x, self.y))
