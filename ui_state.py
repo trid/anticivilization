@@ -172,6 +172,8 @@ class UIState(object):
         self.hide_dialog()
 
     def send_expedition(self):
+        if self.expedition_people_count <= 0:
+            return
         self.hide_dialog()
         if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
             expedition = Expedition(self.cl_sp_list.chosen, self.data.center, self.expedition_people_count)
