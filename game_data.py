@@ -18,6 +18,7 @@ class GameData():
         self.game_map[-20][0].resource = 'tree'
         self.game_map[20][0].resource = 'tree'
         self.game_map[10][10].resource = 'stone'
+        self.game_map[11][11].resource = 'iron'
 
     def place_center(self):
         self.center = Point(5, 5)

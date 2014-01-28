@@ -51,6 +51,8 @@ class PopUpMenu(Clickable):
             return
         if self.dirty:
             self.surface = Surface((self.w, self.h))
+            self.surface.fill(0x111111)
+            self.surface.set_colorkey(0x111111)
             for item in self.items:
                 item.draw(self.surface)
             self.dirty = False
