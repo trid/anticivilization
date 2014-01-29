@@ -27,6 +27,7 @@ class UIState(object):
         self.button_road = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_road'])
         self.button_port = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'])
         self.button_stockpile = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['build_stockpile'])
+        self.button_stone_carrier = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_stone_carrier'])
         self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
@@ -219,6 +220,7 @@ class UIState(object):
         self.building_popup.add_item(self.button_woodcutter)
         self.building_popup.add_item(self.button_port)
         self.building_popup.add_item(self.button_stockpile)
+        self.building_popup.add_item(self.button_stone_carrier)
         self.ui_items.append(self.building_popup)
 
     def show_buildings_pop_up(self):

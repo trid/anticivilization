@@ -1,0 +1,11 @@
+{
+    "conditions": {
+        "resources": {
+            "wood": 100
+        },
+        "tile_params": ["stone"]
+    },
+    "growth": {
+        "stone_increase": 100
+    }
+}
