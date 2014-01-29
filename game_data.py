@@ -1,7 +1,10 @@
 import time
+import math
+import random
 from building_manager import BuildingManager
 import expedition
 from game_map import GameMap
+import game_map
 from map_gen.river_gen import generate_rivers
 from monster import Monster
 from point import Point
@@ -27,6 +30,15 @@ class GameData():
             self.center.y += 1
         self.game_map[self.center.x][self.center.y].building = 'center'
 
+    def place_monsters(self):
+        self.monsters = []
+        for i in range(0, 30):
+            monster = Monster(self.game_map)
+            monster.x = random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)
+            monster.y = random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)
+            monster.level = int(math.sqrt((self.center.x - monster.x) ** 2 + (self.center.y - monster.y) ** 2) / 50) + 1
+            self.monsters.append(monster)
+
     def __init__(self):
         self.drag = False
         self.popup_active = False
@@ -44,7 +56,7 @@ class GameData():
         self.village = Village()
         self.expeditions = []
         self.turn = 0
-        self.monsters = [Monster(self.game_map)]
+        self.place_monsters()
         self.game_map[0][0].unit = self.monsters[0]
         self.specialists = [Specialist(specialist.CHIEFTAIN)]
         self.last_time = time.time() * 1000

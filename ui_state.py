@@ -38,12 +38,14 @@ class UIState(object):
         self.population_label = Label(600, 0, "")
         self.food_label = Label(600, 20, "")
         self.wood_label = Label(600, 40, "")
+        self.stone_label = Label(600, 60, "")
         #Ok, here we shall store ui items, for have less writing about how to draw them
         self.ui_items = []
         self.status_panel = Panel()
         self.status_panel.add(self.population_label)
         self.status_panel.add(self.food_label)
         self.status_panel.add(self.wood_label)
+        self.status_panel.add(self.stone_label)
         self.ui_items.append(self.status_panel)
         self.ui_items.append(self.button_statistics)
         self.ui_items.append(self.button_specialists)
@@ -96,6 +98,7 @@ class UIState(object):
         self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth))
         self.food_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
         self.wood_label.set_text("Wood: %d(+%d)" % (self.data.village.wood_stockpile, self.data.village.wood_increasing))
+        self.stone_label.set_text("Stone: %d(+%d)" % (self.data.village.stone_stockpile, self.data.village.stone_increase))
 
     def draw(self, screen):
         if self.dialog:
