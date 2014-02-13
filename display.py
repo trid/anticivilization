@@ -23,9 +23,6 @@ class Display():
         self.field_view.mouse_x, self.field_view.mouse_y = self.mouse_x, self.mouse_y
         self.field_view.draw_field(self.screen)
 
-        if self.game_data.popup_active:
-            self.uis.draw_buttons(self.screen)
-
         self.uis.update_labels()
         self.uis.draw(self.screen)
 

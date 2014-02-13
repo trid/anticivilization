@@ -1,6 +1,8 @@
 from expedition import Expedition
 from label import Label
+from monster import Monster
 from panel import Panel
+from point import Point
 from specialist import Specialist
 import specialist
 from sprite_manager import SpriteManager
@@ -28,12 +30,9 @@ class UIState(object):
         self.button_port = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'])
         self.button_stockpile = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['build_stockpile'])
         self.button_stone_carrier = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_stone_carrier'])
-        self.button_expedition = Button(0, 0, 132, 21, 'send_expedition')
+        self.button_expedition = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['send_expedition'], callback=self.show_chose_specialists_dialog)
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
-        self.grass_click_buttons = []
-        self.resource_click_buttons = self.grass_click_buttons + [self.button_expedition]
-        self.button_set = None
         self.exp_click_pos = None
         self.population_label = Label(600, 0, "")
         self.food_label = Label(600, 20, "")
@@ -70,29 +69,9 @@ class UIState(object):
         self.ui_items.append(self.build_button)
         self.clickables.append(self.build_button)
         self.generate_building_menu()
+        self.map_popup = PopUpMenu()
+        self.ui_items.append(self.map_popup)
         self.pop_up = None
-
-    def setup_buttons(self, x, y):
-        button_y = y
-        for button in self.button_set:
-            button.x = x
-            button.y = y
-            y += button.h
-
-    def set_grass_click(self):
-        self.button_set = self.grass_click_buttons
-
-    def set_resource_click_buttons(self):
-        self.button_set = self.resource_click_buttons
-
-    def draw_buttons(self, screen):
-        y = self.button_homes.y
-        for button in self.button_set:
-            screen.blit(SpriteManager().sprites[button.name], (button.x, button.y))
-
-    def process_popup(self, x, y):
-        for button in self.button_set:
-            button.is_pressed(x, y)
 
     def update_labels(self):
         self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth))
@@ -181,7 +160,7 @@ class UIState(object):
         self.hide_dialog()
         if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
             expedition = Expedition(self.cl_sp_list.chosen, self.data.center, self.expedition_people_count)
-            expedition.find_path(self.data.center.x, self.data.center.y, self.data.exp_pos[0], self.data.exp_pos[1], self.data.game_map)
+            expedition.find_path(self.data.center.x, self.data.center.y, self.exp_click_pos.x, self.exp_click_pos.y, self.data.game_map)
             self.data.expeditions.append(expedition)
             self.data.village.food_stockpile -= 100
 
@@ -229,3 +208,11 @@ class UIState(object):
     def show_buildings_pop_up(self):
         self.building_popup.show(0, 0)
         self.pop_up = self.building_popup
+
+    def show_map_popup(self, mouse_x, mouse_y, tile):
+        self.map_popup.clean()
+        if tile.resource or isinstance(tile.unit, Monster):
+            self.map_popup.add_item(self.button_expedition)
+            self.exp_click_pos = Point((mouse_x + self.data.dx) / 32, (mouse_y + self.data.dy) / 32)
+        self.pop_up = self.map_popup
+        self.pop_up.show(mouse_x, mouse_y)

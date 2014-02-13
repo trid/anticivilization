@@ -38,10 +38,10 @@ class GameData():
             monster.y = random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)
             monster.level = int(math.sqrt((self.center.x - monster.x) ** 2 + (self.center.y - monster.y) ** 2) / 50) + 1
             self.monsters.append(monster)
+            self.game_map[monster.x][monster.y].unit = monster
 
     def __init__(self):
         self.drag = False
-        self.popup_active = False
         self.done = False
         self.game_map = GameMap()
         generate_rivers(self.game_map)
@@ -66,9 +66,9 @@ class GameData():
         self.uis.show_chose_specialists_dialog()
 
     def destroy_expedition(self, monster_tile):
-        expedition = monster_tile.unit
-        expedition.status = expedition.DEAD
-        for spec in expedition.warriors + expedition.workers:
+        exp = monster_tile.unit
+        exp.status = expedition.DEAD
+        for spec in exp.warriors + exp.workers:
             self.specialists.remove(spec)
 
 

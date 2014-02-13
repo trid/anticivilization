@@ -1,4 +1,5 @@
 import pygame
+from monster import Monster
 
 __author__ = 'TriD'
 
@@ -23,19 +24,11 @@ class EventProcessor:
                         continue
                     self.data.popup_active = True
                     buttons_pos = event.pos
-                    if self.data.game_map[(buttons_pos[0] + self.data.dx) / 32][(buttons_pos[1] + self.data.dy) / 32].resource:
-                        self.uis.set_resource_click_buttons()
-                        self.data.exp_pos = ((buttons_pos[0] + self.data.dx) / 32, (buttons_pos[1] + self.data.dy) / 32)
-                    else:
-                        self.uis.set_grass_click()
-                    self.uis.setup_buttons(*buttons_pos)
-                    building = None
+                    tile = self.data.game_map[(buttons_pos[0] + self.data.dx) / 32][(buttons_pos[1] + self.data.dy) / 32]
+                    self.uis.show_map_popup(buttons_pos[0], buttons_pos[1], tile)
+                    self.uis.building = None
                 if event.button == 1:
-                    if self.data.popup_active:
-                        self.data.popup_active = False
-                        self.uis.process_popup(*event.pos)
-                        continue
-                    elif self.uis.process_clicks(*event.pos):
+                    if self.uis.process_clicks(*event.pos):
                         pass
                     elif self.uis.building and event.pos[0] < 600:
                         self.data.build(*event.pos)

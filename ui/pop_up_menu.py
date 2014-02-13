@@ -26,7 +26,7 @@ class PopUpMenu(Clickable):
 
         res = False
         for item in self.items:
-            res = res or item.is_pressed(x, y)
+            res = res or item.is_pressed(x - self.x, y - self.y)
         return res
 
     def show(self, x, y):
@@ -45,6 +45,10 @@ class PopUpMenu(Clickable):
         if self.w < item.w:
             self.w = item.w
         self.dirty = True
+
+    def clean(self):
+        self.w, self.h = 0, 0
+        self.items = []
 
     def draw(self, screen):
         if not self.visible:
