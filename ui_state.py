@@ -30,7 +30,7 @@ class UIState(object):
         self.button_port = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'])
         self.button_stockpile = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['build_stockpile'])
         self.button_stone_carrier = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_stone_carrier'])
-        self.button_expedition = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['send_expedition'], callback=self.show_chose_specialists_dialog)
+        self.button_expedition = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['send_expedition'], callback=self.on_send_expedition_click)
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
         self.button_info = Button(0, 0, 44, 21, sprite=SpriteManager().sprites['info_button'])
@@ -65,6 +65,7 @@ class UIState(object):
         self.specialists_panel.add(self.sp_list_panel)
         self.create_chose_specialists_dialog()
         self.create_main_menu_dialog()
+        self.create_resource_or_monster_dialog()
         self.expedition_people_count = 0
         self.build_button = Button(0, 0, 51, 23, callback=self.show_buildings_pop_up, sprite=SpriteManager().sprites['build_button'])
         self.ui_items.append(self.build_button)
@@ -147,6 +148,13 @@ class UIState(object):
         self.cl_sp_list = sp_list
         self.chose_sp_dialog = dialog
 
+    def on_send_expedition_click(self):
+        tile = self.data.game_map[self.exp_click_pos.x][self.exp_click_pos.y]
+        if isinstance(tile.unit, Monster) and tile.resource:
+            self.dialog = self.resource_or_monster_dialog
+        else:
+            self.show_chose_specialists_dialog()
+
     def show_chose_specialists_dialog(self):
         self.expedition_people_count = 0
         self.cl_sp_list.reset()
@@ -218,3 +226,10 @@ class UIState(object):
             self.exp_click_pos = Point((mouse_x + self.data.dx) / 32, (mouse_y + self.data.dy) / 32)
         self.pop_up = self.map_popup
         self.pop_up.show(mouse_x, mouse_y)
+
+    def create_resource_or_monster_dialog(self):
+        self.resource_or_monster_dialog = Dialog(325, 285, 150, 30)
+        resource_button = Button(0, 5, 84, 21, sprite=SpriteManager().sprites['resources_button'], callback=self.show_chose_specialists_dialog)
+        monster_button = Button(85, 5, 68, 21, sprite=SpriteManager().sprites['monster_button'])
+        self.resource_or_monster_dialog.add(resource_button)
+        self.resource_or_monster_dialog.add(monster_button)
