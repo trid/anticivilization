@@ -33,6 +33,7 @@ class UIState(object):
         self.button_expedition = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['send_expedition'], callback=self.show_chose_specialists_dialog)
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
+        self.button_info = Button(0, 0, 44, 21, sprite=SpriteManager().sprites['info_button'])
         self.exp_click_pos = None
         self.population_label = Label(600, 0, "")
         self.food_label = Label(600, 20, "")
@@ -211,6 +212,7 @@ class UIState(object):
 
     def show_map_popup(self, mouse_x, mouse_y, tile):
         self.map_popup.clean()
+        self.map_popup.add_item(self.button_info)
         if tile.resource or isinstance(tile.unit, Monster):
             self.map_popup.add_item(self.button_expedition)
             self.exp_click_pos = Point((mouse_x + self.data.dx) / 32, (mouse_y + self.data.dy) / 32)
