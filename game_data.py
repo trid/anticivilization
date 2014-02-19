@@ -142,8 +142,9 @@ class GameData():
             if amount < bc.resources[resource]:
                 return
 
+        tile = self.game_map[x][y]
         for cond in bc.tile_params:
-            if cond != self.game_map[x][y].resource:
+            if cond != tile.resource:
                 return
 
         if not self.check_nearby_tiles(x, y, bc.near):
@@ -152,13 +153,12 @@ class GameData():
         for resource in bc.resources:
             self.village.change_resource_count(resource, -bc.resources[resource])
 
-        for resource in bc.changes:
-            self.village.change_resource_count(resource, bc.changes[resource])
+        tile.building = self.uis.building
+        tile.building_finished = False
+        self.village.add_building(self.uis.building, tile)
 
-        self.game_map[x][y].building = self.uis.building
-
-    #Conditions for nearby tiles. Specially for port building
     def check_nearby_tiles(self, x, y, cond):
+        """Conditions for nearby tiles. Specially for port building"""
         points = (self.game_map[x][y - 1],
                   self.game_map[x + 1][y - 1],
                   self.game_map[x + 1][y],

@@ -1,3 +1,5 @@
+from building_manager import BuildingManager
+
 __author__ = 'trid'
 
 # I'm need it to map resources names from configs to names in village parameters
@@ -32,6 +34,7 @@ class Village:
         self.resources_limit = 1000
         self.stone_stockpile = 0
         self.stone_increase = 0
+        self.to_build = []
 
     def update(self):
         self.population += self.population_growth
@@ -47,6 +50,7 @@ class Village:
         self.wood_stockpile += self.wood_increasing
         if self.wood_stockpile > self.resources_limit:
             self.wood_stockpile = self.resources_limit
+        self.update_buildings()
 
     def get_resource_by_name(self, name):
         return resources_mapping.get(name, None)
@@ -66,3 +70,22 @@ class Village:
     def get_resource_count(self, resource):
         resource_field = self.get_resource_by_name(resource)
         return getattr(self, resource_field)
+
+    def remove_building(self, building):
+        bm = BuildingManager()
+        building_data = bm.conds[building]
+        for resource in building_data.changes:
+            self.change_resource_count(resource, -building_data.changes[resource])
+
+    def add_building(self, building, tile):
+        self.to_build.append((building, tile))
+
+    def update_buildings(self):
+        for b in self.to_build:
+            building_name = b[0]
+            tile = b[1]
+            tile.building_finished = True
+            building_data = BuildingManager().conds[building_name]
+            for resource in building_data.changes:
+                self.change_resource_count(resource, building_data.changes[resource])
+        self.to_build = []
