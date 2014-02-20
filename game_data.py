@@ -17,11 +17,26 @@ __author__ = 'TriD'
 
 class GameData():
     def place_resources(self):
-        self.game_map[9][9].resource = 'tree'
-        self.game_map[-20][0].resource = 'tree'
-        self.game_map[20][0].resource = 'tree'
-        self.game_map[10][10].resource = 'stone'
-        self.game_map[11][11].resource = 'iron'
+        #And, yes, that's a really bad code.
+        #TODO: Find spme time to change it totally
+        for i in range(0, 100):
+            tile = self.game_map[random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)][
+                random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]
+            if tile.ground != 'water':
+                tile.resource = 'tree'
+            tile = self.game_map[random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)][
+                random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]
+            if tile.ground != 'water':
+                tile.resource = 'stone'
+            tile = self.game_map[random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)][
+                random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]
+            if tile.ground != 'water':
+                tile.resource = 'iron'
+        # self.game_map[9][9].resource = 'tree'
+        # self.game_map[-20][0].resource = 'tree'
+        # self.game_map[20][0].resource = 'tree'
+        # self.game_map[10][10].resource = 'stone'
+        # self.game_map[11][11].resource = 'iron'
 
     def place_center(self):
         self.center = Point(5, 5)
