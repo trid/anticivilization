@@ -22,7 +22,7 @@ class Expedition:
         self.warriors = []
         self.workers = []
         self.speed = 4
-        self.people = 0
+        self.people = people
         for specialist_instance in specialists:
             specialist_instance.occupied = True
             if specialist_instance.s_type == specialist.WORKER:
@@ -83,3 +83,7 @@ class Expedition:
             warrior.occupied = False
         for worker in self.workers:
             worker.occupied = False
+
+    def get_resources_count(self):
+        sm = sum([x.level for x in self.workers])
+        return sm * self.people

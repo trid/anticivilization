@@ -93,7 +93,7 @@ class GameData():
             monster.move()
 
             monster_tile = self.game_map[monster.x][monster.y]
-            if monster_tile.unit:
+            if isinstance(monster_tile.unit, expedition.Expedition):
                 self.destroy_expedition(monster_tile)
             monster_tile.unit = monster
 
@@ -105,7 +105,7 @@ class GameData():
             if type(tile.unit) == Monster:
                 expedition_item.status = expedition.DEAD
             elif expedition_item.status == expedition.FINISHED:
-                self.village.change_resource_count(expedition_item.resource, 100)
+                self.village.change_resource_count(expedition_item.resource, expedition_item.get_resources_count())
             else:
                 tile.unit = expedition_item
         self.expeditions = filter(lambda x: x.status != expedition.FINISHED and x.status != expedition.DEAD,
