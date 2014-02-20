@@ -86,7 +86,6 @@ class GameData():
         for spec in exp.warriors + exp.workers:
             self.specialists.remove(spec)
 
-
     def move_monsters(self):
         for monster in self.monsters:
             self.game_map[monster.x][monster.y].unit = None
@@ -95,6 +94,9 @@ class GameData():
             monster_tile = self.game_map[monster.x][monster.y]
             if isinstance(monster_tile.unit, expedition.Expedition):
                 self.destroy_expedition(monster_tile)
+            if monster_tile.building:
+                self.village.remove_building(monster_tile.building)
+                monster_tile.building = None
             monster_tile.unit = monster
 
     def move_expeditions(self):
