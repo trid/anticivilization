@@ -1,0 +1,11 @@
+{
+    "conditions": {
+        "resources": {
+            "wood": 250,
+            "stone": 250,
+            "iron": 100
+        }
+    },
+    "growth": {
+    }
+}

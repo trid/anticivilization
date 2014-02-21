@@ -41,6 +41,10 @@ def build_stone_carrier():
     uis.building = 'stone_carrier'
 
 
+def build_workshop():
+    uis.building = 'workshop'
+
+
 uis.button_homes.callback = build_houses
 uis.button_fields.callback = build_field
 uis.button_woodcutter.callback = build_woodcutter
@@ -48,6 +52,7 @@ uis.button_road.callback = build_road
 uis.button_port.callback = build_port
 uis.button_stockpile.callback = build_stockpile
 uis.button_stone_carrier.callback = build_stone_carrier
+uis.button_workshop.callback = build_workshop
 
 while not game_data.done:
     game_data.process()

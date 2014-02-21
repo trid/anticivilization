@@ -30,6 +30,7 @@ class UIState(object):
         self.button_port = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'])
         self.button_stockpile = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['build_stockpile'])
         self.button_stone_carrier = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_stone_carrier'])
+        self.button_workshop = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_workshop'])
         self.button_expedition = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['send_expedition'], callback=self.on_send_expedition_click)
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
@@ -156,7 +157,9 @@ class UIState(object):
             self.show_chose_specialists_dialog()
 
     def show_chose_specialists_dialog(self):
-        self.expedition_people_count = 0
+        if self.data.village.population < self.expedition_people_count:
+            self.expedition_people_count = 0
+            self.count_label.set_text(str(self.expedition_people_count))
         self.cl_sp_list.reset()
         self.dialog = self.chose_sp_dialog
 
@@ -166,8 +169,8 @@ class UIState(object):
     def send_expedition(self):
         if self.expedition_people_count <= 0:
             return
-        self.hide_dialog()
-        if self.cl_sp_list.chosen and self.data.village.food_stockpile > 100:
+        if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
+            self.hide_dialog()
             expedition = Expedition(self.cl_sp_list.chosen, self.data.center, self.expedition_people_count)
             expedition.find_path(self.data.center.x, self.data.center.y, self.exp_click_pos.x, self.exp_click_pos.y, self.data.game_map)
             self.data.expeditions.append(expedition)
@@ -193,7 +196,7 @@ class UIState(object):
 
     def add_people(self):
         new_count = self.expedition_people_count + 100
-        if new_count < self.data.village.population:
+        if new_count <= self.data.village.population:
             self.expedition_people_count = new_count
             self.count_label.set_text(str(self.expedition_people_count))
 
@@ -212,6 +215,7 @@ class UIState(object):
         self.building_popup.add_item(self.button_port)
         self.building_popup.add_item(self.button_stockpile)
         self.building_popup.add_item(self.button_stone_carrier)
+        self.building_popup.add_item(self.button_workshop)
         self.ui_items.append(self.building_popup)
 
     def show_buildings_pop_up(self):

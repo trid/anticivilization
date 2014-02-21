@@ -18,7 +18,7 @@ __author__ = 'TriD'
 class GameData():
     def place_resources(self):
         #And, yes, that's a really bad code.
-        #TODO: Find spme time to change it totally
+        #TODO: Find some time to change it totally
         for i in range(0, 100):
             tile = self.game_map[random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)][
                 random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]

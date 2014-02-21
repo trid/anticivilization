@@ -53,4 +53,6 @@ class SpriteManager(object):
                         'build_stone_carrier': pygame.image.load('res/images/build_stone_carrier.png'),
                         'info_button': pygame.image.load('res/images/button_info.png'),
                         'resources_button': pygame.image.load('res/images/resources_button.png'),
-                        'monster_button': pygame.image.load('res/images/monster_button.png'),}
+                        'monster_button': pygame.image.load('res/images/monster_button.png'),
+                        'build_workshop': pygame.image.load('res/images/build_workshop.png'),
+                        'workshop': pygame.image.load('res/images/workshop.png'),}

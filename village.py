@@ -14,11 +14,13 @@ resources_mapping = {
     'wood_growth': 'wood_increasing',
     'resources_limit': 'resources_limit',
     'stone': 'stone_stockpile',
-    'stone_increase': 'stone_increase'
+    'stone_increase': 'stone_increase',
+    'iron': 'iron_stockpile',
+    'iron_increase': 'iron_increase'
 }
 
 unlimited_growth = {
-    'food_growth', 'max_population', 'wood_growth', 'population', 'resources_limit', 'stone_increase'
+    'food_growth', 'max_population', 'wood_growth', 'population', 'resources_limit', 'stone_increase', 'iron_increase'
 }
 
 
@@ -34,6 +36,8 @@ class Village:
         self.resources_limit = 1000
         self.stone_stockpile = 0
         self.stone_increase = 0
+        self.iron_stockpile = 0
+        self.iron_increase = 0
         self.to_build = []
 
     def update(self):
