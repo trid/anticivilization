@@ -1,6 +1,4 @@
 import pygame
-from pygame.rect import Rect
-from pygame.surface import Surface
 from field_view import FieldView
 from sprite_manager import SpriteManager
 
