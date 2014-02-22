@@ -35,6 +35,7 @@ class UIState(object):
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
         self.button_info = Button(0, 0, 44, 21, sprite=SpriteManager().sprites['info_button'])
+        self.expedition_build_port_button = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'], callback=self.send_port_expedition)
         self.exp_click_pos = None
         self.population_label = Label(600, 0, "")
         self.food_label = Label(600, 20, "")
@@ -225,9 +226,14 @@ class UIState(object):
     def show_map_popup(self, mouse_x, mouse_y, tile):
         self.map_popup.clean()
         self.map_popup.add_item(self.button_info)
+        click_point = Point((mouse_x + self.data.dx) / 32, (mouse_y + self.data.dy) / 32)
         if tile.resource or isinstance(tile.unit, Monster):
             self.map_popup.add_item(self.button_expedition)
-            self.exp_click_pos = Point((mouse_x + self.data.dx) / 32, (mouse_y + self.data.dy) / 32)
+            self.exp_click_pos = click_point
+        if tile.ground != 'water':
+            game_map = self.data.game_map
+            if game_map[click_point.x + 1][click_point.y].ground == 'water' or game_map[click_point.x][click_point.y + 1].ground == 'water' or game_map[click_point.x - 1][click_point.y].ground == 'water' or game_map[click_point.x][click_point.y - 1].ground == 'water':
+                self.map_popup.add_item(self.expedition_build_port_button)
         self.pop_up = self.map_popup
         self.pop_up.show(mouse_x, mouse_y)
 
@@ -237,3 +243,6 @@ class UIState(object):
         monster_button = Button(85, 5, 68, 21, sprite=SpriteManager().sprites['monster_button'])
         self.resource_or_monster_dialog.add(resource_button)
         self.resource_or_monster_dialog.add(monster_button)
+
+    def send_port_expedition(self):
+        pass
