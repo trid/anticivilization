@@ -34,7 +34,7 @@ class SpriteManager(object):
                         'down_button': pygame.image.load('res/images/down_button.png'),
                         'send_expedition_ok': pygame.image.load('res/images/send_expedition_ok.png'),
                         'cancel_button': pygame.image.load('res/images/cancel_button.png'),
-                        'road': pygame.image.load('res/images/road.png'),
+                        'road': pygame.image.load('res/images/stone_road.png'),
                         'build_road': pygame.image.load('res/images/build_road.png'),
                         'port': pygame.image.load('res/images/port.png'),
                         'build_port': pygame.image.load('res/images/build_port.png'),
@@ -55,4 +55,5 @@ class SpriteManager(object):
                         'resources_button': pygame.image.load('res/images/resources_button.png'),
                         'monster_button': pygame.image.load('res/images/monster_button.png'),
                         'build_workshop': pygame.image.load('res/images/build_workshop.png'),
-                        'workshop': pygame.image.load('res/images/workshop.png'),}
+                        'workshop': pygame.image.load('res/images/workshop.png'),
+                        }
