@@ -37,13 +37,13 @@ class UIState(object):
         self.button_info = Button(0, 0, 44, 21, sprite=SpriteManager().sprites['info_button'])
         self.expedition_build_port_button = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'], callback=self.send_port_expedition)
         self.exp_click_pos = None
-        self.population_label = Label(600, 0, "")
-        self.food_label = Label(600, 20, "")
-        self.wood_label = Label(600, 40, "")
-        self.stone_label = Label(600, 60, "")
+        self.population_label = Label(0, 0, "")
+        self.food_label = Label(0, 20, "")
+        self.wood_label = Label(0, 40, "")
+        self.stone_label = Label(0, 60, "")
         #Ok, here we shall store ui items, for have less writing about how to draw them
         self.ui_items = []
-        self.status_panel = Panel()
+        self.status_panel = Panel(600, 0, 200, 600)
         self.status_panel.add(self.population_label)
         self.status_panel.add(self.food_label)
         self.status_panel.add(self.wood_label)
@@ -51,7 +51,7 @@ class UIState(object):
         self.ui_items.append(self.status_panel)
         self.ui_items.append(self.button_statistics)
         self.ui_items.append(self.button_specialists)
-        self.specialists_panel = Panel()
+        self.specialists_panel = Panel(600, 0, 200, 600)
         self.specialists_panel.visible = False
         self.ui_items.append(self.specialists_panel)
         self.dialog = None
@@ -60,10 +60,10 @@ class UIState(object):
         self.clickables.append(self.button_statistics)
         self.clickables.append(self.specialists_panel)
         #Yeah it's fucking looooong initialization
-        self.create_specialist_button = Button(600, 558, 148, 21, callback=self.show_create_specialist_dialog, sprite=SpriteManager().sprites['create_sp_button'])
+        self.create_specialist_button = Button(0, 558, 148, 21, callback=self.show_create_specialist_dialog, sprite=SpriteManager().sprites['create_sp_button'])
         self.specialists_panel.add(self.create_specialist_button)
         self.create_chose_specialist_type_dialog()
-        self.sp_list_panel = SpecialistsList(self.data, 600, 0)
+        self.sp_list_panel = SpecialistsList(self.data, 0, 0)
         self.specialists_panel.add(self.sp_list_panel)
         self.create_chose_specialists_dialog()
         self.create_main_menu_dialog()

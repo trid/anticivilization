@@ -9,12 +9,16 @@ class EventProcessor:
         self.data = data
         self.uis = uis
         self.display = display
+        self.mouse_listeners = []
+        self.keyboard_listeners = []
 
     def process_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.data.done = True
             elif event.type == pygame.MOUSEBUTTONUP:
+                for listener in self.mouse_listeners:
+                    listener.mouse_event(event)
                 if self.uis.dialog:
                     if event.button == 1:
                         self.uis.process_clicks(*event.pos)
@@ -35,6 +39,8 @@ class EventProcessor:
                     if self.data.drag:
                         self.data.drag = False
             if event.type == pygame.KEYUP:
+                for listener in self.keyboard_listeners:
+                    listener.keyboard_up(event)
                 if not self.uis.dialog:
                     if event.key == pygame.K_RETURN:
                         self.data.next_turn()
@@ -52,6 +58,8 @@ class EventProcessor:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     self.data.scroll_spd_x = 0
             if event.type == pygame.KEYDOWN:
+                for listener in self.keyboard_listeners:
+                    listener.keyboard_down(event)
                 if event.key == pygame.K_UP:
                     self.data.scroll_spd_y = -5
                 if event.key == pygame.K_LEFT:
