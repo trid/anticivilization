@@ -10,9 +10,10 @@ class FieldView:
         self.game_data = game_data
         self.mouse_x, self.mouse_y = 0, 0
         self.sm = SpriteManager()
-        self.selected_tile_surface = Surface((32, 32))
-        self.selected_tile_surface.fill(0xb7f315)
-        self.selected_tile_surface.set_alpha(124)
+        self.selected_tile_surface_no_building = Surface((32, 32))
+        self.selected_tile_surface_no_building.fill(0xb7f315)
+        self.selected_tile_surface_no_building.set_alpha(124)
+        self.selected_tile_surface = self.selected_tile_surface_no_building
 
     def draw_sprite(self, screen, x, y, sprite):
         if x + 32 <= 600:
@@ -44,7 +45,7 @@ class FieldView:
 
         lighted_x = ((self.mouse_x + self.game_data.dx) / 32) * 32 - self.game_data.dx
         lighted_y = ((self.mouse_y + self.game_data.dy) / 32) * 32 - self.game_data.dy
-
+        self.set_selecter_surface()
         self.draw_sprite(screen, lighted_x, lighted_y, self.selected_tile_surface)
 
     def draw_road_tile(self, game_map, position_x, position_y, screen):
@@ -87,3 +88,11 @@ class FieldView:
             screen.blit(sprite, [x, y], Rect(item * 32, 0, 32, sprite.get_height()))
         elif 632 > x + 32 > 600:
             screen.blit(sprite, [x, y], Rect(item * 32, 0, 600 - x, sprite.get_height()))
+
+    def set_selecter_surface(self):
+        if self.game_data.uis.building:
+            surface = SpriteManager().sprites[self.game_data.uis.building]
+            surface.set_alpha(124)
+            self.selected_tile_surface = surface
+        else:
+            self.selected_tile_surface = self.selected_tile_surface_no_building
