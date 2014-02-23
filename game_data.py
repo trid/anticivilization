@@ -85,6 +85,7 @@ class GameData():
         exp.status = expedition.DEAD
         for spec in exp.warriors + exp.workers:
             self.specialists.remove(spec)
+        self.village.population -= exp.people
 
     def move_monsters(self):
         for monster in self.monsters:
