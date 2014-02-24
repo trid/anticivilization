@@ -45,6 +45,10 @@ def build_workshop():
     uis.building = 'workshop'
 
 
+def destruct_building():
+    uis.building = 'destruct'
+
+
 uis.button_homes.callback = build_houses
 uis.button_fields.callback = build_field
 uis.button_woodcutter.callback = build_woodcutter
@@ -53,6 +57,7 @@ uis.button_port.callback = build_port
 uis.button_stockpile.callback = build_stockpile
 uis.button_stone_carrier.callback = build_stone_carrier
 uis.button_workshop.callback = build_workshop
+uis.button_destruct.callback = destruct_building
 
 while not game_data.done:
     game_data.process()

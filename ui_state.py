@@ -31,6 +31,7 @@ class UIState(object):
         self.button_stockpile = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['build_stockpile'])
         self.button_stone_carrier = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_stone_carrier'])
         self.button_workshop = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_workshop'])
+        self.button_destruct = Button(0, 0, 76, 21, sprite=SpriteManager().sprites['destruct'])
         self.button_expedition = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['send_expedition'], callback=self.on_send_expedition_click)
         self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
@@ -217,6 +218,7 @@ class UIState(object):
         self.building_popup.add_item(self.button_stockpile)
         self.building_popup.add_item(self.button_stone_carrier)
         self.building_popup.add_item(self.button_workshop)
+        self.building_popup.add_item(self.button_destruct)
         self.ui_items.append(self.building_popup)
 
     def show_buildings_pop_up(self):

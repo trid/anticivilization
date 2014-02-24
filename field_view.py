@@ -90,7 +90,7 @@ class FieldView:
             screen.blit(sprite, [x, y], Rect(item * 32, 0, 600 - x, sprite.get_height()))
 
     def set_selecter_surface(self):
-        if self.game_data.uis.building:
+        if self.game_data.uis.building and self.game_data.uis.building != 'destruct':
             surface = SpriteManager().sprites[self.game_data.uis.building]
             surface.set_alpha(124)
             self.selected_tile_surface = surface

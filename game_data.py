@@ -129,6 +129,14 @@ class GameData():
 
         may_build = False
         if self.game_map[x][y].building:
+            if self.uis.building == 'destruct' and self.uis.building != 'center':
+                building = self.game_map[x][y].building
+                finished = self.game_map[x][y].building_finished
+                if finished:
+                    self.game_map[x][y].building_finished = False
+                    self.village.remove_building(building)
+                    self.village.to_build.remove(building)
+                self.game_map[x][y].building = None
             return
         if self.game_map[x][y].ground == 'water':
             return
