@@ -30,6 +30,12 @@ class PopUpMenu(Clickable):
         return res
 
     def show(self, x, y):
+        right = x + self.w
+        if right > 600:
+            x -= right - 600
+        bottom = y + self.h
+        if bottom > 600:
+            y -= bottom - 600
         self.x = x
         self.y = y
         self.visible = True
