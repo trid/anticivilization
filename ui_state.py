@@ -3,6 +3,7 @@ from label import Label
 from monster import Monster
 from panel import Panel
 from point import Point
+from radio_button import RadioButton
 from specialist import Specialist
 import specialist
 from sprite_manager import SpriteManager
@@ -145,9 +146,11 @@ class UIState(object):
         plus_button = Button(160, 171, 20, 21, sprite=SpriteManager().sprites['plus_button'], callback=self.add_people)
         minus_button = Button(0, 171, 20, 21, sprite=SpriteManager().sprites['minus_button'], callback=self.remove_people)
         self.count_label = Label(30, 171, "0")
+        self.repeatable_expedition_button = RadioButton(0, 190, 61, 21, sprite=SpriteManager().sprites['repeat_button'])
         dialog.add(plus_button)
         dialog.add(minus_button)
         dialog.add(self.count_label)
+        dialog.add(self.repeatable_expedition_button)
         self.cl_sp_list = sp_list
         self.chose_sp_dialog = dialog
 

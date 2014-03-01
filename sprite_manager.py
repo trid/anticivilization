@@ -57,4 +57,5 @@ class SpriteManager(object):
                         'build_workshop': pygame.image.load('res/images/build_workshop.png'),
                         'workshop': pygame.image.load('res/images/workshop.png'),
                         'destruct': pygame.image.load('res/images/destruct_building.png'),
+                        'repeat_button': pygame.image.load('res/images/repeat_button.png'),
                         }
