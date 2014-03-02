@@ -1,3 +1,5 @@
+import pickle
+
 __author__ = 'TriD'
 
 from game_data import GameData
@@ -49,6 +51,23 @@ def destruct_building():
     uis.building = 'destruct'
 
 
+def load_game():
+    global game_data
+    game_data.uis = None
+    with open('save', 'rb') as save_file:
+        game_data = pickle.load(save_file)
+    game_data.uis = uis
+    display.reset_game_data(game_data)
+    event_processor.data = game_data
+
+
+def save_game():
+    game_data.uis = None
+    with open('save', 'wb') as save_file:
+        pickle.dump(game_data, save_file)
+    game_data.uis = uis
+
+
 uis.button_homes.callback = build_houses
 uis.button_fields.callback = build_field
 uis.button_woodcutter.callback = build_woodcutter
@@ -58,6 +77,8 @@ uis.button_stockpile.callback = build_stockpile
 uis.button_stone_carrier.callback = build_stone_carrier
 uis.button_workshop.callback = build_workshop
 uis.button_destruct.callback = destruct_building
+uis.save_button.callback = save_game
+uis.load_button.callback = load_game
 
 while not game_data.done:
     game_data.process()

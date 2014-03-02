@@ -187,6 +187,8 @@ class UIState(object):
         self.main_menu.add_cancel(esc_button)
         save_button = Button(78, 0, 44, 21, sprite=SpriteManager().sprites['save_button'], callback=self.save_game)
         load_button = Button(78, 24, 44, 21, sprite=SpriteManager().sprites['load_button'], callback=self.load_game)
+        self.save_button = save_button
+        self.load_button = load_button
         self.main_menu.add(save_button)
         self.main_menu.add(load_button)
 

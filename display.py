@@ -25,3 +25,7 @@ class Display():
         self.uis.draw(self.screen)
 
         pygame.display.flip()
+
+    def reset_game_data(self, game_data):
+        self.game_data = game_data
+        self.field_view.game_data = game_data
