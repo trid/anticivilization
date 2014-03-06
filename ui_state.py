@@ -156,8 +156,10 @@ class UIState(object):
 
     def on_send_expedition_click(self):
         tile = self.data.game_map[self.exp_click_pos.x][self.exp_click_pos.y]
-        if isinstance(tile.unit, Monster) and tile.resource:
-            self.dialog = self.resource_or_monster_dialog
+        for unit in tile.units:
+            if isinstance(tile.unit, Monster) and tile.resource:
+                self.dialog = self.resource_or_monster_dialog
+                break
         else:
             self.show_chose_specialists_dialog()
 

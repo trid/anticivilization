@@ -8,4 +8,4 @@ class Tile:
         #Ground can be 'grass' or 'water' or 'swamp' or 'shit' or...
         self.ground = 'grass'
         self.resource = None
-        self.unit = None
+        self.units = []

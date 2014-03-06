@@ -30,10 +30,11 @@ class Monster:
     def search(self, game_map):
         for x in range(self.x - self.view_radius, self.x + self.view_radius):
             for y in range(self.y - self.view_radius, self.y + self.view_radius):
-                if isinstance(game_map[x][y].unit, Expedition):
-                    self.target = game_map[x][y].unit
-                    self.reset_path(game_map)
-                    return True
+                for unit in game_map[x][y].units:
+                    if isinstance(unit, Expedition):
+                        self.target = game_map[x][y].unit
+                        self.reset_path(game_map)
+                        return True
         return False
 
     def move(self):

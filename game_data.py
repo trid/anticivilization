@@ -54,7 +54,7 @@ class GameData():
             monster.y = random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)
             monster.level = int(math.sqrt((self.center.x - monster.x) ** 2 + (self.center.y - monster.y) ** 2) / 50) + 1
             self.monsters.append(monster)
-            self.game_map[monster.x][monster.y].unit = monster
+            self.game_map[monster.x][monster.y].units.append(monster)
 
     def __init__(self):
         self.drag = False
@@ -73,7 +73,6 @@ class GameData():
         self.expeditions = []
         self.turn = 0
         self.place_monsters()
-        self.game_map[0][0].unit = self.monsters[0]
         self.specialists = [Specialist(specialist.CHIEFTAIN)]
         self.last_time = time.time() * 1000
         self.accum = 0
@@ -81,37 +80,40 @@ class GameData():
     def send_expedition(self):
         self.uis.show_chose_specialists_dialog()
 
-    def destroy_expedition(self, monster_tile):
-        exp = monster_tile.unit
+    def destroy_expedition(self, monster_tile, exp):
         exp.status = expedition.DEAD
         for spec in exp.warriors + exp.workers:
             self.specialists.remove(spec)
         self.village.population -= exp.people
+        monster_tile.units.remove(exp)
 
     def move_monsters(self):
         for monster in self.monsters:
-            self.game_map[monster.x][monster.y].unit = None
+            self.game_map[monster.x][monster.y].units.remove(monster)
             monster.move()
 
             monster_tile = self.game_map[monster.x][monster.y]
-            if isinstance(monster_tile.unit, expedition.Expedition):
-                self.destroy_expedition(monster_tile)
+            for unit in monster_tile.units:
+                if isinstance(unit, expedition.Expedition):
+                    self.destroy_expedition(monster_tile, unit)
             if monster_tile.building:
                 self.village.remove_building(monster_tile.building)
                 monster_tile.building = None
-            monster_tile.unit = monster
+            monster_tile.units.append(monster)
 
     def move_expeditions(self):
         for expedition_item in self.expeditions:
-            self.game_map[expedition_item.x][expedition_item.y].unit = None
+            self.game_map[expedition_item.x][expedition_item.y].units.remove(expedition_item)
             expedition_item.make_move()
             tile = self.game_map[expedition_item.x][expedition_item.y]
-            if type(tile.unit) == Monster:
-                expedition_item.status = expedition.DEAD
-            elif expedition_item.status == expedition.FINISHED:
+            for unit in tile.units:
+                if type(unit) == Monster:
+                    expedition_item.status = expedition.DEAD
+                    break
+            if expedition_item.status == expedition.FINISHED:
                 self.village.change_resource_count(expedition_item.resource, expedition_item.get_resources_count())
             else:
-                tile.unit = expedition_item
+                tile.units.append(expedition_item)
         self.expeditions = filter(lambda x: x.status != expedition.FINISHED and x.status != expedition.DEAD,
                                   self.expeditions)
 
