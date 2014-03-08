@@ -9,3 +9,4 @@ class Tile:
         self.ground = 'grass'
         self.resource = None
         self.units = []
+        self.protection = None

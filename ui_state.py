@@ -1,4 +1,5 @@
 from expedition import Expedition
+from expeditions_panel import ExpeditionsPanel
 from label import Label
 from monster import Monster
 from panel import Panel
@@ -38,6 +39,7 @@ class UIState(object):
         self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
         self.button_info = Button(0, 0, 44, 21, sprite=SpriteManager().sprites['info_button'])
         self.expedition_build_port_button = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'], callback=self.send_port_expedition)
+        self.protect_button = Button(0, 0, 68, 21, sprite=SpriteManager().sprites['protect_button'])
         self.exp_click_pos = None
         self.population_label = Label(0, 0, "")
         self.food_label = Label(0, 20, "")
@@ -78,6 +80,11 @@ class UIState(object):
         self.map_popup = PopUpMenu()
         self.ui_items.append(self.map_popup)
         self.pop_up = None
+        #Panels section
+        self.expedition_panel = ExpeditionsPanel(self.data, 600, 0)
+        self.expedition_panel.visible = False
+        self.ui_items.append(self.expedition_panel)
+        self.clickables.append(self.expedition_panel)
 
     def update_labels(self):
         self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth))
@@ -187,8 +194,8 @@ class UIState(object):
         self.main_menu = Dialog(300, 150, 200, 300)
         esc_button = Button(0, 0, 0, 0, callback=self.hide_dialog)
         self.main_menu.add_cancel(esc_button)
-        save_button = Button(78, 0, 44, 21, sprite=SpriteManager().sprites['save_button'], callback=self.save_game)
-        load_button = Button(78, 24, 44, 21, sprite=SpriteManager().sprites['load_button'], callback=self.load_game)
+        save_button = Button(78, 0, 44, 21, sprite=SpriteManager().sprites['save_button'])
+        load_button = Button(78, 24, 44, 21, sprite=SpriteManager().sprites['load_button'])
         self.save_button = save_button
         self.load_button = load_button
         self.main_menu.add(save_button)
@@ -196,12 +203,6 @@ class UIState(object):
 
     def hide_dialog(self):
         self.dialog = None
-
-    def save_game(self):
-        self.data.save('save')
-
-    def load_game(self):
-        self.data.load('save')
 
     def add_people(self):
         new_count = self.expedition_people_count + 100
@@ -236,13 +237,15 @@ class UIState(object):
         self.map_popup.clean()
         self.map_popup.add_item(self.button_info)
         click_point = Point((mouse_x + self.data.dx) / 32, (mouse_y + self.data.dy) / 32)
-        if tile.resource or isinstance(tile.unit, Monster):
+        if tile.resource or self.check_monster(tile):
             self.map_popup.add_item(self.button_expedition)
             self.exp_click_pos = click_point
         if tile.ground != 'water':
             game_map = self.data.game_map
             if game_map[click_point.x + 1][click_point.y].ground == 'water' or game_map[click_point.x][click_point.y + 1].ground == 'water' or game_map[click_point.x - 1][click_point.y].ground == 'water' or game_map[click_point.x][click_point.y - 1].ground == 'water':
                 self.map_popup.add_item(self.expedition_build_port_button)
+        if tile.building and not tile.protection:
+            self.map_popup.add_item(self.protect_button)
         self.pop_up = self.map_popup
         self.pop_up.show(mouse_x, mouse_y)
 
@@ -255,3 +258,9 @@ class UIState(object):
 
     def send_port_expedition(self):
         pass
+
+    def check_monster(self, tile):
+        for unit in tile.units:
+            if isinstance(unit, Monster):
+                return True
+        return False

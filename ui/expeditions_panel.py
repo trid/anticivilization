@@ -20,6 +20,7 @@ class ExpeditionsPanel(Clickable):
         self.items = [self.up_button, self.down_button]
         self.clickables = [self.up_button, self.down_button]
         self.update_expeditions()
+        self.visible = True
 
     def update_expeditions(self):
         window = self.data.expeditions[self.offset:self.offset + 6]
@@ -38,12 +39,16 @@ class ExpeditionsPanel(Clickable):
             self.update_expeditions()
 
     def draw(self, screen):
+        if not self.visible:
+            return
         self.surface.fill(0x000000)
         for item in self.items:
             item.draw(self.surface)
         screen.blit(self.surface, (self.x, self.y))
 
     def is_pressed(self, wx, wy):
+        if not self.visible:
+            return False
         x = wx - self.x
         y = wy - self.y
         for item in self.clickables:

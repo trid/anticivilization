@@ -75,6 +75,19 @@ class EventProcessor:
                     mouse_pos_x, mouse_pos_y = event.pos
                     self.data.dx = self.data.old_dx + (mouse_pos_x - self.data.mouse_drag_x)
                     self.data.dy = self.data.old_dy + (mouse_pos_y - self.data.mouse_drag_y)
+                else:
+                    if event.pos[0] < 10:
+                        self.data.scroll_spd_x = -5
+                    elif event.pos[0] > 590:
+                        self.data.scroll_spd_x = 5
+                    else:
+                        self.data.scroll_spd_x = 0
+                    if event.pos[1] < 10:
+                        self.data.scroll_spd_y = -5
+                    elif event.pos[1] > 590:
+                        self.data.scroll_spd_y = 5
+                    else:
+                        self.data.scroll_spd_y = 0
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1 and event.pos[0] < 600 and not self.uis.dialog:
                     #Here we start drag the map
