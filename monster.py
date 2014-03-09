@@ -19,6 +19,7 @@ class Monster:
         self.target = None
         self.path = None
         self.game_map = game_map
+        self.alive = True
 
     def random_move(self):
         self.x += random.randint(-1, 1)
@@ -32,7 +33,7 @@ class Monster:
             for y in range(self.y - self.view_radius, self.y + self.view_radius):
                 for unit in game_map[x][y].units:
                     if isinstance(unit, Expedition):
-                        self.target = game_map[x][y].unit
+                        self.target = unit
                         self.reset_path(game_map)
                         return True
         return False

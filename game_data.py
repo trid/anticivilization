@@ -33,11 +33,6 @@ class GameData():
                 random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]
             if tile.ground != 'water':
                 tile.resource = 'iron'
-        # self.game_map[9][9].resource = 'tree'
-        # self.game_map[-20][0].resource = 'tree'
-        # self.game_map[20][0].resource = 'tree'
-        # self.game_map[10][10].resource = 'stone'
-        # self.game_map[11][11].resource = 'iron'
 
     def place_center(self):
         self.center = Point(5, 5)
@@ -95,11 +90,17 @@ class GameData():
             monster_tile = self.game_map[monster.x][monster.y]
             for unit in monster_tile.units:
                 if isinstance(unit, expedition.Expedition):
-                    self.destroy_expedition(monster_tile, unit)
+                    if self.process_battle(monster, expedition) == monster:
+                        self.destroy_expedition(monster_tile, unit)
+                    else:
+                        self.destroy_monster(monster)
+                        for specialist in unit.warriors:
+                            specialist.add_exp(monster.level * 100)
             if monster_tile.building:
                 self.village.remove_building(monster_tile.building)
                 monster_tile.building = None
-            monster_tile.units.append(monster)
+            if monster.alive:
+                monster_tile.units.append(monster)
 
     def move_expeditions(self):
         for expedition_item in self.expeditions:
@@ -108,8 +109,13 @@ class GameData():
             tile = self.game_map[expedition_item.x][expedition_item.y]
             for unit in tile.units:
                 if type(unit) == Monster:
-                    expedition_item.status = expedition.DEAD
-                    break
+                    if self.process_battle(unit, expedition) == unit:
+                        self.destroy_expedition(tile, unit)
+                    else:
+                        self.destroy_monster(unit)
+                        tile.units.remove(unit)
+                        for specialist in expedition.warriors:
+                            specialist.add_exp(unit.level * 100)
             if expedition_item.status == expedition.FINISHED:
                 self.village.change_resource_count(expedition_item.resource, expedition_item.get_resources_count())
             else:
@@ -204,6 +210,16 @@ class GameData():
                 return False
         return True
 
+    def process_battle(self, monster, expedition):
+        monster_power = monster.level * 100
+        exp_power = 0
+        for specialist in expedition.warriors:
+            exp_power += specialist.level
+        exp_power *= expedition.people
+        if monster_power > exp_power:
+            return monster
+        return expedition
+
     def process(self):
         curr_time = time.time() * 1000
         delta = curr_time - self.last_time
@@ -214,3 +230,7 @@ class GameData():
             self.accum -= 100
             self.dx += self.scroll_spd_x
             self.dy += self.scroll_spd_y
+
+    def destroy_monster(self, monster):
+        monster.alive = False
+        self.monsters.remove(monster)

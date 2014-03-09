@@ -78,7 +78,7 @@ class EventProcessor:
                 else:
                     if event.pos[0] < 10:
                         self.data.scroll_spd_x = -5
-                    elif event.pos[0] > 590:
+                    elif 590 < event.pos[0] < 600:
                         self.data.scroll_spd_x = 5
                     else:
                         self.data.scroll_spd_x = 0

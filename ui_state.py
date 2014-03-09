@@ -189,6 +189,7 @@ class UIState(object):
             expedition.find_path(self.data.center.x, self.data.center.y, self.exp_click_pos.x, self.exp_click_pos.y, self.data.game_map)
             self.data.expeditions.append(expedition)
             self.data.village.food_stockpile -= 100
+            self.data.game_map[self.data.center.x][self.data.center.y].units.append(expedition)
 
     def create_main_menu_dialog(self):
         self.main_menu = Dialog(300, 150, 200, 300)
