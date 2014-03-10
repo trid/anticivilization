@@ -1,5 +1,6 @@
 import math
 from point import Point
+import tile_data
 
 __author__ = 'TriD'
 
@@ -38,6 +39,9 @@ class Node:
                     (next_tile.building is None or next_tile.building == 'port'):
                 yield Edge(game_map, self, Node(game_map, npoint))
 
+    def get_cost(self):
+        return tile_data.tile_data[self.game_map[self.point.x][self.point.y].ground]
+
 
 class Edge:
     def __init__(self, game_map, node_from, node_to):
@@ -67,9 +71,7 @@ class AStarFinder():
             for edge in current_node.get_edges():
                 if edge.node_to in closed_set:
                     continue
-                #Here will be cost for passing tile
-                #and somehow i'll add here some way to avoid tiles that character can't pass
-                tentative_g_score = gscore[current_node] + 0
+                tentative_g_score = gscore[current_node] + edge.node_to.get_cost()
                 hcost = self.heuristic(end_point, edge.node_to.point)
 
                 if not self.is_in_open_set(open_set, edge.node_to) or tentative_g_score < gscore[edge.node_to]:
@@ -82,7 +84,7 @@ class AStarFinder():
         return None
 
     def heuristic(self, point1, point2):
-        return math.sqrt((point2.x - point1.x) ** 2 + (point2.y - point1.y) ** 2)
+        return abs(point2.x - point1.x) + abs(point2.y - point1.y)
 
     def add_to_open_set(self, open_set, node_to, heuristic):
         if not len(open_set):

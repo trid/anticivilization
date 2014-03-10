@@ -12,6 +12,7 @@ from point import Point
 from specialist import Specialist
 import specialist
 from village import Village
+from resource import Resource
 
 __author__ = 'TriD'
 
@@ -93,9 +94,10 @@ class GameData():
                     if self.process_battle(monster, expedition) == monster:
                         self.destroy_expedition(monster_tile, unit)
                     else:
-                        self.destroy_monster(monster)
+                        self.destroy_monster(monster, monster_tile)
                         for specialist in unit.warriors:
                             specialist.add_exp(monster.level * 100)
+                        break
             if monster_tile.building:
                 self.village.remove_building(monster_tile.building)
                 monster_tile.building = None
@@ -111,8 +113,9 @@ class GameData():
                 if type(unit) == Monster:
                     if self.process_battle(unit, expedition) == unit:
                         self.destroy_expedition(tile, unit)
+                        break
                     else:
-                        self.destroy_monster(unit)
+                        self.destroy_monster(unit, tile)
                         tile.units.remove(unit)
                         for specialist in expedition.warriors:
                             specialist.add_exp(unit.level * 100)
@@ -231,6 +234,8 @@ class GameData():
             self.dx += self.scroll_spd_x
             self.dy += self.scroll_spd_y
 
-    def destroy_monster(self, monster):
+    def destroy_monster(self, monster, tile):
         monster.alive = False
         self.monsters.remove(monster)
+        if not tile.resource:
+            tile.resource = 'remaining'

@@ -59,4 +59,5 @@ class SpriteManager(object):
                         'destruct': pygame.image.load('res/images/destruct_building.png'),
                         'repeat_button': pygame.image.load('res/images/repeat_button.png'),
                         'protect_button': pygame.image.load('res/images/button_protect.png'),
+                        'remaining': pygame.image.load('res/images/bone_resource.png'),
                         }
