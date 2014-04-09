@@ -64,8 +64,8 @@ def generate_rivers(game_map, num_rivers=40):
         current_x = random.randint(0, width)
         current_y = random.randint(0, height)
         for k in range(0, max_steps):
-            direction_x = random.randint(-1, 1)
-            direction_y = random.randint(-1, 1)
+            direction_x = random.randint(-2, 2)
+            direction_y = random.randint(-2, 2)
             current_x += direction_x
             current_y += direction_y
 
