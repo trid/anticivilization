@@ -1,10 +1,10 @@
 from expedition import Expedition
-from expeditions_panel import ExpeditionsPanel
-from label import Label
+from ui.expeditions_panel import ExpeditionsPanel
+from ui.label import Label
 from monster import Monster
-from panel import Panel
+from ui.panel import Panel
 from point import Point
-from radio_button import RadioButton
+from ui.radio_button import RadioButton
 from specialist import Specialist
 import specialist
 from sprite_manager import SpriteManager

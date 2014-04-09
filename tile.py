@@ -10,3 +10,6 @@ class Tile:
         self.resource = None
         self.units = []
         self.protection = None
+
+    def __repr__(self):
+        return "Tile %s" % self.ground

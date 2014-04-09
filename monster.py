@@ -1,6 +1,6 @@
 from expedition import Expedition
 import expedition
-from pathfinder import AStarFinder
+from ai.pathfinder import AStarFinder
 from point import Point
 
 __author__ = 'TriD'

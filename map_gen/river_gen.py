@@ -46,9 +46,35 @@ def draw_river(vec, map):
             error -= 1.0
 
 
-def generate_rivers(map):
+def generate_rivers_old(map):
     width = MAP_WIDTH * SQUARE_WIDTH
     height = MAP_HEIGHT * SQUARE_HEIGHT
 
     for i in range(0, 20):
         draw_river(Vector(random.randint(0, width), random.randint(0, height), random.randint(0, width), random.randint(0, height)), map)
+
+
+def generate_rivers(game_map, num_rivers=40):
+    width = MAP_WIDTH * SQUARE_WIDTH
+    height = MAP_HEIGHT * SQUARE_HEIGHT
+
+    max_steps = 160
+
+    for i in range(0, num_rivers):
+        current_x = random.randint(0, width)
+        current_y = random.randint(0, height)
+        for k in range(0, max_steps):
+            direction_x = random.randint(-1, 1)
+            direction_y = random.randint(-1, 1)
+            current_x += direction_x
+            current_y += direction_y
+
+            game_map[current_x][current_y].ground = 'water'
+            game_map[current_x - 1][current_y].ground = 'water'
+            game_map[current_x - 1][current_y - 1].ground = 'water'
+            game_map[current_x][current_y - 1].ground = 'water'
+            game_map[current_x + 1][current_y - 1].ground = 'water'
+            game_map[current_x + 1][current_y].ground = 'water'
+            game_map[current_x + 1][current_y + 1].ground = 'water'
+            game_map[current_x][current_y + 1].ground = 'water'
+            game_map[current_x - 1][current_y + 1].ground = 'water'
