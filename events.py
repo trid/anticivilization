@@ -1,5 +1,5 @@
 import pygame
-from monster import Monster
+from application import application
 
 __author__ = 'TriD'
 
@@ -15,7 +15,7 @@ class EventProcessor:
     def process_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.data.done = True
+                application.running = False
             elif event.type == pygame.MOUSEBUTTONUP:
                 for listener in self.mouse_listeners:
                     listener.mouse_event(event)

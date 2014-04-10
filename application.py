@@ -4,6 +4,7 @@ __author__ = 'TriD'
 class Application:
     def __init__(self):
         self.states = []
+        self.running = True
 
     def push_state(self, state):
         self.states.append(state)
@@ -13,6 +14,6 @@ class Application:
             self.states.pop()
 
     def process(self):
-        self.states.process()
+        self.states[-1].process()
 
 application = Application()

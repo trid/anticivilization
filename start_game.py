@@ -1,10 +1,11 @@
-import pickle
 from global_map_state import GlobalMapState
+from application import application
 
 __author__ = 'TriD'
 
 
 state = GlobalMapState()
+application.push_state(state)
 
-while not state.game_data.done:
-    state.process()
+while application.running:
+    application.process()
