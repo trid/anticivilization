@@ -93,7 +93,6 @@ class FieldView:
     def set_selecter_surface(self):
         if self.game_data.uis.building and self.game_data.uis.building != 'destruct':
             surface = SpriteManager().sprites[self.game_data.uis.building].copy()
-            surface.set_alpha(124)
             self.selected_tile_surface = surface
         else:
             self.selected_tile_surface = self.selected_tile_surface_no_building
