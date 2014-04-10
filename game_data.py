@@ -214,15 +214,15 @@ class GameData():
                 return False
         return True
 
-    def process_battle(self, monster, expedition):
+    def process_battle(self, monster, current_expedition):
         monster_power = monster.level * 100
         exp_power = 0
-        for specialist in expedition.warriors:
+        for specialist in current_expedition.warriors:
             exp_power += specialist.level
-        exp_power *= expedition.people
+        exp_power *= current_expedition.people
         if monster_power > exp_power:
             return monster
-        return expedition
+        return current_expedition
 
     def process(self):
         curr_time = time.time() * 1000
