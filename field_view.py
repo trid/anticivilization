@@ -46,7 +46,8 @@ class FieldView:
         lighted_x = ((self.mouse_x + self.game_data.dx) / 32) * 32 - self.game_data.dx
         lighted_y = ((self.mouse_y + self.game_data.dy) / 32) * 32 - self.game_data.dy
         self.set_selecter_surface()
-        self.draw_sprite(screen, lighted_x, lighted_y, self.selected_tile_surface)
+        #self.draw_sprite(screen, lighted_x, lighted_y, self.selected_tile_surface)
+        screen.blit(self.selected_tile_surface, [lighted_x, lighted_y], Rect(0, 0, 32, self.selected_tile_surface.get_height()))
 
     def draw_road_tile(self, game_map, position_x, position_y, screen):
         """
@@ -91,7 +92,7 @@ class FieldView:
 
     def set_selecter_surface(self):
         if self.game_data.uis.building and self.game_data.uis.building != 'destruct':
-            surface = SpriteManager().sprites[self.game_data.uis.building]
+            surface = SpriteManager().sprites[self.game_data.uis.building].copy()
             surface.set_alpha(124)
             self.selected_tile_surface = surface
         else:
