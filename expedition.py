@@ -10,6 +10,7 @@ STARTED = 1
 RETURNING = 2
 FINISHED = 3
 DEAD = 4
+BUILD = 5
 
 
 class Expedition:
