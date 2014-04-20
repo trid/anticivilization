@@ -1,4 +1,4 @@
-from global_map_state import GlobalMapState
+from states.global_map_state import GlobalMapState
 from application import application
 
 __author__ = 'TriD'

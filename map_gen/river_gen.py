@@ -58,7 +58,7 @@ def generate_rivers(game_map, num_rivers=40):
     width = MAP_WIDTH * SQUARE_WIDTH
     height = MAP_HEIGHT * SQUARE_HEIGHT
 
-    max_steps = 160
+    max_steps = 60
 
     for i in range(0, num_rivers):
         current_x = random.randint(0, width)

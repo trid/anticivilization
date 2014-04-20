@@ -27,7 +27,7 @@ unlimited_growth = {
 class Village:
     def __init__(self):
         self.population = 100
-        self.population_growth = 10
+        self.population_growth = 0.01
         self.food_growth = 300
         self.food_stockpile = 100
         self.max_population = 200
@@ -41,7 +41,7 @@ class Village:
         self.to_build = []
 
     def update(self):
-        self.population += self.population_growth
+        self.population += self.population * self.population_growth
         if self.population > self.max_population:
             self.population = self.max_population
         self.food_stockpile += self.food_growth

@@ -41,7 +41,7 @@ class GlobalMapState:
 
     def load_game(self):
         self.game_data.uis = None
-        with open('save', 'rb') as save_file:
+        with open('../save', 'rb') as save_file:
             self.game_data = pickle.load(save_file)
         self.game_data.uis = self.uis
         self.display.reset_game_data(self.game_data)
@@ -49,6 +49,6 @@ class GlobalMapState:
 
     def save_game(self):
         self.game_data.uis = None
-        with open('save', 'wb') as save_file:
+        with open('../save', 'wb') as save_file:
             pickle.dump(self.game_data, save_file)
         self.game_data.uis = self.uis
