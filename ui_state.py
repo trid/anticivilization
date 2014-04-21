@@ -87,7 +87,7 @@ class UIState(object):
         self.clickables.append(self.expedition_panel)
 
     def update_labels(self):
-        self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth))
+        self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth * self.data.village.population))
         self.food_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
         self.wood_label.set_text("Wood: %d(+%d)" % (self.data.village.wood_stockpile, self.data.village.wood_increasing))
         self.stone_label.set_text("Stone: %d(+%d)" % (self.data.village.stone_stockpile, self.data.village.stone_increase))

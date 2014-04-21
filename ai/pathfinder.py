@@ -51,9 +51,12 @@ class Edge:
 
 
 class AStarFinder():
+    def __init__(self, node_class=Node):
+        self.Node = node_class
+
     def find(self, game_map, start_point, end_point, limit=()):
-        start_node = Node(game_map, start_point)
-        finish_node = Node(game_map, end_point)
+        start_node = self.Node(game_map, start_point)
+        finish_node = self.Node(game_map, end_point)
         start_heuristic = self.heuristic(start_node.point, end_point)
 
         closed_set = set()
