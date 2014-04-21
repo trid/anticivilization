@@ -19,11 +19,7 @@ class EventProcessor:
             elif event.type == pygame.MOUSEBUTTONUP:
                 for listener in self.mouse_listeners:
                     listener.mouse_event(event)
-                if self.uis.dialog:
-                    if event.button == 1:
-                        self.uis.process_clicks(*event.pos)
-                        continue
-                elif event.button == 3:
+                if event.button == 3:
                     if event.pos[0] > 600:
                         continue
                     self.data.popup_active = True
@@ -31,14 +27,15 @@ class EventProcessor:
                     tile = self.data.game_map[(buttons_pos[0] + self.data.dx) / 32][(buttons_pos[1] + self.data.dy) / 32]
                     self.uis.show_map_popup(buttons_pos[0], buttons_pos[1], tile)
                     self.uis.building = None
+                    continue
                 if event.button == 1:
-                    if self.uis.process_clicks(*event.pos):
-                        pass
-                    elif self.uis.building and event.pos[0] < 600:
+                    if self.uis.building and event.pos[0] < 600:
                         self.data.build(*event.pos)
                     if self.data.drag:
                         self.data.drag = False
-            if event.type == pygame.KEYUP:
+                if self.uis.process_clicks(event.pos[0], event.pos[1], event.button):
+                    continue
+            elif event.type == pygame.KEYUP:
                 for listener in self.keyboard_listeners:
                     listener.keyboard_up(event)
                 if not self.uis.dialog:

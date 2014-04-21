@@ -27,7 +27,7 @@ class Dialog(object):
         if isinstance(item, Clickable):
             self.clickables.append(item)
 
-    def click(self, wx, wy):
+    def click(self, wx, wy, button):
         x = wx - self.x
         y = wy - self.y
         if x < 0 or y < 0:

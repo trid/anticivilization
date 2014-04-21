@@ -33,7 +33,7 @@ class SpecialistPanel(Clickable):
         self.s_level.draw(self.surface)
         screen.blit(self.surface, (self.x, self.y))
 
-    def is_pressed(self, x, y):
+    def is_pressed(self, x, y, button):
         if not self.selectable:
             return False
         if x < self.x:

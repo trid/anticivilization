@@ -106,16 +106,16 @@ class UIState(object):
         self.specialists_panel.visible = False
         self.status_panel.visible = True
 
-    def process_clicks(self, x, y):
+    def process_clicks(self, x, y, button):
         if self.dialog:
-            self.dialog.click(x, y)
+            self.dialog.click(x, y, button)
             return True
         result = False
         if self.pop_up and self.pop_up.visible:
-            result = result or self.pop_up.is_pressed(x, y)
+            result = result or self.pop_up.is_pressed(x, y, button)
             self.pop_up.hide()
         for button in self.clickables:
-            result = result or button.is_pressed(x, y)
+            result = result or button.is_pressed(x, y, button)
             if result:
                 return True
         return result

@@ -26,7 +26,7 @@ class Panel(Clickable):
         if isinstance(item, Clickable):
             self.clickables.append(item)
 
-    def is_pressed(self, wx, wy):
+    def is_pressed(self, wx, wy, button):
         if not self.visible:
             return False
         x = wx - self.x

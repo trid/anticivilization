@@ -15,7 +15,7 @@ class RadioButton(Button):
         else:
             screen.blit(self.sprite, (self.x, self.y), Rect(0, self.sprite.get_height()/2, self.sprite.get_width(), self.sprite.get_height()/2))
 
-    def is_pressed(self, x, y):
-        result = Button.is_pressed(self, x, y)
+    def is_pressed(self, x, y, button):
+        result = Button.is_pressed(self, x, y, button)
         if result:
             self.checked = not self.checked

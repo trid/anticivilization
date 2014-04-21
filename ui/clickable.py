@@ -2,5 +2,5 @@ __author__ = 'TriD'
 
 
 class Clickable():
-    def is_pressed(self, x, y):
+    def is_pressed(self, x, y, button):
         pass

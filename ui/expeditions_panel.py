@@ -46,7 +46,7 @@ class ExpeditionsPanel(Clickable):
             item.draw(self.surface)
         screen.blit(self.surface, (self.x, self.y))
 
-    def is_pressed(self, wx, wy):
+    def is_pressed(self, wx, wy, button):
         if not self.visible:
             return False
         x = wx - self.x

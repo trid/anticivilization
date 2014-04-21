@@ -43,7 +43,7 @@ class ClickableSpList(Clickable):
             item.draw(self.surface)
         screen.blit(self.surface, (self.x, self.y))
 
-    def is_pressed(self, wx, wy):
+    def is_pressed(self, wx, wy, button):
         x = wx - self.x
         y = wy - self.y
         for item in self.clickables:

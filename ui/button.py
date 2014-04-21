@@ -15,7 +15,9 @@ class Button(Clickable):
         self.caller = caller
         self.sprite = sprite
 
-    def is_pressed(self, x, y):
+    def is_pressed(self, x, y, button):
+        if button != 1:
+            return False
         if not self.active:
             return False
         if x < self.x:
