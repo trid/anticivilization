@@ -25,6 +25,8 @@ class Expedition:
         self.speed = 4
         self.people = people
         self.regular = regular
+        self.build_turns = 0
+        self.need_turns = 0
         for specialist_instance in specialists:
             specialist_instance.occupied = True
             if specialist_instance.s_type == specialist.WORKER:
