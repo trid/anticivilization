@@ -185,7 +185,7 @@ class UIState(object):
             return
         if self.cl_sp_list.chosen and self.data.village.food_stockpile >= 100:
             self.hide_dialog()
-            expedition = Expedition(self.cl_sp_list.chosen, self.data.center, self.expedition_people_count)
+            expedition = Expedition(self.cl_sp_list.chosen, self.data.center, self.expedition_people_count, self.repeatable_expedition_button.checked)
             expedition.find_path(self.data.center.x, self.data.center.y, self.exp_click_pos.x, self.exp_click_pos.y, self.data.game_map)
             self.data.expeditions.append(expedition)
             self.data.village.food_stockpile -= 100
