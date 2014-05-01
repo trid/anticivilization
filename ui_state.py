@@ -40,6 +40,7 @@ class UIState(object):
         self.button_info = Button(0, 0, 44, 21, sprite=SpriteManager().sprites['info_button'])
         self.expedition_build_port_button = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'], callback=self.send_port_expedition)
         self.protect_button = Button(0, 0, 68, 21, sprite=SpriteManager().sprites['protect_button'])
+        self.end_turn_button = Button(524, 579, 76, 21, sprite=SpriteManager().sprites['end_turn_button'], callback=self.data.next_turn)
         self.exp_click_pos = None
         self.population_label = Label(0, 0, "")
         self.food_label = Label(0, 20, "")
@@ -55,6 +56,7 @@ class UIState(object):
         self.ui_items.append(self.status_panel)
         self.ui_items.append(self.button_statistics)
         self.ui_items.append(self.button_specialists)
+        self.ui_items.append(self.end_turn_button)
         self.specialists_panel = Panel(600, 0, 200, 600)
         self.specialists_panel.visible = False
         self.ui_items.append(self.specialists_panel)
@@ -62,6 +64,7 @@ class UIState(object):
         self.clickables = []
         self.clickables.append(self.button_specialists)
         self.clickables.append(self.button_statistics)
+        self.clickables.append(self.end_turn_button)
         self.clickables.append(self.specialists_panel)
         #Yeah it's fucking looooong initialization
         self.create_specialist_button = Button(0, 558, 148, 21, callback=self.show_create_specialist_dialog, sprite=SpriteManager().sprites['create_sp_button'])
@@ -106,16 +109,16 @@ class UIState(object):
         self.specialists_panel.visible = False
         self.status_panel.visible = True
 
-    def process_clicks(self, x, y, button):
+    def process_clicks(self, x, y, mouse_button):
         if self.dialog:
-            self.dialog.click(x, y, button)
+            self.dialog.click(x, y, mouse_button)
             return True
         result = False
         if self.pop_up and self.pop_up.visible:
-            result = result or self.pop_up.is_pressed(x, y, button)
+            result = result or self.pop_up.is_pressed(x, y, mouse_button)
             self.pop_up.hide()
         for button in self.clickables:
-            result = result or button.is_pressed(x, y, button)
+            result = result or button.is_pressed(x, y, mouse_button)
             if result:
                 return True
         return result

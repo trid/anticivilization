@@ -60,4 +60,5 @@ class SpriteManager(object):
                         'repeat_button': pygame.image.load('res/images/repeat_button.png'),
                         'protect_button': pygame.image.load('res/images/button_protect.png'),
                         'remaining': pygame.image.load('res/images/bone_resource.png'),
+                        'end_turn_button': pygame.image.load('res/images/end_turn_button.png'),
                         }
