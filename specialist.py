@@ -8,12 +8,13 @@ mapping = ("Chieftain", "Warrior", "Worker")
 
 
 class Specialist():
-    def __init__(self, s_type):
+    def __init__(self, s_type, gender='M'):
         self.s_type = s_type
         self.experience = 0
         self.level_up_exp = 100
         self.level = 1
         self.occupied = False
+        self.gender = gender
 
     def add_exp(self, exp):
         self.experience += exp
