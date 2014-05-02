@@ -39,7 +39,6 @@ class Expedition:
 
     def find_path(self, pos_x, pos_y, dst_x, dst_y, game_map):
         #Here we go with an A*
-        #I know it's wrong, but let's just leave it here, hope i'll fix it later, ok?
         self.game_map = game_map
         path = AStarFinder().find(game_map, Point(pos_x, pos_y), Point(dst_x, dst_y))
         self.path = path
@@ -91,3 +90,6 @@ class Expedition:
     def get_resources_count(self):
         sm = sum([x.level for x in self.workers])
         return sm * self.people
+
+    def can_move(self, tile):
+        pass
