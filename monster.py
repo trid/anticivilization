@@ -39,14 +39,14 @@ class Monster:
                 for unit in game_map[x][y].units:
                     if isinstance(unit, Expedition):
                         self.target = unit
-                        self.reset_path(game_map)
+                        self.reset_path()
                         return True
         return False
 
     def move(self):
         if self.target:
             if abs(self.x - self.target.x) < 5 and abs(self.y - self.y) < 5 and (self.target.status != expedition.DEAD and self.target.status != expedition.FINISHED):
-                self.reset_path(self.game_map)
+                self.reset_path()
                 self.path.pop()
                 node = self.path.pop()
                 self.x, self.y = node.x, node.y
