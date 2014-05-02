@@ -90,6 +90,3 @@ class Expedition:
     def get_resources_count(self):
         sm = sum([x.level for x in self.workers])
         return sm * self.people
-
-    def can_move(self, tile):
-        pass
