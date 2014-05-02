@@ -13,7 +13,6 @@ from point import Point
 from specialist import Specialist
 import specialist
 from village import Village
-from resource import Resource
 
 __author__ = 'TriD'
 
@@ -23,17 +22,19 @@ class GameData():
         #And, yes, that's a really bad code.
         #TODO: Find some time to change it totally
         for i in range(0, 100):
-            tile = self.game_map[random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)][
-                random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]
+            map_width = game_map.MAP_WIDTH * game_map.SQUARE_WIDTH
+            map_height = game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT
+            tile = self.game_map[random.randint(0, map_width)][random.randint(0, map_height)]
             if tile.ground != 'water':
                 tile.resource = 'tree'
-            tile = self.game_map[random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)][
-                random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]
+            tile = self.game_map[random.randint(0, map_width)][random.randint(0, map_height)]
             if tile.ground != 'water':
                 tile.resource = 'stone'
-            tile = self.game_map[random.randint(0, game_map.MAP_WIDTH * game_map.SQUARE_WIDTH)][
-                random.randint(0, game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT)]
-            if tile.ground != 'water':
+            pos_w = random.randint(0, map_width)
+            pos_h = random.randint(0, map_height)
+            m_dist = abs(pos_w - self.center.x) + abs(pos_h - self.center.y)
+            tile = self.game_map[pos_w][pos_h]
+            if tile.ground != 'water' and m_dist > 20:
                 tile.resource = 'iron'
 
     def place_center(self):
