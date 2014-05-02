@@ -1,4 +1,3 @@
-import pickle
 import time
 import math
 import random
@@ -7,7 +6,6 @@ import expedition
 from game_map import GameMap
 import game_map
 from map_gen.river_gen import generate_rivers
-from map_gen.river_gen import generate_rivers_old
 from monster import Monster
 from point import Point
 from specialist import Specialist
@@ -113,7 +111,7 @@ class GameData():
             tile = self.game_map[expedition_item.x][expedition_item.y]
             for unit in tile.units:
                 if type(unit) == Monster:
-                    if self.process_battle(unit, expedition) == unit:
+                    if self.process_battle(unit, expedition_item) == unit:
                         self.destroy_expedition(tile, unit)
                         break
                     else:
