@@ -91,7 +91,7 @@ class GameData():
             monster_tile = self.game_map[monster.x][monster.y]
             for unit in monster_tile.units:
                 if isinstance(unit, expedition.Expedition):
-                    if self.process_battle(monster, expedition) == monster:
+                    if self.process_battle(monster, unit) == monster:
                         self.destroy_expedition(monster_tile, unit)
                     else:
                         self.destroy_monster(monster, monster_tile)
