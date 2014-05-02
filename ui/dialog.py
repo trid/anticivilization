@@ -33,7 +33,7 @@ class Dialog(object):
         if x < 0 or y < 0:
             return
         for item in self.clickables:
-            item.is_pressed(x, y)
+            item.is_pressed(x, y, button)
 
     def add_ok(self, button):
         self.enter_btn = button
