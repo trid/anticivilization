@@ -47,9 +47,9 @@ class ClickableSpList(Clickable):
         x = wx - self.x
         y = wy - self.y
         for item in self.clickables:
-            item.is_pressed(x, y)
+            item.is_pressed(x, y, button)
         for item in self.shown_sp_panels:
-            if item.is_pressed(x, y):
+            if item.is_pressed(x, y, button):
                 if item.selected:
                     self.chosen.add(item.specialist)
                 else:
