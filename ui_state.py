@@ -13,11 +13,9 @@ from ui.dialog import Dialog
 from ui.specialist_panel import SpecialistPanel
 from ui.specialists_list import SpecialistsList
 from ui.pop_up_menu import PopUpMenu
+from ui.button import Button
 
 __author__ = 'trid'
-
-import pygame
-from ui.button import Button
 
 
 class UIState(object):
@@ -41,6 +39,7 @@ class UIState(object):
         self.expedition_build_port_button = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'], callback=self.send_port_expedition)
         self.protect_button = Button(0, 0, 68, 21, sprite=SpriteManager().sprites['protect_button'])
         self.end_turn_button = Button(524, 579, 76, 21, sprite=SpriteManager().sprites['end_turn_button'], callback=self.data.next_turn)
+        self.spells_button = Button(52, 0, 60, 21, sprite=SpriteManager().sprites['spells_button'])
         self.exp_click_pos = None
         self.population_label = Label(0, 0, "")
         self.food_label = Label(0, 20, "")
@@ -57,6 +56,7 @@ class UIState(object):
         self.ui_items.append(self.button_statistics)
         self.ui_items.append(self.button_specialists)
         self.ui_items.append(self.end_turn_button)
+        self.ui_items.append(self.spells_button)
         self.specialists_panel = Panel(600, 0, 200, 600)
         self.specialists_panel.visible = False
         self.ui_items.append(self.specialists_panel)
@@ -66,6 +66,7 @@ class UIState(object):
         self.clickables.append(self.button_statistics)
         self.clickables.append(self.end_turn_button)
         self.clickables.append(self.specialists_panel)
+        self.clickables.append(self.spells_button)
         #Yeah it's fucking looooong initialization
         self.create_specialist_button = Button(0, 558, 148, 21, callback=self.show_create_specialist_dialog, sprite=SpriteManager().sprites['create_sp_button'])
         self.specialists_panel.add(self.create_specialist_button)
@@ -248,7 +249,7 @@ class UIState(object):
             game_map = self.data.game_map
             if game_map[click_point.x + 1][click_point.y].ground == 'water' or game_map[click_point.x][click_point.y + 1].ground == 'water' or game_map[click_point.x - 1][click_point.y].ground == 'water' or game_map[click_point.x][click_point.y - 1].ground == 'water':
                 self.map_popup.add_item(self.expedition_build_port_button)
-        if tile.building and not tile.protection:
+        if tile.building and not tile.protection and tile.building != 'boat':
             self.map_popup.add_item(self.protect_button)
         self.pop_up = self.map_popup
         self.pop_up.show(mouse_x, mouse_y)
