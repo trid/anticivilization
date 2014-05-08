@@ -13,6 +13,9 @@ class FieldView:
         self.selected_tile_surface_no_building = Surface((32, 32))
         self.selected_tile_surface_no_building.fill(0xb7f315)
         self.selected_tile_surface_no_building.set_alpha(124)
+        self.selected_tile_surface_destroy = Surface((32, 32))
+        self.selected_tile_surface_destroy.fill(0xff0000)
+        self.selected_tile_surface_destroy.set_alpha(124)
         self.selected_tile_surface = self.selected_tile_surface_no_building
 
     def draw_sprite(self, screen, x, y, sprite):
@@ -94,5 +97,7 @@ class FieldView:
         if self.game_data.uis.building and self.game_data.uis.building != 'destruct':
             surface = SpriteManager().sprites[self.game_data.uis.building].copy()
             self.selected_tile_surface = surface
+        elif self.game_data.uis.building == 'destruct':
+            self.selected_tile_surface = self.selected_tile_surface_destroy
         else:
             self.selected_tile_surface = self.selected_tile_surface_no_building
