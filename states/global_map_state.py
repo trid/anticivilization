@@ -22,6 +22,7 @@ class GlobalMapState:
         self.uis.button_stockpile.callback = self.generate_building_callback('stockpile')
         self.uis.button_stone_carrier.callback = self.generate_building_callback('stone_carrier')
         self.uis.button_workshop.callback = self.generate_building_callback('workshop')
+        self.uis.button_iron_mine.callback = self.generate_building_callback('iron_mine')
         self.uis.button_destruct.callback = self.generate_building_callback('destruct')
         self.display.uis = self.uis
         self.game_data.uis = self.uis

@@ -1,4 +1,5 @@
 from expedition import Expedition
+from protect_dialog import ProtectDialog
 from ui.expeditions_panel import ExpeditionsPanel
 from ui.label import Label
 from monster import Monster
@@ -10,7 +11,6 @@ import specialist
 from sprite_manager import SpriteManager
 from ui.clickable_specialists_list import ClickableSpList
 from ui.dialog import Dialog
-from ui.specialist_panel import SpecialistPanel
 from ui.specialists_list import SpecialistsList
 from ui.pop_up_menu import PopUpMenu
 from ui.button import Button
@@ -23,23 +23,25 @@ class UIState(object):
         self.data = data
         self.building = None
 
-        self.button_homes = Button(0, 0, 115, 23, sprite=SpriteManager().sprites['build_homes'])
-        self.button_fields = Button(0, 0, 93, 23, sprite=SpriteManager().sprites['build_field'])
-        self.button_woodcutter = Button(0, 0, 140, 21, sprite=SpriteManager().sprites['build_woodcutter'])
-        self.button_road = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_road'])
-        self.button_port = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'])
-        self.button_stockpile = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['build_stockpile'])
-        self.button_stone_carrier = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_stone_carrier'])
-        self.button_workshop = Button(0, 0, 164, 21, sprite=SpriteManager().sprites['build_workshop'])
-        self.button_destruct = Button(0, 0, 76, 21, sprite=SpriteManager().sprites['destruct'])
-        self.button_expedition = Button(0, 0, 132, 21, sprite=SpriteManager().sprites['send_expedition'], callback=self.on_send_expedition_click)
-        self.button_statistics = Button(600, 579, 100, 21, sprite=SpriteManager().sprites['statistics_button'], callback=self.show_statistics)
-        self.button_specialists = Button(700, 579, 100, 21, sprite=SpriteManager().sprites['specialists_button'], callback=self.show_specialists)
-        self.button_info = Button(0, 0, 44, 21, sprite=SpriteManager().sprites['info_button'])
-        self.expedition_build_port_button = Button(0, 0, 92, 21, sprite=SpriteManager().sprites['build_port'], callback=self.send_port_expedition)
-        self.protect_button = Button(0, 0, 68, 21, sprite=SpriteManager().sprites['protect_button'])
-        self.end_turn_button = Button(524, 579, 76, 21, sprite=SpriteManager().sprites['end_turn_button'], callback=self.data.next_turn)
-        self.spells_button = Button(52, 0, 60, 21, sprite=SpriteManager().sprites['spells_button'])
+        sprite_manager = SpriteManager()
+        self.button_homes = Button(0, 0, 115, 23, sprite=sprite_manager.sprites['build_homes'])
+        self.button_fields = Button(0, 0, 93, 23, sprite=sprite_manager.sprites['build_field'])
+        self.button_woodcutter = Button(0, 0, 140, 21, sprite=sprite_manager.sprites['build_woodcutter'])
+        self.button_road = Button(0, 0, 92, 21, sprite=sprite_manager.sprites['build_road'])
+        self.button_port = Button(0, 0, 92, 21, sprite=sprite_manager.sprites['build_port'])
+        self.button_stockpile = Button(0, 0, 132, 21, sprite=sprite_manager.sprites['build_stockpile'])
+        self.button_stone_carrier = Button(0, 0, 164, 21, sprite=sprite_manager.sprites['build_stone_carrier'])
+        self.button_workshop = Button(0, 0, 164, 21, sprite=sprite_manager.sprites['build_workshop'])
+        self.button_iron_mine = Button(0, 0, 84, 21, sprite=sprite_manager.sprites['build_iron_mine'])
+        self.button_destruct = Button(0, 0, 76, 21, sprite=sprite_manager.sprites['destruct'])
+        self.button_expedition = Button(0, 0, 132, 21, sprite=sprite_manager.sprites['send_expedition'], callback=self.on_send_expedition_click)
+        self.button_statistics = Button(600, 579, 100, 21, sprite=sprite_manager.sprites['statistics_button'], callback=self.show_statistics)
+        self.button_specialists = Button(700, 579, 100, 21, sprite=sprite_manager.sprites['specialists_button'], callback=self.show_specialists)
+        self.button_info = Button(0, 0, 44, 21, sprite=sprite_manager.sprites['info_button'])
+        self.expedition_build_port_button = Button(0, 0, 92, 21, sprite=sprite_manager.sprites['build_port'], callback=self.send_port_expedition)
+        self.protect_button = Button(0, 0, 68, 21, sprite=sprite_manager.sprites['protect_button'], callback=self.show_protect_dialog)
+        self.end_turn_button = Button(524, 579, 76, 21, sprite=sprite_manager.sprites['end_turn_button'], callback=self.data.next_turn)
+        self.spells_button = Button(52, 0, 60, 21, sprite=sprite_manager.sprites['spells_button'])
         self.exp_click_pos = None
         self.population_label = Label(0, 0, "")
         self.food_label = Label(0, 20, "")
@@ -68,7 +70,8 @@ class UIState(object):
         self.clickables.append(self.specialists_panel)
         self.clickables.append(self.spells_button)
         #Yeah it's fucking looooong initialization
-        self.create_specialist_button = Button(0, 558, 148, 21, callback=self.show_create_specialist_dialog, sprite=SpriteManager().sprites['create_sp_button'])
+        self.create_specialist_button = Button(0, 558, 148, 21, callback=self.show_create_specialist_dialog, sprite=
+        sprite_manager.sprites['create_sp_button'])
         self.specialists_panel.add(self.create_specialist_button)
         self.create_chose_specialist_type_dialog()
         self.sp_list_panel = SpecialistsList(self.data, 0, 0)
@@ -77,7 +80,7 @@ class UIState(object):
         self.create_main_menu_dialog()
         self.create_resource_or_monster_dialog()
         self.expedition_people_count = 0
-        self.build_button = Button(0, 0, 51, 23, callback=self.show_buildings_pop_up, sprite=SpriteManager().sprites['build_button'])
+        self.build_button = Button(0, 0, 51, 23, callback=self.show_buildings_pop_up, sprite=sprite_manager.sprites['build_button'])
         self.ui_items.append(self.build_button)
         self.clickables.append(self.build_button)
         self.generate_building_menu()
@@ -89,6 +92,7 @@ class UIState(object):
         self.expedition_panel.visible = False
         self.ui_items.append(self.expedition_panel)
         self.clickables.append(self.expedition_panel)
+        self.protect_dialog = ProtectDialog(self)
 
     def update_labels(self):
         self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth * self.data.village.population))
@@ -231,6 +235,7 @@ class UIState(object):
         self.building_popup.add_item(self.button_stockpile)
         self.building_popup.add_item(self.button_stone_carrier)
         self.building_popup.add_item(self.button_workshop)
+        self.building_popup.add_item(self.button_iron_mine)
         self.building_popup.add_item(self.button_destruct)
         self.ui_items.append(self.building_popup)
 
@@ -269,3 +274,9 @@ class UIState(object):
             if isinstance(unit, Monster):
                 return True
         return False
+
+    def show_protect_dialog(self):
+        self.dialog = self.protect_dialog
+
+    def send_protection(self):
+        pass
