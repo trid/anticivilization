@@ -11,4 +11,7 @@ class Video:
     def draw(self, sprite, position):
         pass
 
+    def flip(self):
+        pygame.display.flip()
+
 video = Video()

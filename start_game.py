@@ -1,10 +1,10 @@
-from states.global_map_state import GlobalMapState
 from application import application
+from states.start_menu_state import StartMenuState
 
 __author__ = 'TriD'
 
 
-state = GlobalMapState()
+state = StartMenuState()
 application.push_state(state)
 
 while application.running:
