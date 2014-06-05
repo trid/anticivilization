@@ -1,14 +1,14 @@
 import pygame
 from field_view import FieldView
 from sprite_manager import SpriteManager
+from video import video
 
 __author__ = 'TriD'
 
 
 class Display():
     def __init__(self, game_data, uis=None):
-        pygame.init()
-        self.screen = pygame.display.set_mode([800, 600])
+        self.screen = video.screen
         self.game_data = game_data
         self.uis = uis
         self.mouse_x, self.mouse_y = 0, 0

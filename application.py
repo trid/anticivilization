@@ -1,3 +1,5 @@
+from event_manager import event_manager
+
 __author__ = 'TriD'
 
 
@@ -14,6 +16,7 @@ class Application:
             self.states.pop()
 
     def process(self):
+        event_manager.process()
         self.states[-1].process()
 
 application = Application()

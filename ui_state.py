@@ -1,5 +1,5 @@
 from expedition import Expedition
-from protect_dialog import ProtectDialog
+#from protect_dialog import ProtectDialog
 from ui.expeditions_panel import ExpeditionsPanel
 from ui.label import Label
 from monster import Monster
@@ -92,7 +92,7 @@ class UIState(object):
         self.expedition_panel.visible = False
         self.ui_items.append(self.expedition_panel)
         self.clickables.append(self.expedition_panel)
-        self.protect_dialog = ProtectDialog(self)
+#        self.protect_dialog = ProtectDialog(self)
 
     def update_labels(self):
         self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth * self.data.village.population))
