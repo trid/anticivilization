@@ -280,3 +280,19 @@ class UIState(object):
 
     def send_protection(self):
         pass
+
+    def mouse_button_up_callback(self, pos_x, pos_y, button):
+        if button == 3:
+            if pos_x > 600:
+                return
+            self.data.popup_active = True
+            tile = self.data.game_map[(pos_x + self.data.dx) / 32][(pos_y + self.data.dy) / 32]
+            self.show_map_popup(pos_x, pos_y, tile)
+            self.building = None
+            return
+        if button == 1:
+            if self.building and pos_x < 600:
+                self.data.build(pos_x, pos_y)
+            if self.data.drag:
+                self.data.drag = False
+        self.process_clicks(pos_x, pos_y, button)

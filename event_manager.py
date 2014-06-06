@@ -3,7 +3,10 @@ import application
 
 __author__ = 'TriD'
 
-
+MESSAGE_KEY_DOWN = 'KEY_DOWN'
+MESSAGE_KEY_UP = 'KEY_UP'
+MESSAGE_MOUSE_DOWN = 'MOUSE_DOWN'
+MESSAGE_MOUSE_MOTION = 'MOUSE_MOTION'
 MESSAGE_MOUSE_UP = 'MOUSE_UP'
 MESSAGE_QUIT = 'quit'
 
@@ -32,9 +35,36 @@ class EventManager:
         for event in pygame.event.get():
             if event.type == pygame.QUIT and MESSAGE_QUIT not in self.listeners:
                 application.application.running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for listener in self.listeners.get(MESSAGE_MOUSE_DOWN, ()):
+                    if callable(listener):
+                        listener(event.pos[0], event.pos[1], event.button)
+                    else:
+                        listener.process_message(event.pos[0], event.pos[1], event.button)
+            elif event.type == pygame.MOUSEMOTION:
+                for listener in self.listeners.get(MESSAGE_MOUSE_MOTION, ()):
+                    if callable(listener):
+                        listener(event.pos[0], event.pos[1])
+                    else:
+                        listener.process_message(event.pos[0], event.pos[1])
             elif event.type == pygame.MOUSEBUTTONUP:
                 for listener in self.listeners.get(MESSAGE_MOUSE_UP, ()):
-                    listener.on_click(event.pos[0], event.pos[1], event.button)
+                    if callable(listener):
+                        listener(event.pos[0], event.pos[1], event.button)
+                    else:
+                        listener.process_message(event.pos[0], event.pos[1], event.button)
+            elif event.type == pygame.KEYUP:
+                for listener in self.listeners.get(MESSAGE_KEY_UP, ()):
+                    if callable(listener):
+                        listener(event.key)
+                    else:
+                        listener.process_message(event.key)
+            elif event.type == pygame.KEYDOWN:
+                for listener in self.listeners.get(MESSAGE_KEY_DOWN, ()):
+                    if callable(listener):
+                        listener(event.key)
+                    else:
+                        listener.process_message(event.key)
 
 
 event_manager = EventManager()

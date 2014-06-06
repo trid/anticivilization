@@ -18,18 +18,18 @@ class StartMenuState:
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_UP, self)
 
     def process(self):
-
         self.button_new_game.draw(video.screen)
         self.button_load_game.draw(video.screen)
         self.button_exit.draw(video.screen)
         video.flip()
 
-    def on_click(self, pos_x, pos_y, button):
+    def process_message(self, pos_x, pos_y, button):
         self.button_new_game.is_pressed(pos_x, pos_y, button)
         self.button_load_game.is_pressed(pos_x, pos_y, button)
         self.button_exit.is_pressed(pos_x, pos_y, button)
 
     def start_new_game(self):
+        event_manager.event_manager.purge()
         application.push_state(GlobalMapState())
 
     def load_game(self):
