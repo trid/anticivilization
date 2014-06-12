@@ -30,10 +30,15 @@ class StartMenuState:
 
     def start_new_game(self):
         event_manager.event_manager.purge()
-        application.push_state(GlobalMapState())
+        state = GlobalMapState()
+        state.new_game()
+        application.push_state(state)
 
     def load_game(self):
-        pass
+        event_manager.event_manager.purge()
+        state = GlobalMapState()
+        state.load_game()
+        application.push_state(state)
 
     def exit_game(self):
         application.running = False

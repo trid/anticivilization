@@ -9,8 +9,7 @@ __author__ = 'TriD'
 
 
 class GlobalMapState:
-    def __init__(self):
-        self.game_data = GameData()
+    def initialize_interface(self):
         self.display = Display(self.game_data)
         self.uis = UIState(self.game_data)
         #Building buttons callbacks
@@ -34,6 +33,9 @@ class GlobalMapState:
         event_manager.event_manager.add_listener(event_manager.MESSAGE_KEY_DOWN, self.keydown_callback)
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_MOTION, self.mouse_move)
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_DOWN, self.mouse_key_down_callback)
+
+    def __init__(self):
+        self.game_data = None
 
     def process(self):
         self.game_data.process()
@@ -102,15 +104,19 @@ class GlobalMapState:
             self.game_data.old_dy = self.game_data.dy
 
     def load_game(self):
-        self.game_data.uis = None
         with open('../save', 'rb') as save_file:
             self.game_data = pickle.load(save_file)
-        self.game_data.uis = self.uis
-        self.display.reset_game_data(self.game_data)
-        self.events.data = self.game_data
+        self.initialize_interface()
+
 
     def save_game(self):
         self.game_data.uis = None
         with open('../save', 'wb') as save_file:
             pickle.dump(self.game_data, save_file)
         self.game_data.uis = self.uis
+
+    def new_game(self):
+        self.game_data = GameData()
+        self.display = Display(self.game_data)
+        self.uis = UIState(self.game_data)
+        self.initialize_interface()
