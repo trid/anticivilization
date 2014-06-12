@@ -59,7 +59,7 @@ class UIState(object):
         self.ui_items.append(self.button_specialists)
         self.ui_items.append(self.end_turn_button)
         self.ui_items.append(self.spells_button)
-        self.specialists_panel = Panel(600, 0, 200, 600)
+        self.specialists_panel = Panel(600, 0, 200, 577)
         self.specialists_panel.visible = False
         self.ui_items.append(self.specialists_panel)
         self.dialog = None
