@@ -34,6 +34,9 @@ class GlobalMapState:
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_MOTION, self.mouse_move)
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_DOWN, self.mouse_key_down_callback)
 
+    def remove_listeners(self):
+        event_manager.event_manager.purge()
+
     def __init__(self):
         self.game_data = None
 
@@ -104,6 +107,7 @@ class GlobalMapState:
             self.game_data.old_dy = self.game_data.dy
 
     def load_game(self):
+        self.remove_listeners()
         with open('../save', 'rb') as save_file:
             self.game_data = pickle.load(save_file)
         self.initialize_interface()
