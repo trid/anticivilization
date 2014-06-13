@@ -35,7 +35,11 @@ class GlobalMapState:
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_DOWN, self.mouse_key_down_callback)
 
     def remove_listeners(self):
-        event_manager.event_manager.purge()
+        event_manager.event_manager.remove_listener(event_manager.MESSAGE_MOUSE_UP, self.uis.mouse_button_up_callback)
+        event_manager.event_manager.remove_listener(event_manager.MESSAGE_KEY_UP, self.keyup_callback)
+        event_manager.event_manager.remove_listener(event_manager.MESSAGE_KEY_DOWN, self.keydown_callback)
+        event_manager.event_manager.remove_listener(event_manager.MESSAGE_MOUSE_MOTION, self.mouse_move)
+        event_manager.event_manager.remove_listener(event_manager.MESSAGE_MOUSE_DOWN, self.mouse_key_down_callback)
 
     def __init__(self):
         self.game_data = None
