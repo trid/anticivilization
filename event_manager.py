@@ -31,6 +31,12 @@ class EventManager:
             self.listeners[message_type] = []
         self.listeners[message_type].append(listener)
 
+    def remove_listener(self, message_type, listener):
+        if message_type in self.listeners:
+            listeners_list = self.listeners[message_type]
+            if listener in listeners_list:
+                listeners_list.remove(listener)
+
     def process(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT and MESSAGE_QUIT not in self.listeners:
