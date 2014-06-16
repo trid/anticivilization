@@ -54,6 +54,9 @@ class Village:
         self.wood_stockpile += self.wood_increasing
         if self.wood_stockpile > self.resources_limit:
             self.wood_stockpile = self.resources_limit
+        self.stone_stockpile += self.stone_increase
+        if self.stone_stockpile > self.resources_limit:
+            self.stone_stockpile = self.resources_limit
         self.update_buildings()
 
     def get_resource_by_name(self, name):
