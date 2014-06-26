@@ -47,7 +47,6 @@ class GameMap:
 
     def touch_square(self, x, y):
         if not (x, y) in self.data:
-            self.generate_rivers(x, y)
             data = []
             for i in range(0, SQUARE_WIDTH):
                 row = []

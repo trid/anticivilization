@@ -10,6 +10,7 @@ from monster import Monster
 from point import Point
 from specialist import Specialist
 import specialist
+from swamp_gen import generate_swamp
 from village import Village
 
 __author__ = 'TriD'
@@ -37,7 +38,7 @@ class GameData():
 
     def place_center(self):
         self.center = Point(5, 5)
-        while self.game_map[self.center.x][self.center.y].ground == 'water':
+        while self.game_map[self.center.x][self.center.y].ground != 'grass':
             self.center.x += 1
             self.center.y += 1
         self.game_map[self.center.x][self.center.y].building = 'center'
@@ -57,6 +58,9 @@ class GameData():
         self.done = False
         self.game_map = GameMap()
         generate_rivers(self.game_map)
+        map_width = game_map.MAP_WIDTH * game_map.SQUARE_WIDTH
+        map_height = game_map.MAP_HEIGHT * game_map.SQUARE_HEIGHT
+        generate_swamp(self.game_map, Point(random.randint(0, map_width), random.randint(0, map_height)), random.randint(0, 30))
         self.place_center()
         self.place_resources()
         self.old_dx = 0

@@ -66,4 +66,5 @@ class SpriteManager(object):
                         'iron_mine': pygame.image.load('res/images/mine.png'),
                         'new_game_button': pygame.image.load('res/images/button_new_game.png'),
                         'exit_button': pygame.image.load('res/images/button_exit.png'),
+                        'swamp': pygame.image.load('res/images/swamp.png'),
                         }
