@@ -17,6 +17,7 @@ class FieldView:
         self.selected_tile_surface_destroy.fill(0xff0000)
         self.selected_tile_surface_destroy.set_alpha(124)
         self.selected_tile_surface = self.selected_tile_surface_no_building
+        self.road_data = (1, 1, 0, 10, 0, 9, 0, 4, 1, 1, 8, 6, 7, 5, 3, 2)
 
     def draw_sprite(self, screen, x, y, sprite):
         if x + 32 <= 600:
@@ -54,36 +55,21 @@ class FieldView:
 
     def draw_road_tile(self, game_map, position_x, position_y, screen):
         """
-         Implementing FSM by hands. Always dreamed to do it.
-         (May be there is a better choice, but not like it showed in Strategy Game Programming)
+        Road drawing as it have to be
         """
-        #TODO: Change magic numbers to constants
-        tile_num = 1
-        if game_map[position_x - 1][position_y].building == 'road' and game_map[position_x][position_y + 1].building == 'road':
-            tile_num = 8
-            if game_map[position_x + 1][position_y].building == 'road':
-                tile_num = 3
-                if game_map[position_x][position_y - 1].building == 'road':
-                    tile_num = 2
-            elif game_map[position_x][position_y - 1].building == 'road':
-                tile_num = 6
-        elif game_map[position_x][position_y + 1].building == 'road' and game_map[position_x + 1][position_y].building == 'road':
-            tile_num = 7
-            if game_map[position_x][position_y - 1].building == 'road':
-                tile_num = 5
-        elif game_map[position_x + 1][position_y].building == 'road' and game_map[position_x][position_y - 1].building == 'road':
-            tile_num = 9
-            if game_map[position_x - 1][position_y].building == 'road':
-                tile_num = 4
-        elif game_map[position_x][position_y - 1].building == 'road' and game_map[position_x - 1][position_y].building == 'road':
-            tile_num = 10
-            if game_map[position_x][position_y + 1].building == 'road':
-                tile_num = 6
-        elif game_map[position_x + 1][position_y].building == 'road' or game_map[position_x - 1][position_y].building == 'road':
-            tile_num = 0
+        tile_num = 0
+        if game_map[position_x][position_y - 1].building == 'road':
+            tile_num += 1
+        if game_map[position_x - 1][position_y].building == 'road':
+            tile_num += 2
+        if game_map[position_x + 1][position_y].building == 'road':
+            tile_num += 4
+        if game_map[position_x][position_y + 1].building == 'road':
+            tile_num += 8
+
         sx = position_x * 32 - self.game_data.dx
         sy = position_y * 32 - self.game_data.dy
-        self.blit_road_tile(sx, sy, screen, tile_num)
+        self.blit_road_tile(sx, sy, screen, self.road_data[tile_num])
 
     #TODO: merge two blitting methods
     def blit_road_tile(self, x, y, screen, item):
