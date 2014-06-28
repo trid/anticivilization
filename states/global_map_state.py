@@ -110,8 +110,9 @@ class GlobalMapState:
             self.game_data.old_dx = self.game_data.dx
             self.game_data.old_dy = self.game_data.dy
 
-    def load_game(self):
-        self.remove_listeners()
+    def load_game(self, from_start_menu=False):
+        if not from_start_menu:
+            self.remove_listeners()
         with open('../save', 'rb') as save_file:
             self.game_data = pickle.load(save_file)
         self.initialize_interface()
