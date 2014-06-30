@@ -15,4 +15,7 @@ class Video:
     def flip(self):
         pygame.display.flip()
 
+    def clean(self):
+        self.screen.fill((0, 0, 0))
+
 video = Video()
