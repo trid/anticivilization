@@ -121,7 +121,7 @@ class GameData():
                     else:
                         self.destroy_monster(unit, tile)
                         tile.units.remove(unit)
-                        for specialist in expedition.warriors:
+                        for specialist in expedition_item.warriors:
                             specialist.add_exp(unit.level * 100)
             if expedition_item.status == expedition.FINISHED:
                 self.village.change_resource_count(expedition_item.resource, expedition_item.get_resources_count())
