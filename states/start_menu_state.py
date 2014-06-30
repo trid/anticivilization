@@ -1,5 +1,6 @@
 from application import application
 import event_manager
+from label import Label
 from sprite_manager import SpriteManager
 from states.global_map_state import GlobalMapState
 from ui.button import Button
@@ -15,12 +16,15 @@ class StartMenuState:
         self.button_new_game = Button(352, 0, 96, 23, sprite=self.sm.sprites['new_game_button'], callback=self.start_new_game)
         self.button_load_game = Button(378, 23, 44, 23, sprite=self.sm.sprites['load_button'], callback=self.load_game)
         self.button_exit = Button(378, 46, 41, 23, sprite=self.sm.sprites['exit_button'], callback=self.exit_game)
+        self.version_label = Label(0, 580, "Version 0.1")
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_UP, self)
 
     def process(self):
+        video.clean()
         self.button_new_game.draw(video.screen)
         self.button_load_game.draw(video.screen)
         self.button_exit.draw(video.screen)
+        self.version_label.draw(video.screen)
         video.flip()
 
     def process_message(self, pos_x, pos_y, button):
