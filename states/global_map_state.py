@@ -25,6 +25,7 @@ class GlobalMapState:
         self.uis.button_destruct.callback = self.generate_building_callback('destruct')
         self.display.uis = self.uis
         self.game_data.uis = self.uis
+        self.uis.display = self.display
         self.uis.save_button.callback = self.save_game
         self.uis.load_button.callback = self.load_game
         #Listeners
@@ -33,6 +34,7 @@ class GlobalMapState:
         event_manager.event_manager.add_listener(event_manager.MESSAGE_KEY_DOWN, self.keydown_callback)
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_MOTION, self.mouse_move)
         event_manager.event_manager.add_listener(event_manager.MESSAGE_MOUSE_DOWN, self.mouse_key_down_callback)
+        event_manager.event_manager.add_listener(event_manager.MESSAGE_KEY_UP, self.uis.check_button_up)
 
     def remove_listeners(self):
         event_manager.event_manager.remove_listener(event_manager.MESSAGE_MOUSE_UP, self.uis.mouse_button_up_callback)
@@ -40,6 +42,7 @@ class GlobalMapState:
         event_manager.event_manager.remove_listener(event_manager.MESSAGE_KEY_DOWN, self.keydown_callback)
         event_manager.event_manager.remove_listener(event_manager.MESSAGE_MOUSE_MOTION, self.mouse_move)
         event_manager.event_manager.remove_listener(event_manager.MESSAGE_MOUSE_DOWN, self.mouse_key_down_callback)
+        event_manager.event_manager.remove_listener(event_manager.MESSAGE_KEY_UP, self.uis.check_button_up)
 
     def __init__(self):
         self.game_data = None

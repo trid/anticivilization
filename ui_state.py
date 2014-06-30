@@ -1,5 +1,8 @@
+import pygame
 from expedition import Expedition
 #from protect_dialog import ProtectDialog
+from hunting_expedition_dialog import HuntingExpeditionDialog
+from protect_dialog import ProtectDialog
 from ui.expeditions_panel import ExpeditionsPanel
 from ui.label import Label
 from monster import Monster
@@ -43,10 +46,13 @@ class UIState(object):
         self.end_turn_button = Button(524, 579, 76, 21, sprite=sprite_manager.sprites['end_turn_button'], callback=self.data.next_turn)
         self.spells_button = Button(52, 0, 60, 21, sprite=sprite_manager.sprites['spells_button'])
         self.exp_click_pos = None
+        #Labels
         self.population_label = Label(0, 0, "")
         self.food_label = Label(0, 20, "")
         self.wood_label = Label(0, 40, "")
         self.stone_label = Label(0, 60, "")
+        self.mouse_position_label = Label(0, 22, "")
+        self.mouse_position_label.visible = False
         #Ok, here we shall store ui items, for have less writing about how to draw them
         self.ui_items = []
         self.status_panel = Panel(600, 0, 200, 600)
@@ -59,6 +65,7 @@ class UIState(object):
         self.ui_items.append(self.button_specialists)
         self.ui_items.append(self.end_turn_button)
         self.ui_items.append(self.spells_button)
+        self.ui_items.append(self.mouse_position_label)
         self.specialists_panel = Panel(600, 0, 200, 577)
         self.specialists_panel.visible = False
         self.ui_items.append(self.specialists_panel)
@@ -92,13 +99,18 @@ class UIState(object):
         self.expedition_panel.visible = False
         self.ui_items.append(self.expedition_panel)
         self.clickables.append(self.expedition_panel)
-#        self.protect_dialog = ProtectDialog(self)
+        self.protect_dialog = ProtectDialog(self)
+        self.hunting_expedition_dialog = HuntingExpeditionDialog(self)
+        self.display = None
 
     def update_labels(self):
         self.population_label.set_text("Population: %d(+%d)" % (self.data.village.population, self.data.village.population_growth * self.data.village.population))
         self.food_label.set_text("Food: %d(+%d)" % (self.data.village.food_stockpile, self.data.village.food_growth))
         self.wood_label.set_text("Wood: %d(+%d)" % (self.data.village.wood_stockpile, self.data.village.wood_increasing))
         self.stone_label.set_text("Stone: %d(+%d)" % (self.data.village.stone_stockpile, self.data.village.stone_increase))
+        lighted_x = ((self.display.mouse_x + self.data.dx) / 32)
+        lighted_y = ((self.display.mouse_y + self.data.dy) / 32)
+        self.mouse_position_label.set_text("x: %d; y: %d" % (lighted_x, lighted_y))
 
     def draw(self, screen):
         if self.dialog:
@@ -172,8 +184,11 @@ class UIState(object):
     def on_send_expedition_click(self):
         tile = self.data.game_map[self.exp_click_pos.x][self.exp_click_pos.y]
         for unit in tile.units:
-            if isinstance(tile.unit, Monster) and tile.resource:
-                self.dialog = self.resource_or_monster_dialog
+            if isinstance(unit, Monster):
+                if tile.resource:
+                    self.dialog = self.resource_or_monster_dialog
+                else:
+                    self.show_hunting_dialog()
                 break
         else:
             self.show_chose_specialists_dialog()
@@ -262,7 +277,7 @@ class UIState(object):
     def create_resource_or_monster_dialog(self):
         self.resource_or_monster_dialog = Dialog(325, 285, 150, 30)
         resource_button = Button(0, 5, 84, 21, sprite=SpriteManager().sprites['resources_button'], callback=self.show_chose_specialists_dialog)
-        monster_button = Button(85, 5, 68, 21, sprite=SpriteManager().sprites['monster_button'])
+        monster_button = Button(85, 5, 68, 21, sprite=SpriteManager().sprites['monster_button'], callback=self.show_hunting_dialog)
         self.resource_or_monster_dialog.add(resource_button)
         self.resource_or_monster_dialog.add(monster_button)
 
@@ -296,3 +311,22 @@ class UIState(object):
             if self.data.drag:
                 self.data.drag = False
         self.process_clicks(pos_x, pos_y, button)
+
+    def hunting_expedition_send(self):
+        if self.hunting_expedition_dialog.pop <= 0:
+            return
+        if self.hunting_expedition_dialog.sp_list.chosen and self.data.village.food_stockpile >= 100:
+            self.hide_dialog()
+            expedition = Expedition(self.hunting_expedition_dialog.sp_list.chosen, self.data.center, self.hunting_expedition_dialog.pop, False)
+            expedition.find_path(self.data.center.x, self.data.center.y, self.exp_click_pos.x, self.exp_click_pos.y, self.data.game_map)
+            expedition.hunt_target = self.data.game_map[self.exp_click_pos.x][self.exp_click_pos.y].units[0]
+            self.data.expeditions.append(expedition)
+            self.data.village.food_stockpile -= 100
+            self.data.game_map[self.data.center.x][self.data.center.y].units.append(expedition)
+
+    def check_button_up(self, button):
+        if button == pygame.K_F1:
+            self.mouse_position_label.visible = not self.mouse_position_label.visible
+
+    def show_hunting_dialog(self):
+        self.dialog = self.hunting_expedition_dialog
