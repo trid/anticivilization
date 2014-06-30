@@ -12,8 +12,11 @@ class Label:
         self.h = h
         self.surface = None
         self.font = pygame.font.SysFont('monospace', h)
+        self.visible = True
 
     def draw(self, screen):
+        if not self.visible:
+            return
         if self.dirty:
             self.surface = self.font.render(self.text, 1, (255, 255, 255))
             self.dirty = False
