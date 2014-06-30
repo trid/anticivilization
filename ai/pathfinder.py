@@ -21,13 +21,9 @@ class Node:
         game_map = self.game_map
         point = self.point
         points = (Point(point.x, point.y - 1),
-                  Point(point.x + 1, point.y - 1),
                   Point(point.x + 1, point.y),
-                  Point(point.x + 1, point.y + 1),
                   Point(point.x, point.y + 1),
-                  Point(point.x - 1, point.y + 1),
-                  Point(point.x - 1, point.y),
-                  Point(point.x - 1, point.y - 1))
+                  Point(point.x - 1, point.y))
         current_tile = game_map[point.x][point.y]
         for npoint in points:
             next_tile = game_map[npoint.x][npoint.y]

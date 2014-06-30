@@ -24,11 +24,14 @@ class Monster:
         self.alive = True
 
     def random_move(self):
-        x = self.x + random.randint(-1, 1)
-        y = self.y + random.randint(-1, 1)
+        if random.randint(0, 1):
+            x = self.x + random.randint(-1, 1)
+            y = self.y
+        else:
+            x = self.x
+            y = self.y + random.randint(-1, 1)
         self.x = x
         self.y = y
-
 
     def reset_path(self):
         self.path = AStarFinder().find(self.game_map, Point(self.x, self.y), Point(self.target.x, self.target.y))
