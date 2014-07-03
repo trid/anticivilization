@@ -1,7 +1,7 @@
 from ui.button import Button
 from ui.dialog import Dialog
 from ui.filtered_specialist_list import FilteredSpList
-from label import Label
+from ui.label import Label
 import specialist
 from sprite_manager import SpriteManager
 
