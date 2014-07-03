@@ -1,10 +1,11 @@
 from pygame.surface import Surface
 from button import Button
-from clickable import Clickable
+from ui.clickable import Clickable
 from specialist_panel import SpecialistPanel
 from sprite_manager import SpriteManager
 
 __author__ = 'TriD'
+
 
 class FilteredSpList(Clickable):
     def __init__(self, data, x, y, filters):
@@ -46,14 +47,17 @@ class FilteredSpList(Clickable):
     def is_pressed(self, wx, wy, button):
         x = wx - self.x
         y = wy - self.y
+        res = False
         for item in self.clickables:
-            item.is_pressed(x, y)
+            res = res or item.is_pressed(x, y, button)
         for item in self.shown_sp_panels:
-            if item.is_pressed(x, y):
+            if item.is_pressed(x, y, button):
                 if item.selected:
                     self.chosen.add(item.specialist)
                 else:
                     self.chosen.remove(item.specialist)
+                res = True
+        return res
 
     def reset(self):
         free_specialists = [sp for sp in self.data.specialists if not sp.occupied and sp.s_type in self.filter]

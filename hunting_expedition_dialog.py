@@ -1,6 +1,6 @@
-from button import Button
-from dialog import Dialog
-from filtered_specialist_list import FilteredSpList
+from ui.button import Button
+from ui.dialog import Dialog
+from ui.filtered_specialist_list import FilteredSpList
 from label import Label
 import specialist
 from sprite_manager import SpriteManager
