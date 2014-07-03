@@ -10,7 +10,7 @@ from monster import Monster
 from point import Point
 from specialist import Specialist
 import specialist
-from swamp_gen import generate_swamp
+from map_gen.swamp_gen import generate_swamp
 from village import Village
 
 __author__ = 'TriD'
