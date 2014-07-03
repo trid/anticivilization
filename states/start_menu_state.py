@@ -1,6 +1,6 @@
 from application import application
 import event_manager
-from label import Label
+from ui.label import Label
 from sprite_manager import SpriteManager
 from states.global_map_state import GlobalMapState
 from ui.button import Button
